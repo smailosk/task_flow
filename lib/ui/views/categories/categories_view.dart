@@ -19,7 +19,7 @@ class CategoriesView extends StatelessWidget {
           const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Welcome Ismail',
+                'Welcome Ismail ',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )),
           SizedBox(height: 8),
