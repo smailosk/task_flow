@@ -1,0 +1,40 @@
+name: task_flow
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  stacked: ^3.4.0
+  stacked_services: ^1.1.0
+
+  flutter_dynamic_calculator: ^1.0.0
+  intl: ^0.17.0
+  weather: ^3.1.1
+  geolocator: ^10.1.0
+  location: ^5.0.3
+  flutter_svg: ^2.0.9
+
+#UI
+  flutter_snake_navigationbar: ^0.6.1
+  flutter_signin_button: ^2.0.0
+
+
+dev_dependencies:
+  build_runner: ^2.4.5
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  mockito: ^5.4.1
+  stacked_generator: ^1.3.3
+
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
