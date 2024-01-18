@@ -5,24 +5,27 @@
  * import {onDocumentWritten} from "firebase-functions/v2/firestore";
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ * 
+ * From folder functions: npm run build && firebase emulators:start --only functions
  */
 import { onRequest } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-
+import { Environment } from "./models";
 initializeApp();
 
-export const helloWorld = onRequest(async (request, response) => {
+export const CreateProject = onRequest(async (request, response) => {
     const firestore = getFirestore();
 
     try {
         // Define the collection and data to add
         const collection = firestore.collection('Projects');
-        const data = {
-            field1: 'value1',
-            field2: 'value2',
-            // ... other fields
+        const data: Environment = {
+            id: "SOmeIDSpqofjhwqpof",
+            color: "X012421412",
+            icon: "Home",
+            name: "Project name"
         };
 
         // Add a new document with an auto-generated ID
