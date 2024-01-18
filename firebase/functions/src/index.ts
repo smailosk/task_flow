@@ -39,3 +39,21 @@ export const CreateProject = onRequest(async (request, response) => {
     }
 });
 
+
+export const PrintBody = onRequest(async (request, response) => {
+
+    try {
+        if (typeof request.body.id !== 'string' ||
+            typeof request.body.name !== 'string' ||
+            typeof request.body.icon !== 'string' ||
+            typeof request.body.color !== 'string') {
+            throw new Error('Invalid data format');
+        }
+        const data: Environment = request.body;
+
+
+        response.send(`Data processed successfully ${JSON.stringify(data)}`);
+    } catch (error) {
+        response.status(400).send("Invalid data format");
+    }
+});
