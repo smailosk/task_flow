@@ -10,6 +10,7 @@ import 'package:task_flow/ui/views/start_page/get_start_page_view.dart';
 import 'package:task_flow/ui/views/startup/startup_view.dart';
 import 'package:task_flow/ui/views/weather/weather_view.dart';
 import 'package:task_flow/ui/views/login/login_view.dart';
+import 'package:task_flow/ui/views/environment/environment_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -20,6 +21,7 @@ import 'package:task_flow/ui/views/login/login_view.dart';
     MaterialRoute(page: CategoriesView),
     MaterialRoute(page: GetStartPageView),
     MaterialRoute(page: LoginView),
+    MaterialRoute(page: EnvironmentView),
 // @stacked-route
   ],
   dependencies: [
