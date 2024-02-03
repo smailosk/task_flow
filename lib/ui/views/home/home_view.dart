@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/ui/views/categories/categories_view.dart';
-import 'package:task_flow/ui/views/environment/environment_view.dart';
 import 'package:task_flow/ui/views/login/login_view.dart';
+import 'package:task_flow/ui/views/projects/projects_view.dart';
 
 import 'home_viewmodel.dart';
 
@@ -100,7 +100,7 @@ class HomeView extends StackedView<HomeViewModel> {
       case 1:
         widget = const CategoriesView();
       case 2:
-        widget = const EnvironmentView();
+        widget = const ProjectsView();
       case 3:
         widget = Container(
           color: Colors.green,

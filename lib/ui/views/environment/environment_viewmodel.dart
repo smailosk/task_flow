@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:task_flow/app/app.locator.dart';
 
-import '../../../app/app.bottomsheets.dart';
 
 class EnvironmentViewModel extends BaseViewModel {
-  final _bottomSheet = locator<BottomSheetService>();
 
   List<EnvData> environments = [
     EnvData('Home', Colors.yellow, Icons.home_outlined),
