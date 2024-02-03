@@ -11,7 +11,6 @@ import 'package:task_flow/ui/views/startup/startup_view.dart';
 import 'package:task_flow/ui/views/weather/weather_view.dart';
 import 'package:task_flow/ui/views/login/login_view.dart';
 import 'package:task_flow/ui/views/environment/environment_view.dart';
-import 'package:task_flow/ui/bottom_sheets/add_new_environment/add_new_environment_sheet.dart';
 // @stacked-import
 
 @StackedApp(
@@ -35,7 +34,6 @@ import 'package:task_flow/ui/bottom_sheets/add_new_environment/add_new_environme
   ],
   bottomsheets: [
     StackedBottomsheet(classType: NoticeSheet),
-    StackedBottomsheet(classType: AddNewEnvironmentSheet),
 // @stacked-bottom-sheet
   ],
   dialogs: [
