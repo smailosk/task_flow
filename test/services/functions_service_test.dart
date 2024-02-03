@@ -4,7 +4,7 @@ import 'package:task_flow/app/app.locator.dart';
 import '../helpers/test_helpers.dart';
 
 void main() {
-  group('LoginViewModel Tests -', () {
+  group('FunctionsServiceTest -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });

@@ -8,9 +8,9 @@ import 'package:task_flow/ui/views/login/login_view.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
-  HomeView({Key? key}) : super(key: key);
+  HomeView({super.key});
 
-  final BorderRadius _borderRadius = const BorderRadius.only(
+  BorderRadius borderRadius = const BorderRadius.only(
     topLeft: Radius.circular(25),
     topRight: Radius.circular(25),
   );
@@ -96,7 +96,7 @@ class HomeView extends StackedView<HomeViewModel> {
 
     switch (index) {
       case 0:
-        widget = const LoginView();
+        widget = const EnvironmentView();
       case 1:
         widget = const CategoriesView();
       case 2:

@@ -11,8 +11,11 @@ import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
-import '../services/geolocation_service.dart';
-import '../services/weather_api_service.dart';
+import '../services/auth_service.dart';
+import '../services/firestore_service.dart';
+import '../services/functions_service.dart';
+import '../services/google_auth_service.dart';
+import '../services/repo_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -28,6 +31,9 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => BottomSheetService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => NavigationService());
-  locator.registerLazySingleton(() => WeatherApiService());
-  locator.registerLazySingleton(() => GeolocationService());
+  locator.registerLazySingleton(() => AuthService());
+  locator.registerLazySingleton(() => GoogleAuthService());
+  locator.registerLazySingleton(() => FunctionsService());
+  locator.registerLazySingleton(() => RepoService());
+  locator.registerLazySingleton(() => FirestoreService());
 }

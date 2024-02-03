@@ -4,7 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'environment_viewmodel.dart';
 
 class EnvironmentView extends StatelessWidget {
-  const EnvironmentView({Key? key}) : super(key: key);
+  const EnvironmentView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +18,7 @@ class EnvironmentView extends StatelessWidget {
 
     return ViewModelBuilder<EnvironmentViewModel>.reactive(
       viewModelBuilder: () => EnvironmentViewModel(),
+      onViewModelReady: (viewModel) => viewModel.init(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Padding(
@@ -56,8 +57,7 @@ class EnvironmentView extends StatelessWidget {
           foregroundColor: Colors.white,
           backgroundColor: Colors.blueGrey.shade700,
           elevation: 3,
-          onPressed: () => model.openBottomSheet(),
-          // onPressed: () => _showAddEnvironmentBottomSheet(context, model),
+          onPressed: () {},
           child: const Icon(Icons.add),
         ),
       ),

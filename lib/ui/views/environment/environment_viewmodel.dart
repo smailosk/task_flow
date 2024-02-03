@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:task_flow/app/app.locator.dart';
-
-import '../../../app/app.bottomsheets.dart';
+import 'package:task_flow/app/app.logger.dart';
+import 'package:task_flow/services/firestore_service.dart';
 
 class EnvironmentViewModel extends BaseViewModel {
-  final _bottomSheet = locator<BottomSheetService>();
-
+  final _firestore = locator<FirestoreService>();
+  final _log = getLogger('EnvironmentViewModel');
   List<EnvData> environments = [
     EnvData('Home', Colors.yellow, Icons.home_outlined),
     EnvData('Private', Colors.greenAccent, Icons.privacy_tip_outlined),
@@ -27,8 +27,10 @@ class EnvironmentViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  openBottomSheet() {
-    _bottomSheet.showCustomSheet(variant: BottomSheetType.addNewEnvironment);
+  init() async {
+    final envs = await _firestore.fetchEnvironments();
+
+    _log.i(envs);
   }
 }
 

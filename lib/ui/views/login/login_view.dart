@@ -2,17 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked/stacked_annotations.dart';
+import 'package:task_flow/ui/common/form_validators.dart';
 
+import 'login_view.form.dart';
 import 'login_viewmodel.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+@FormView(autoTextFieldValidation: false, fields: [
+  FormTextField(name: 'email', validator: FormValidators.validateEmail),
+  FormTextField(name: 'password', validator: FormValidators.validatePassword)
+])
+class LoginView extends StatelessWidget with $LoginView {
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
+      onDispose: (viewModel) => disposeForm(),
       viewModelBuilder: () => LoginViewModel(),
-      builder: (context, model, child) => Scaffold(
+      onViewModelReady: (viewModel) {
+        syncFormWithViewModel(viewModel);
+      },
+      builder: (context, viewModel, child) => Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
             padding:
@@ -41,9 +52,11 @@ class LoginView extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.email_outlined),
                     labelText: 'Email',
+                    errorText: viewModel.emailValidationMessage,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -51,9 +64,11 @@ class LoginView extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock_outline),
                     labelText: 'Password',
+                    errorText: viewModel.passwordValidationMessage,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -70,9 +85,7 @@ class LoginView extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    // Login event
-                  },
+                  onPressed: viewModel.signIn,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF24A19C),
                     minimumSize: const Size(double.infinity, 50),
@@ -80,8 +93,10 @@ class LoginView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Login',
-                      style: TextStyle(color: Colors.white)),
+                  child: viewModel.isBusy
+                      ? const CircularProgressIndicator()
+                      : const Text('Login',
+                          style: TextStyle(color: Colors.white)),
                 ),
                 const SizedBox(height: 20),
                 const Row(

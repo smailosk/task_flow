@@ -8,36 +8,37 @@
  * 
  * From folder functions: npm run build && firebase emulators:start --only functions
  */
-import { onRequest } from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
+import * as functions from 'firebase-functions';
+
 import { initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { Environment } from "./models";
+import { FieldValue, getFirestore } from "firebase-admin/firestore";
+import { Environment, Project, Task } from "./models";
 initializeApp();
 
-export const CreateProject = onRequest(async (request, response) => {
-    const firestore = getFirestore();
+// export const CreateProject = onRequest(async (request, response) => {
+//     const firestore = getFirestore();
 
-    try {
-        // Define the collection and data to add
-        const collection = firestore.collection('Projects');
-        const data: Environment = {
-            id: "SOmeIDSpqofjhwqpof",
-            color: "X012421412",
-            icon: "Home",
-            name: "Project name"
-        };
+//     try {
+//         // Define the collection and data to add
+//         const collection = firestore.collection('Projects');
+//         const data: Environment = {
+//             id: "SOmeIDSpqofjhwqpof",
+//             color: "X012421412",
+//             icon: "Home",
+//             name: "Project name"
+//         };
 
-        // Add a new document with an auto-generated ID
-        const docRef = await collection.add(data);
+//         // Add a new document with an auto-generated ID
+//         const docRef = await collection.add(data);
 
-        logger.info("New document created with ID: " + docRef.id, { structuredData: true });
-        response.send("Hello from Firebase! Document created with ID: " + docRef.id);
-    } catch (error) {
-        logger.error("Error creating document: ", error);
-        response.status(500).send("Error creating document");
-    }
-});
+//         logger.info("New document created with ID: " + docRef.id, { structuredData: true });
+//         response.send("Hello from Firebase! Document created with ID: " + docRef.id);
+//     } catch (error) {
+//         logger.error("Error creating document: ", error);
+//         response.status(500).send("Error creating document");
+//     }
+// });
 
 
 export const PrintBody = onRequest(async (request, response) => {
@@ -55,5 +56,528 @@ export const PrintBody = onRequest(async (request, response) => {
         response.send(`Data processed successfully ${JSON.stringify(data)}`);
     } catch (error) {
         response.status(400).send("Invalid data format");
+    }
+});
+
+
+exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
+    try {
+        const firestoreDb = getFirestore();
+
+        // Create an example environment
+        const environmentData: Environment = {
+            id: firestoreDb.collection('Environments').doc().id,
+            name: 'Default Environment',
+            icon: 'default_icon',
+            color: '#000000' // Example RGB code
+            ,
+            admins: [user.uid]
+        };
+        await firestoreDb.collection('Environments').doc(environmentData.id).set(environmentData);
+
+        // Create an example project
+        const projectData: Project = {
+            id: firestoreDb.collection('Projects').doc().id,
+            name: 'Default Project',
+            parentEnvironmentId: environmentData.id,
+            members: [user.uid],
+            color: '#123456' // Example RGB code
+        };
+        await firestoreDb.collection('Projects').doc(projectData.id).set(projectData);
+
+        // Create example tasks
+        const taskData: Task[] = [{
+            title: 'Example Task 1',
+            id: firestoreDb.collection('Tasks').doc().id,
+            details: 'Details of Example Task 1',
+            parentProjectId: projectData.id,
+            deadline: new Date(), // Example deadline
+            assignee: user.uid,
+            done: false
+        }, {
+            title: 'Example Task 2',
+            id: firestoreDb.collection('Tasks').doc().id,
+            details: 'Details of Example Task 2',
+            parentProjectId: projectData.id,
+            deadline: new Date(), // Example deadline
+            assignee: user.uid,
+            done: false
+        }];
+
+        for (const task of taskData) {
+            await firestoreDb.collection('Tasks').doc(task.id).set(task);
+        }
+
+        // You can add additional actions here, such as sending a welcome email
+
+        console.log('User initialization completed successfully for user:', user.uid);
+        return null;
+
+    } catch (error) {
+        console.error('Error creating initial data for user:', error);
+        throw new functions.https.HttpsError('internal', 'Unable to initialize user data.');
+    }
+});
+
+
+export const createEnvironment = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.name !== 'string' ||
+        typeof request.data.icon !== 'string' ||
+        typeof request.data.color !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    try {
+        const firestoreDb = getFirestore();
+        const userId = request.auth.uid;
+
+        // Create a new environment with the creator as an admin
+        const newEnvironment: Environment = {
+            id: firestoreDb.collection('Environments').doc().id,
+            name: request.data.name,
+            icon: request.data.icon,
+            color: request.data.color,
+            admins: [userId] // Set the creator as the admin
+        };
+
+        // Save the new environment to Firestore
+        await firestoreDb.collection('Environments').doc(newEnvironment.id).set(newEnvironment);
+
+        return { message: 'Environment created successfully', environmentId: newEnvironment.id };
+    } catch (error) {
+        console.error('Error creating environment:', error);
+        throw new HttpsError('internal', 'Unable to create environment.');
+    }
+});
+
+export const deleteEnvironment = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.environmentId !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const environmentId = request.data.environmentId;
+    const userId = request.auth.uid;
+
+    try {
+        // Retrieve the environment to check if the user is an admin
+        const environmentRef = firestoreDb.collection('Environments').doc(environmentId);
+        const environmentDoc = await environmentRef.get();
+
+        if (!environmentDoc.exists) {
+            throw new HttpsError('not-found', 'Environment not found');
+        }
+
+        const environmentData = environmentDoc.data() as Environment; // Type assertion
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of this environment');
+        }
+
+        // User is an admin, proceed with deletion
+        await environmentRef.delete();
+
+        return { message: 'Environment deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting environment:', error);
+        throw new HttpsError('internal', 'Unable to delete environment.');
+    }
+});
+
+
+export const createProject = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data for the project
+    if (typeof request.data.name !== 'string' ||
+        typeof request.data.parentEnvironmentId !== 'string' ||
+        typeof request.data.color !== 'string'
+    ) {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const userId = request.auth.uid;
+    const { name, parentEnvironmentId, color } = request.data; // Destructure the project data from the request
+
+    try {
+        // Retrieve the parent environment to check if the user is an admin
+        const environmentRef = firestoreDb.collection('Environments').doc(parentEnvironmentId);
+        const environmentDoc = await environmentRef.get();
+
+        if (!environmentDoc.exists) {
+            throw new HttpsError('not-found', 'Parent environment not found');
+        }
+
+        const environmentData = environmentDoc.data() as Environment;
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of the parent environment');
+        }
+
+        // Create a new project with the provided data
+        const newProject: Project = {
+            id: firestoreDb.collection('Projects').doc().id,
+            name: name,
+            parentEnvironmentId: parentEnvironmentId,
+            color: color,
+            // Initialize other necessary fields for the project
+            members: [userId] // Set the creator as the first member
+        };
+
+        // Save the new project to Firestore
+        await firestoreDb.collection('Projects').doc(newProject.id).set(newProject);
+
+        return { message: 'Project created successfully', projectId: newProject.id };
+    } catch (error) {
+        console.error('Error creating project:', error);
+        throw new HttpsError('internal', 'Unable to create project.');
+    }
+});
+
+export const deleteProject = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.projectId !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const projectId = request.data.projectId;
+    const userId = request.auth.uid;
+
+    try {
+        // Retrieve the project to get the parent environment ID
+        const projectRef = firestoreDb.collection('Projects').doc(projectId);
+        const projectDoc = await projectRef.get();
+
+        if (!projectDoc.exists) {
+            throw new HttpsError('not-found', 'Project not found');
+        }
+
+        // Check if the user is an admin of the parent environment
+        const parentEnvironmentId = projectDoc.data()?.parentEnvironmentId;
+        if (!parentEnvironmentId) {
+            throw new HttpsError('not-found', 'Parent environment not found');
+        }
+
+        const environmentRef = firestoreDb.collection('Environments').doc(parentEnvironmentId);
+        const environmentDoc = await environmentRef.get();
+        const environmentData = environmentDoc.data() as Environment;
+
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of the parent environment');
+        }
+
+        // User is an admin, proceed with deletion
+        await projectRef.delete();
+
+        return { message: 'Project deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        throw new HttpsError('internal', 'Unable to delete project.');
+    }
+});
+
+
+export const addMemberToProject = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.projectId !== 'string' ||
+        typeof request.data.memberId !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const { projectId, memberId } = request.data;
+    const userId = request.auth.uid;
+
+    try {
+        // Retrieve the project
+        const projectRef = firestoreDb.collection('Projects').doc(projectId);
+        const projectDoc = await projectRef.get();
+
+        if (!projectDoc.exists) {
+            throw new HttpsError('not-found', 'Project not found');
+        }
+
+        // Check if the user is an admin of the parent environment
+        const parentEnvironmentId = projectDoc.data()?.parentEnvironmentId;
+        if (!parentEnvironmentId) {
+            throw new HttpsError('not-found', 'Parent environment not found');
+        }
+
+        const environmentRef = firestoreDb.collection('Environments').doc(parentEnvironmentId);
+        const environmentDoc = await environmentRef.get();
+        const environmentData = environmentDoc.data() as Environment;
+
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of the parent environment');
+        }
+
+        // Add the member to the project
+        await projectRef.update({
+            members: FieldValue.arrayUnion(memberId)
+        });
+
+        return { message: 'Member added to project successfully' };
+    } catch (error) {
+        console.error('Error adding member to project:', error);
+        throw new HttpsError('internal', 'Unable to add member to project.');
+    }
+});
+
+export const deleteMemberFromProject = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.projectId !== 'string' ||
+        typeof request.data.memberId !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const { projectId, memberId } = request.data;
+    const userId = request.auth.uid;
+
+    try {
+        // Retrieve the project
+        const projectRef = firestoreDb.collection('Projects').doc(projectId);
+        const projectDoc = await projectRef.get();
+
+        if (!projectDoc.exists) {
+            throw new HttpsError('not-found', 'Project not found');
+        }
+
+        // Check if the user is an admin of the parent environment
+        const parentEnvironmentId = projectDoc.data()?.parentEnvironmentId;
+        if (!parentEnvironmentId) {
+            throw new HttpsError('not-found', 'Parent environment not found');
+        }
+
+        const environmentRef = firestoreDb.collection('Environments').doc(parentEnvironmentId);
+        const environmentDoc = await environmentRef.get();
+        const environmentData = environmentDoc.data() as Environment;
+
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of the parent environment');
+        }
+
+        // Remove the member from the project
+        await projectRef.update({
+            members: FieldValue.arrayRemove(memberId)
+        });
+
+        return { message: 'Member removed from project successfully' };
+    } catch (error) {
+        console.error('Error removing member from project:', error);
+        throw new HttpsError('internal', 'Unable to remove member from project.');
+    }
+});
+
+
+export const createTask = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data for the task
+    if (typeof request.data.title !== 'string' ||
+        typeof request.data.details !== 'string' ||
+        typeof request.data.parentProjectId !== 'string' ||
+        typeof request.data.deadline !== 'string' // Ensure deadline is in the correct format
+        // Add additional validation as necessary
+    ) {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const { title, details, parentProjectId, deadline } = request.data; // Destructure the task data
+    const assignee = request.auth.uid; // Assign task to the creator by default
+
+    try {
+        // Create a new task with the provided data
+        const newTask: Task = {
+            id: firestoreDb.collection('Tasks').doc().id,
+            title,
+            details,
+            parentProjectId,
+            deadline: new Date(deadline), // Convert string to Date object
+            assignee,
+            done: false // Default to not done
+        };
+
+        // Save the new task to Firestore
+        await firestoreDb.collection('Tasks').doc(newTask.id).set(newTask);
+
+        return { message: 'Task created successfully', taskId: newTask.id };
+    } catch (error) {
+        console.error('Error creating task:', error);
+        throw new HttpsError('internal', 'Unable to create task.');
+    }
+});
+
+export const deleteTask = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.taskId !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const taskId = request.data.taskId;
+
+    try {
+        // Delete the task
+        await firestoreDb.collection('Tasks').doc(taskId).delete();
+
+        return { message: 'Task deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting task:', error);
+        throw new HttpsError('internal', 'Unable to delete task.');
+    }
+});
+
+export const modifyTask = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.taskId !== 'string' ||
+        typeof request.data.newDetails !== 'string' // Add additional checks for other fields you want to modify
+    ) {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const { taskId, newDetails } = request.data;
+
+    try {
+        // Update the task with new details
+        await firestoreDb.collection('Tasks').doc(taskId).update({ details: newDetails });
+
+        return { message: 'Task updated successfully' };
+    } catch (error) {
+        console.error('Error modifying task:', error);
+        throw new HttpsError('internal', 'Unable to modify task.');
+    }
+});
+
+export const markTaskDone = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.taskId !== 'string' ||
+        typeof request.data.done !== 'boolean') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const { taskId, done } = request.data;
+
+    try {
+        // Update the 'done' status of the task
+        await firestoreDb.collection('Tasks').doc(taskId).update({ done });
+
+        return { message: `Task marked as ${done ? 'done' : 'undone'} successfully` };
+    } catch (error) {
+        console.error('Error marking task as done/undone:', error);
+        throw new HttpsError('internal', 'Unable to mark task as done/undone.');
+    }
+});
+
+export const assignTask = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.taskId !== 'string' ||
+        typeof request.data.newAssigneeId !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const { taskId, newAssigneeId } = request.data;
+
+    try {
+        // Update the 'assignee' of the task
+        await firestoreDb.collection('Tasks').doc(taskId).update({ assignee: newAssigneeId });
+
+        return { message: 'Task assignee updated successfully' };
+    } catch (error) {
+        console.error('Error assigning task:', error);
+        throw new HttpsError('internal', 'Unable to assign task.');
+    }
+});
+
+
+export const modifyEnvironment = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.environmentId !== 'string' ||
+        typeof request.data.newTitle !== 'string' ||
+        typeof request.data.newColor !== 'string' ||
+        !Array.isArray(request.data.admins) ||
+        request.data.admins.some((adminId: any) => typeof adminId !== 'string')) {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const firestoreDb = getFirestore();
+    const { environmentId, newTitle, newColor, admins } = request.data;
+    const userId = request.auth.uid;
+
+    try {
+        // Retrieve the environment to check if the user is an admin
+        const environmentRef = firestoreDb.collection('Environments').doc(environmentId);
+        const environmentDoc = await environmentRef.get();
+
+        if (!environmentDoc.exists) {
+            throw new HttpsError('not-found', 'Environment not found');
+        }
+
+        const environmentData = environmentDoc.data() as Environment;
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of this environment');
+        }
+
+        // Update the environment with new details
+        await environmentRef.update({
+            name: newTitle,
+            color: newColor,
+            admins: admins
+        });
+
+        return { message: 'Environment updated successfully' };
+    } catch (error) {
+        console.error('Error modifying environment:', error);
+        throw new HttpsError('internal', 'Unable to modify environment.');
     }
 });

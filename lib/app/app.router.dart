@@ -5,24 +5,21 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i9;
+import 'package:flutter/material.dart' as _i8;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i10;
-import 'package:task_flow/ui/views/categories/categories_view.dart' as _i5;
-import 'package:task_flow/ui/views/environment/environment_view.dart' as _i8;
+import 'package:stacked_services/stacked_services.dart' as _i9;
+import 'package:task_flow/ui/views/categories/categories_view.dart' as _i4;
+import 'package:task_flow/ui/views/environment/environment_view.dart' as _i7;
 import 'package:task_flow/ui/views/home/home_view.dart' as _i2;
-import 'package:task_flow/ui/views/login/login_view.dart' as _i7;
-import 'package:task_flow/ui/views/start_page/get_start_page_view.dart' as _i6;
+import 'package:task_flow/ui/views/login/login_view.dart' as _i6;
+import 'package:task_flow/ui/views/start_page/get_start_page_view.dart' as _i5;
 import 'package:task_flow/ui/views/startup/startup_view.dart' as _i3;
-import 'package:task_flow/ui/views/weather/weather_view.dart' as _i4;
 
 class Routes {
   static const homeView = '/home-view';
 
   static const startupView = '/';
-
-  static const weatherView = '/weather-view';
 
   static const categoriesView = '/categories-view';
 
@@ -35,7 +32,6 @@ class Routes {
   static const all = <String>{
     homeView,
     startupView,
-    weatherView,
     categoriesView,
     getStartPageView,
     loginView,
@@ -54,24 +50,20 @@ class StackedRouter extends _i1.RouterBase {
       page: _i3.StartupView,
     ),
     _i1.RouteDef(
-      Routes.weatherView,
-      page: _i4.WeatherView,
-    ),
-    _i1.RouteDef(
       Routes.categoriesView,
-      page: _i5.CategoriesView,
+      page: _i4.CategoriesView,
     ),
     _i1.RouteDef(
       Routes.getStartPageView,
-      page: _i6.GetStartPageView,
+      page: _i5.GetStartPageView,
     ),
     _i1.RouteDef(
       Routes.loginView,
-      page: _i7.LoginView,
+      page: _i6.LoginView,
     ),
     _i1.RouteDef(
       Routes.environmentView,
-      page: _i8.EnvironmentView,
+      page: _i7.EnvironmentView,
     ),
   ];
 
@@ -80,44 +72,38 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<HomeViewArguments>(
         orElse: () => const HomeViewArguments(),
       );
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i8.MaterialPageRoute<dynamic>(
         builder: (context) => _i2.HomeView(key: args.key),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i8.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
-    _i4.WeatherView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i4.WeatherView(),
+    _i4.CategoriesView: (data) {
+      return _i8.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i4.CategoriesView(),
         settings: data,
       );
     },
-    _i5.CategoriesView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i5.CategoriesView(),
+    _i5.GetStartPageView: (data) {
+      return _i8.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i5.GetStartPageView(),
         settings: data,
       );
     },
-    _i6.GetStartPageView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i6.GetStartPageView(),
+    _i6.LoginView: (data) {
+      return _i8.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i6.LoginView(),
         settings: data,
       );
     },
-    _i7.LoginView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i7.LoginView(),
-        settings: data,
-      );
-    },
-    _i8.EnvironmentView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i8.EnvironmentView(),
+    _i7.EnvironmentView: (data) {
+      return _i8.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i7.EnvironmentView(),
         settings: data,
       );
     },
@@ -133,7 +119,7 @@ class StackedRouter extends _i1.RouterBase {
 class HomeViewArguments {
   const HomeViewArguments({this.key});
 
-  final _i9.Key? key;
+  final _i8.Key? key;
 
   @override
   String toString() {
@@ -152,9 +138,9 @@ class HomeViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i10.NavigationService {
+extension NavigatorStateExtension on _i9.NavigationService {
   Future<dynamic> navigateToHomeView({
-    _i9.Key? key,
+    _i8.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -177,20 +163,6 @@ extension NavigatorStateExtension on _i10.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.startupView,
-        id: routerId,
-        preventDuplicates: preventDuplicates,
-        parameters: parameters,
-        transition: transition);
-  }
-
-  Future<dynamic> navigateToWeatherView([
-    int? routerId,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
-  ]) async {
-    return navigateTo<dynamic>(Routes.weatherView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -254,7 +226,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> replaceWithHomeView({
-    _i9.Key? key,
+    _i8.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -277,20 +249,6 @@ extension NavigatorStateExtension on _i10.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.startupView,
-        id: routerId,
-        preventDuplicates: preventDuplicates,
-        parameters: parameters,
-        transition: transition);
-  }
-
-  Future<dynamic> replaceWithWeatherView([
-    int? routerId,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
-  ]) async {
-    return replaceWith<dynamic>(Routes.weatherView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

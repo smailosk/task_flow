@@ -4,7 +4,7 @@ import 'package:task_flow/app/app.locator.dart';
 import '../helpers/test_helpers.dart';
 
 void main() {
-  group('WeatherViewModel Tests -', () {
+  group('FirestoreServiceTest -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });
