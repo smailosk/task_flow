@@ -28,7 +28,7 @@ class EnvironmentViewModel extends BaseViewModel {
   }
 
   openBottomSheet() {
-    _bottomSheet.showCustomSheet(variant: BottomSheetType.addNewEnvironment);
+    // _bottomSheet.showCustomSheet(variant: BottomSheetType.addNewEnvironment);
   }
 }
 

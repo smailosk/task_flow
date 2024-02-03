@@ -11,8 +11,6 @@ import '../ui/bottom_sheets/notice/notice_sheet.dart';
 
 enum BottomSheetType {
   notice,
-  addNewEnvironment,
-
 }
 
 void setupBottomSheetUi() {
@@ -21,7 +19,6 @@ void setupBottomSheetUi() {
   final Map<BottomSheetType, SheetBuilder> builders = {
     BottomSheetType.notice: (context, request, completer) =>
         NoticeSheet(request: request, completer: completer),
-
   };
 
   bottomsheetService.setCustomSheetBuilders(builders);
