@@ -1,20 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'dart:convert';
-
+import 'package:task_flow/core/utils/converters.dart';
 part 'task.freezed.dart';
 part 'task.g.dart';
 
 @freezed
-class Task with _$Task {
-  const factory Task({
+class ToDoTask with _$ToDoTask {
+  const factory ToDoTask({
     required String title,
     required String id,
     required bool done,
     required String details,
     required String parentProjectId,
-    required DateTime deadline,
+    @JsonKey(
+        fromJson: Converters.timestampToDateTime,
+        toJson: Converters.dateTimeToTimestamp)
+    required DateTime? deadline,
     required String assignee,
-  }) = _Task;
+  }) = _ToDoTask;
 
-  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+  factory ToDoTask.fromJson(Map<String, dynamic> json) =>
+      _$ToDoTaskFromJson(json);
 }

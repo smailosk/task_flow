@@ -6,6 +6,7 @@ import 'package:task_flow/core/error_handling/failures/functions_failures.dart';
 import 'package:task_flow/core/error_handling/failures/general_failure.dart';
 import 'package:task_flow/core/models/environment/environment.dart';
 import 'package:task_flow/core/models/project/project.dart';
+import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/services/firestore_service.dart';
 import 'package:task_flow/services/functions_service.dart';
 
@@ -16,14 +17,18 @@ class RepoService with ListenableServiceMixin {
 
   final Map<String, Environment> _environments = {};
   final Map<String, Project> _projects = {};
+  final Map<String, List<ToDoTask>> _tasksByProject = {};
+
   Map<String, Environment> get environments => _environments;
   Map<String, Project> get projects => _projects;
+  Map<String, List<ToDoTask>> get tasksByProject => _tasksByProject;
 
   init() async {
     _environments.clear();
     _projects.clear();
 
     _log.i('RepoService - init');
+    await _fetchEnvironments();
     final envToFetch = await _fetchProjects();
     await _fetchEnvironmentByIds(envToFetch);
 
@@ -34,22 +39,22 @@ class RepoService with ListenableServiceMixin {
     _log.i(_environments.values.first.color);
   }
 
-  // _fetchEnvironments() async {
-  //   try {
-  //     final data = await _firestore.fetchEnvironments();
-  // _environments.addAll(
-  //     data.map((e) => MapEntry(e.id, e)) as Map<String, Environment>);
-  //   } on Failure catch (e) {
-  //     _log.e('RepoService - _fetchEnvironment', e);
-  //     rethrow;
-  //   } catch (e, s) {
-  //     throw GeneralFailure(
-  //       type: GeneralFailureType.unexpectedError,
-  //       description: 'RepoService - _fetchEnvironment ${e.toString()}',
-  //       stackTrace: s,
-  //     );
-  //   }
-  // }
+  _fetchEnvironments() async {
+    try {
+      final data = await _firestore.fetchEnvironments();
+      final envs = {for (var e in data) e.id: e};
+      _environments.addAll(envs);
+    } on Failure catch (e) {
+      _log.e('RepoService - _fetchEnvironment', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - _fetchEnvironment ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
 
   Future<List<String>> _fetchProjects() async {
     try {
@@ -83,6 +88,23 @@ class RepoService with ListenableServiceMixin {
       throw GeneralFailure(
         type: GeneralFailureType.unexpectedError,
         description: 'RepoService - _fetchEnvironmentByIds ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future<List<ToDoTask>> fetchTasksForProject(String projectId) async {
+    try {
+      final data = await _firestore.fetchTasksForProject(projectId);
+      _tasksByProject[projectId] = data + data + data;
+      return data;
+    } on Failure catch (e) {
+      _log.e('RepoService - fetchTasksForProject', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - fetchTasksForProject ${e.toString()}',
         stackTrace: s,
       );
     }

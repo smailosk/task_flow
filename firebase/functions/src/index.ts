@@ -14,6 +14,7 @@ import * as functions from 'firebase-functions';
 import { initializeApp } from "firebase-admin/app";
 import { FieldValue, getFirestore } from "firebase-admin/firestore";
 import { Environment, Project, Task, FunctionsErrorCodes } from "./models";
+import { generateRandomColor } from "./utils";
 initializeApp();
 const firestoreDb = getFirestore();
 
@@ -69,8 +70,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
             id: firestoreDb.collection('Environments').doc().id,
             name: 'Default Environment',
             icon: 'default_icon',
-            color: '#000000' // Example RGB code
-            ,
+            color: generateRandomColor(),
             admins: [user.uid]
         };
         await firestoreDb.collection('Environments').doc(environmentData.id).set(environmentData);
@@ -81,7 +81,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
             name: 'Default Project',
             parentEnvironmentId: environmentData.id,
             members: [user.uid],
-            color: '#123456' // Example RGB code
+            color: generateRandomColor()
         };
         await firestoreDb.collection('Projects').doc(projectData.id).set(projectData);
 
@@ -130,6 +130,10 @@ export const createEnvironment = onCall(async (request) => {
         typeof request.data.icon !== 'string' ||
         typeof request.data.color !== 'string') {
         throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+    // Check if color is a valid hex 16 string
+    if (!/^#[0-9A-Fa-f]{6}$/i.test(request.data.color)) {
+        throw new HttpsError(FunctionsErrorCodes.INVALID_ARGUMENT, 'Invalid color format:' + request.data.color);
     }
 
     try {

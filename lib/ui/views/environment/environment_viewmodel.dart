@@ -4,6 +4,7 @@ import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/app/app.router.dart';
 import 'package:task_flow/core/models/environment/environment.dart';
+import 'package:task_flow/services/auth_service.dart';
 import 'package:task_flow/services/repo_service.dart';
 
 class EnvironmentViewModel extends ReactiveViewModel {
@@ -11,11 +12,12 @@ class EnvironmentViewModel extends ReactiveViewModel {
 
   final _navigationService = locator<NavigationService>();
   final _repo = locator<RepoService>();
+  final _auth = locator<AuthService>();
+  String get displayName => _auth.displayName ?? '';
 
   @override
   List<ListenableServiceMixin> get listenableServices => [_repo];
 
-  final List<Environment> _environments = [];
   List<Environment> get environments => _repo.environments.values.toList();
   init() {
     // _environments.clear();
@@ -27,5 +29,13 @@ class EnvironmentViewModel extends ReactiveViewModel {
   navigatoToAddEnvironment() {
     _log.i('navigatoToAddEnvironment');
     _navigationService.navigateTo(Routes.addEnvironmentView);
+  }
+
+  openEnvironment(int index) {
+    _log.i('openEnvironment - $index');
+    _navigationService.navigateToProjectsView(
+        environmentId: environments[index].id);
+    // _navigationService.navigateTo(Routes.environmentView,
+    //     arguments: EnvironmentViewArguments(environment: environments[index]));
   }
 }

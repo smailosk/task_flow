@@ -14,29 +14,33 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Task _$TaskFromJson(Map<String, dynamic> json) {
-  return _Task.fromJson(json);
+ToDoTask _$ToDoTaskFromJson(Map<String, dynamic> json) {
+  return _ToDoTask.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Task {
+mixin _$ToDoTask {
   String get title => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   bool get done => throw _privateConstructorUsedError;
   String get details => throw _privateConstructorUsedError;
   String get parentProjectId => throw _privateConstructorUsedError;
-  DateTime get deadline => throw _privateConstructorUsedError;
+  @JsonKey(
+      fromJson: Converters.timestampToDateTime,
+      toJson: Converters.dateTimeToTimestamp)
+  DateTime? get deadline => throw _privateConstructorUsedError;
   String get assignee => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TaskCopyWith<Task> get copyWith => throw _privateConstructorUsedError;
+  $ToDoTaskCopyWith<ToDoTask> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TaskCopyWith<$Res> {
-  factory $TaskCopyWith(Task value, $Res Function(Task) then) =
-      _$TaskCopyWithImpl<$Res, Task>;
+abstract class $ToDoTaskCopyWith<$Res> {
+  factory $ToDoTaskCopyWith(ToDoTask value, $Res Function(ToDoTask) then) =
+      _$ToDoTaskCopyWithImpl<$Res, ToDoTask>;
   @useResult
   $Res call(
       {String title,
@@ -44,14 +48,17 @@ abstract class $TaskCopyWith<$Res> {
       bool done,
       String details,
       String parentProjectId,
-      DateTime deadline,
+      @JsonKey(
+          fromJson: Converters.timestampToDateTime,
+          toJson: Converters.dateTimeToTimestamp)
+      DateTime? deadline,
       String assignee});
 }
 
 /// @nodoc
-class _$TaskCopyWithImpl<$Res, $Val extends Task>
-    implements $TaskCopyWith<$Res> {
-  _$TaskCopyWithImpl(this._value, this._then);
+class _$ToDoTaskCopyWithImpl<$Res, $Val extends ToDoTask>
+    implements $ToDoTaskCopyWith<$Res> {
+  _$ToDoTaskCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -66,7 +73,7 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
     Object? done = null,
     Object? details = null,
     Object? parentProjectId = null,
-    Object? deadline = null,
+    Object? deadline = freezed,
     Object? assignee = null,
   }) {
     return _then(_value.copyWith(
@@ -90,10 +97,10 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
           ? _value.parentProjectId
           : parentProjectId // ignore: cast_nullable_to_non_nullable
               as String,
-      deadline: null == deadline
+      deadline: freezed == deadline
           ? _value.deadline
           : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       assignee: null == assignee
           ? _value.assignee
           : assignee // ignore: cast_nullable_to_non_nullable
@@ -103,10 +110,11 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
 }
 
 /// @nodoc
-abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
-  factory _$$TaskImplCopyWith(
-          _$TaskImpl value, $Res Function(_$TaskImpl) then) =
-      __$$TaskImplCopyWithImpl<$Res>;
+abstract class _$$ToDoTaskImplCopyWith<$Res>
+    implements $ToDoTaskCopyWith<$Res> {
+  factory _$$ToDoTaskImplCopyWith(
+          _$ToDoTaskImpl value, $Res Function(_$ToDoTaskImpl) then) =
+      __$$ToDoTaskImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -115,15 +123,19 @@ abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
       bool done,
       String details,
       String parentProjectId,
-      DateTime deadline,
+      @JsonKey(
+          fromJson: Converters.timestampToDateTime,
+          toJson: Converters.dateTimeToTimestamp)
+      DateTime? deadline,
       String assignee});
 }
 
 /// @nodoc
-class __$$TaskImplCopyWithImpl<$Res>
-    extends _$TaskCopyWithImpl<$Res, _$TaskImpl>
-    implements _$$TaskImplCopyWith<$Res> {
-  __$$TaskImplCopyWithImpl(_$TaskImpl _value, $Res Function(_$TaskImpl) _then)
+class __$$ToDoTaskImplCopyWithImpl<$Res>
+    extends _$ToDoTaskCopyWithImpl<$Res, _$ToDoTaskImpl>
+    implements _$$ToDoTaskImplCopyWith<$Res> {
+  __$$ToDoTaskImplCopyWithImpl(
+      _$ToDoTaskImpl _value, $Res Function(_$ToDoTaskImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -134,10 +146,10 @@ class __$$TaskImplCopyWithImpl<$Res>
     Object? done = null,
     Object? details = null,
     Object? parentProjectId = null,
-    Object? deadline = null,
+    Object? deadline = freezed,
     Object? assignee = null,
   }) {
-    return _then(_$TaskImpl(
+    return _then(_$ToDoTaskImpl(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -158,10 +170,10 @@ class __$$TaskImplCopyWithImpl<$Res>
           ? _value.parentProjectId
           : parentProjectId // ignore: cast_nullable_to_non_nullable
               as String,
-      deadline: null == deadline
+      deadline: freezed == deadline
           ? _value.deadline
           : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       assignee: null == assignee
           ? _value.assignee
           : assignee // ignore: cast_nullable_to_non_nullable
@@ -172,18 +184,21 @@ class __$$TaskImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TaskImpl implements _Task {
-  const _$TaskImpl(
+class _$ToDoTaskImpl implements _ToDoTask {
+  const _$ToDoTaskImpl(
       {required this.title,
       required this.id,
       required this.done,
       required this.details,
       required this.parentProjectId,
+      @JsonKey(
+          fromJson: Converters.timestampToDateTime,
+          toJson: Converters.dateTimeToTimestamp)
       required this.deadline,
       required this.assignee});
 
-  factory _$TaskImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TaskImplFromJson(json);
+  factory _$ToDoTaskImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ToDoTaskImplFromJson(json);
 
   @override
   final String title;
@@ -196,20 +211,23 @@ class _$TaskImpl implements _Task {
   @override
   final String parentProjectId;
   @override
-  final DateTime deadline;
+  @JsonKey(
+      fromJson: Converters.timestampToDateTime,
+      toJson: Converters.dateTimeToTimestamp)
+  final DateTime? deadline;
   @override
   final String assignee;
 
   @override
   String toString() {
-    return 'Task(title: $title, id: $id, done: $done, details: $details, parentProjectId: $parentProjectId, deadline: $deadline, assignee: $assignee)';
+    return 'ToDoTask(title: $title, id: $id, done: $done, details: $details, parentProjectId: $parentProjectId, deadline: $deadline, assignee: $assignee)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TaskImpl &&
+            other is _$ToDoTaskImpl &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.done, done) || other.done == done) &&
@@ -230,28 +248,32 @@ class _$TaskImpl implements _Task {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TaskImplCopyWith<_$TaskImpl> get copyWith =>
-      __$$TaskImplCopyWithImpl<_$TaskImpl>(this, _$identity);
+  _$$ToDoTaskImplCopyWith<_$ToDoTaskImpl> get copyWith =>
+      __$$ToDoTaskImplCopyWithImpl<_$ToDoTaskImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TaskImplToJson(
+    return _$$ToDoTaskImplToJson(
       this,
     );
   }
 }
 
-abstract class _Task implements Task {
-  const factory _Task(
+abstract class _ToDoTask implements ToDoTask {
+  const factory _ToDoTask(
       {required final String title,
       required final String id,
       required final bool done,
       required final String details,
       required final String parentProjectId,
-      required final DateTime deadline,
-      required final String assignee}) = _$TaskImpl;
+      @JsonKey(
+          fromJson: Converters.timestampToDateTime,
+          toJson: Converters.dateTimeToTimestamp)
+      required final DateTime? deadline,
+      required final String assignee}) = _$ToDoTaskImpl;
 
-  factory _Task.fromJson(Map<String, dynamic> json) = _$TaskImpl.fromJson;
+  factory _ToDoTask.fromJson(Map<String, dynamic> json) =
+      _$ToDoTaskImpl.fromJson;
 
   @override
   String get title;
@@ -264,11 +286,14 @@ abstract class _Task implements Task {
   @override
   String get parentProjectId;
   @override
-  DateTime get deadline;
+  @JsonKey(
+      fromJson: Converters.timestampToDateTime,
+      toJson: Converters.dateTimeToTimestamp)
+  DateTime? get deadline;
   @override
   String get assignee;
   @override
   @JsonKey(ignore: true)
-  _$$TaskImplCopyWith<_$TaskImpl> get copyWith =>
+  _$$ToDoTaskImplCopyWith<_$ToDoTaskImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

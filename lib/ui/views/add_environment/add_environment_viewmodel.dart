@@ -25,7 +25,7 @@ class AddEnvironmentViewModel extends FormViewModel {
 
   init() {
     _colors.addAll(Utils.generateRandomColors(20)
-        .map((e) => e.value.toRadixString(16))
+        .map((e) => Utils.colorToHex(e))
         .toList());
     setInitialised(true);
     updateSelectedColor(0);

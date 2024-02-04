@@ -11,6 +11,8 @@ class AuthService {
   }
 
   String? get uid => _auth.currentUser?.uid;
+  String? get email => _auth.currentUser?.email;
+  String? get displayName => _auth.currentUser?.displayName;
 
   Future<bool> isUserSignedIn() async {
     final user = await _auth.authStateChanges().first;

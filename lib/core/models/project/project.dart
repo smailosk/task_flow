@@ -1,6 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'dart:convert';
-
 part 'project.freezed.dart';
 part 'project.g.dart';
 

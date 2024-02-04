@@ -1,28 +1,37 @@
-import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:task_flow/ui/views/projects/projects_view.dart';
+import 'package:stacked_services/stacked_services.dart';
+import 'package:task_flow/app/app.locator.dart';
+import 'package:task_flow/core/models/project/project.dart';
+import 'package:task_flow/core/models/task/task.dart';
+import 'package:task_flow/services/firestore_service.dart';
+import 'package:task_flow/services/repo_service.dart';
 
 class ProjectsViewModel extends BaseViewModel {
-  List<ProjectModel> getMockProjects() {
-    return [
-      ProjectModel(
-        'Project Alpha',
-        Colors.blue.shade700,
-        '31.12.2023',
-        ['Design phase', 'Development phase'],
-      ),
-      ProjectModel(
-        'Project Beta',
-        Colors.green,
-        '15.01.2024',
-        ['Research', 'Implementation', 'Testing'],
-      ),
-      ProjectModel(
-        'Project Gamma',
-        Colors.red,
-        '30.03.2024',
-        ['Planning', 'Execution'],
-      ),
-    ];
+  ProjectsViewModel(this.environmentId);
+
+  final String environmentId;
+
+  final _navigationService = locator<NavigationService>();
+  final _repoService = locator<RepoService>();
+
+  List<Project> get projects => _repoService.projects.values
+      .where((element) => element.parentEnvironmentId == environmentId)
+      .toList();
+
+  List<ToDoTask> getTasksForProject(String projectId) {
+    return _repoService.tasksByProject[projectId] ?? [];
+  }
+
+  init() async {
+    setBusy(true);
+    // await _repoService.fetchTasksForProject(projects.first.id);
+    await Future.wait(projects
+        .map((element) => _repoService.fetchTasksForProject(element.id)));
+
+    setBusy(false);
+  }
+
+  back() {
+    _navigationService.back();
   }
 }

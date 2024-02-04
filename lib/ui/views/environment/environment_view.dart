@@ -26,11 +26,12 @@ class EnvironmentView extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              const Align(
+              Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Welcome Ismail ',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    'Welcome ${viewModel.displayName}',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   )),
               const SizedBox(height: 10),
               Expanded(
@@ -44,28 +45,31 @@ class EnvironmentView extends StatelessWidget {
                     mainAxisSpacing: 5,
                   ),
                   itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          color: Utils.hexToColor(
-                              viewModel.environments[index].color),
-                          height: 100,
-                          width: 100,
-                        ),
-                        verticalSpace(15),
-                        Text(
-                          viewModel.environments[index].name,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          style: const TextStyle(
-                            height: 1,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    return GestureDetector(
+                      onTap: () => viewModel.openEnvironment(index),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            color: Utils.hexToColor(
+                                viewModel.environments[index].color),
+                            height: 100,
+                            width: 100,
                           ),
-                        )
-                      ],
+                          verticalSpace(15),
+                          Text(
+                            viewModel.environments[index].name,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              height: 1,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
+                      ),
                     );
                     // return CategoryItem(
                     //   title: viewModel.environments[index].name,

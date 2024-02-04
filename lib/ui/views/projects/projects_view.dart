@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:task_flow/core/models/project/project.dart';
+import 'package:task_flow/core/utils/utils.dart';
+import 'package:task_flow/ui/common/widgets/busy_widget.dart';
 
 import '../../common/widgets/reusable_icon_button.dart';
 import 'projects_viewmodel.dart';
 
 class ProjectsView extends StatelessWidget {
-  const ProjectsView({Key? key}) : super(key: key);
+  const ProjectsView({super.key, required this.environmentId});
+
+  final String environmentId;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProjectsViewModel>.reactive(
-      viewModelBuilder: () => ProjectsViewModel(),
-      builder: (context, model, child) => Scaffold(
+      viewModelBuilder: () => ProjectsViewModel(environmentId),
+      onViewModelReady: (viewmodel) => viewmodel.init(),
+      builder: (context, viewmodel, child) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              // Handle back button
-            },
+            onPressed: viewmodel.back,
           ),
           title: const Text('Env Name',
               style: TextStyle(
@@ -39,27 +43,30 @@ class ProjectsView extends StatelessWidget {
             ),
           ],
         ),
-        body: Container(
-          padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'In Progress',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return ProjectCard(
-                      project: model.getMockProjects()[index],
-                    );
-                  },
+        body: BusyWidget(
+          isBusy: viewmodel.isBusy,
+          child: Container(
+            padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'In Progress',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: viewmodel.projects.length,
+                    itemBuilder: (context, index) {
+                      return ProjectCard(
+                        project: viewmodel.projects[index],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -67,14 +74,14 @@ class ProjectsView extends StatelessWidget {
   }
 }
 
-class ProjectCard extends StatelessWidget {
-  final ProjectModel project;
+class ProjectCard extends ViewModelWidget<ProjectsViewModel> {
+  final Project project;
   final int tasksToShow = 2;
 
-  const ProjectCard({Key? key, required this.project}) : super(key: key);
+  const ProjectCard({super.key, required this.project});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ProjectsViewModel viewModel) {
     return Card(
       color: Colors.grey.shade50,
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -87,10 +94,10 @@ class ProjectCard extends StatelessWidget {
           children: [
             // Title section
             Container(
-              color: project.backgroundColor,
+              color: Utils.hexToColor(project.color),
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                project.title,
+                project.name,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -103,47 +110,37 @@ class ProjectCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: project.tasks
-                    .take(tasksToShow) // Take only up to 'tasksToShow' tasks
-                    .map((task) => Text(task))
-                    .toList(),
+                children: viewModel
+                    .getTasksForProject(project.id)
+                    .map((e) => Text(e.title))
+                    .toList()
+                    .sublist(0, 2),
               ),
             ),
-            if (project.tasks.length > tasksToShow)
+            if (viewModel.getTasksForProject(project.id).length > tasksToShow)
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                child: Text('...'), // Indication that there are more tasks
+                child: Text(
+                  '...',
+                  textAlign: TextAlign.start,
+                ), // Indication that there are more tasks
               ),
-            const Divider(color: Colors.grey, endIndent: 8, indent: 8),
-            // Deadline section
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                'Deadline: ${project.deadline}',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
+            // const Divider(color: Colors.grey, endIndent: 8, indent: 8),
+            // // Deadline section
+            // Padding(
+            //   padding: const EdgeInsets.all(8),
+            //   child: Text(
+            //     'Deadline: ${project.deadline}',
+            //     style: const TextStyle(
+            //       fontSize: 14,
+            //       color: Colors.black,
+            //       fontWeight: FontWeight.w400,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
     );
   }
-}
-
-class ProjectModel {
-  String title;
-  Color backgroundColor;
-  String deadline;
-  List<String> tasks;
-
-  ProjectModel(
-    this.title,
-    this.backgroundColor,
-    this.deadline,
-    this.tasks,
-  );
 }

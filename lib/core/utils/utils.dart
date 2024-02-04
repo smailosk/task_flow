@@ -6,11 +6,14 @@ import 'package:task_flow/app/app.logger.dart';
 class Utils {
   static final _log = getLogger('Utils');
   static Color hexToColor(String hexString) {
-    _log.i(hexString);
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
     buffer.write(hexString.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  static String colorToHex(Color color) {
+    return '#${color.value.toRadixString(16).substring(2)}';
   }
 
   static List<Color> generateRandomColors(int count) {

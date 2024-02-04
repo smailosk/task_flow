@@ -6,23 +6,24 @@ part of 'task.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TaskImpl _$$TaskImplFromJson(Map<String, dynamic> json) => _$TaskImpl(
+_$ToDoTaskImpl _$$ToDoTaskImplFromJson(Map<String, dynamic> json) =>
+    _$ToDoTaskImpl(
       title: json['title'] as String,
       id: json['id'] as String,
       done: json['done'] as bool,
       details: json['details'] as String,
       parentProjectId: json['parentProjectId'] as String,
-      deadline: DateTime.parse(json['deadline'] as String),
+      deadline: Converters.timestampToDateTime(json['deadline'] as Timestamp?),
       assignee: json['assignee'] as String,
     );
 
-Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>
+Map<String, dynamic> _$$ToDoTaskImplToJson(_$ToDoTaskImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
       'id': instance.id,
       'done': instance.done,
       'details': instance.details,
       'parentProjectId': instance.parentProjectId,
-      'deadline': instance.deadline.toIso8601String(),
+      'deadline': Converters.dateTimeToTimestamp(instance.deadline),
       'assignee': instance.assignee,
     };

@@ -53,7 +53,24 @@ class FirestoreService {
     }
   }
 
-  Future<List<Task>> fetchTasks() async {
+  Future<List<ToDoTask>> fetchTasksForProject(String projectId,
+      {int limit = 100}) async {
+    try {
+      final snapshot = await _firestore
+          .collection('Tasks')
+          .where(
+            'parentProjectId',
+            isEqualTo: projectId,
+          )
+          .limit(limit)
+          .get();
+
+      final tasks =
+          snapshot.docs.map((e) => ToDoTask.fromJson(e.data())).toList();
+      return tasks;
+    } catch (e) {
+      throw GeneralFailure(description: e.toString());
+    }
     return [];
   }
 
