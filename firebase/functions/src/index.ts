@@ -13,8 +13,9 @@ import * as functions from 'firebase-functions';
 
 import { initializeApp } from "firebase-admin/app";
 import { FieldValue, getFirestore } from "firebase-admin/firestore";
-import { Environment, Project, Task } from "./models";
+import { Environment, Project, Task, FunctionsErrorCodes } from "./models";
 initializeApp();
+const firestoreDb = getFirestore();
 
 // export const CreateProject = onRequest(async (request, response) => {
 //     const firestore = getFirestore();
@@ -55,14 +56,13 @@ export const PrintBody = onRequest(async (request, response) => {
 
         response.send(`Data processed successfully ${JSON.stringify(data)}`);
     } catch (error) {
-        response.status(400).send("Invalid data format");
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
 
 exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
     try {
-        const firestoreDb = getFirestore();
 
         // Create an example environment
         const environmentData: Environment = {
@@ -115,7 +115,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
 
     } catch (error) {
         console.error('Error creating initial data for user:', error);
-        throw new functions.https.HttpsError('internal', 'Unable to initialize user data.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -133,7 +133,6 @@ export const createEnvironment = onCall(async (request) => {
     }
 
     try {
-        const firestoreDb = getFirestore();
         const userId = request.auth.uid;
 
         // Create a new environment with the creator as an admin
@@ -147,11 +146,10 @@ export const createEnvironment = onCall(async (request) => {
 
         // Save the new environment to Firestore
         await firestoreDb.collection('Environments').doc(newEnvironment.id).set(newEnvironment);
-
-        return { message: 'Environment created successfully', environmentId: newEnvironment.id };
+        return newEnvironment;
     } catch (error) {
         console.error('Error creating environment:', error);
-        throw new HttpsError('internal', 'Unable to create environment.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -165,7 +163,6 @@ export const deleteEnvironment = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
     const environmentId = request.data.environmentId;
     const userId = request.auth.uid;
 
@@ -189,7 +186,7 @@ export const deleteEnvironment = onCall(async (request) => {
         return { message: 'Environment deleted successfully' };
     } catch (error) {
         console.error('Error deleting environment:', error);
-        throw new HttpsError('internal', 'Unable to delete environment.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -207,7 +204,6 @@ export const createProject = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
     const userId = request.auth.uid;
     const { name, parentEnvironmentId, color } = request.data; // Destructure the project data from the request
 
@@ -241,7 +237,7 @@ export const createProject = onCall(async (request) => {
         return { message: 'Project created successfully', projectId: newProject.id };
     } catch (error) {
         console.error('Error creating project:', error);
-        throw new HttpsError('internal', 'Unable to create project.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -255,7 +251,7 @@ export const deleteProject = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
+
     const projectId = request.data.projectId;
     const userId = request.auth.uid;
 
@@ -288,7 +284,7 @@ export const deleteProject = onCall(async (request) => {
         return { message: 'Project deleted successfully' };
     } catch (error) {
         console.error('Error deleting project:', error);
-        throw new HttpsError('internal', 'Unable to delete project.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -304,7 +300,7 @@ export const addMemberToProject = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
+
     const { projectId, memberId } = request.data;
     const userId = request.auth.uid;
 
@@ -328,7 +324,8 @@ export const addMemberToProject = onCall(async (request) => {
         const environmentData = environmentDoc.data() as Environment;
 
         if (!environmentData.admins.includes(userId)) {
-            throw new HttpsError('permission-denied', 'User is not an admin of the parent environment');
+            throw new HttpsError(FunctionsErrorCodes.PERMISSION_DENIED, 'User is not an admin of the parent environment');
+
         }
 
         // Add the member to the project
@@ -339,7 +336,7 @@ export const addMemberToProject = onCall(async (request) => {
         return { message: 'Member added to project successfully' };
     } catch (error) {
         console.error('Error adding member to project:', error);
-        throw new HttpsError('internal', 'Unable to add member to project.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -354,7 +351,7 @@ export const deleteMemberFromProject = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
+
     const { projectId, memberId } = request.data;
     const userId = request.auth.uid;
 
@@ -389,7 +386,7 @@ export const deleteMemberFromProject = onCall(async (request) => {
         return { message: 'Member removed from project successfully' };
     } catch (error) {
         console.error('Error removing member from project:', error);
-        throw new HttpsError('internal', 'Unable to remove member from project.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -409,7 +406,6 @@ export const createTask = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
     const { title, details, parentProjectId, deadline } = request.data; // Destructure the task data
     const assignee = request.auth.uid; // Assign task to the creator by default
 
@@ -431,7 +427,7 @@ export const createTask = onCall(async (request) => {
         return { message: 'Task created successfully', taskId: newTask.id };
     } catch (error) {
         console.error('Error creating task:', error);
-        throw new HttpsError('internal', 'Unable to create task.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -445,7 +441,7 @@ export const deleteTask = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
+
     const taskId = request.data.taskId;
 
     try {
@@ -455,7 +451,7 @@ export const deleteTask = onCall(async (request) => {
         return { message: 'Task deleted successfully' };
     } catch (error) {
         console.error('Error deleting task:', error);
-        throw new HttpsError('internal', 'Unable to delete task.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
@@ -471,7 +467,6 @@ export const modifyTask = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
     const { taskId, newDetails } = request.data;
 
     try {
@@ -481,7 +476,9 @@ export const modifyTask = onCall(async (request) => {
         return { message: 'Task updated successfully' };
     } catch (error) {
         console.error('Error modifying task:', error);
-        throw new HttpsError('internal', 'Unable to modify task.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
+
+
     }
 });
 
@@ -496,7 +493,6 @@ export const markTaskDone = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
     const { taskId, done } = request.data;
 
     try {
@@ -506,7 +502,8 @@ export const markTaskDone = onCall(async (request) => {
         return { message: `Task marked as ${done ? 'done' : 'undone'} successfully` };
     } catch (error) {
         console.error('Error marking task as done/undone:', error);
-        throw new HttpsError('internal', 'Unable to mark task as done/undone.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, 'Unable to mark task as done/undone.');
+
     }
 });
 
@@ -521,7 +518,6 @@ export const assignTask = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
     const { taskId, newAssigneeId } = request.data;
 
     try {
@@ -531,7 +527,7 @@ export const assignTask = onCall(async (request) => {
         return { message: 'Task assignee updated successfully' };
     } catch (error) {
         console.error('Error assigning task:', error);
-        throw new HttpsError('internal', 'Unable to assign task.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, 'Unable to assign task.');
     }
 });
 
@@ -550,7 +546,6 @@ export const modifyEnvironment = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const firestoreDb = getFirestore();
     const { environmentId, newTitle, newColor, admins } = request.data;
     const userId = request.auth.uid;
 
@@ -578,6 +573,8 @@ export const modifyEnvironment = onCall(async (request) => {
         return { message: 'Environment updated successfully' };
     } catch (error) {
         console.error('Error modifying environment:', error);
-        throw new HttpsError('internal', 'Unable to modify environment.');
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, 'Unable to modify environment.');
+
+
     }
 });
