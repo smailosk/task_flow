@@ -14,6 +14,7 @@ import 'package:task_flow/services/firestore_service.dart';
 import 'package:task_flow/ui/views/add_environment/add_environment_view.dart';
 import 'package:task_flow/ui/views/settings/settings_view.dart';
 import 'package:task_flow/ui/views/calendar/calendar_view.dart';
+import 'package:task_flow/ui/views/projects/projects_view.dart';
 // @stacked-import
 
 //  flutter clean && flutter pub get && stacked generate
@@ -33,6 +34,7 @@ import 'package:task_flow/ui/views/calendar/calendar_view.dart';
     MaterialRoute(page: AddEnvironmentView),
     MaterialRoute(page: SettingsView),
     MaterialRoute(page: CalendarView),
+    MaterialRoute(page: ProjectsView),
 // @stacked-route
   ],
   dependencies: [
