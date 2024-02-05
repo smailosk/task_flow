@@ -15,6 +15,8 @@ import 'package:task_flow/ui/views/add_environment/add_environment_view.dart';
 import 'package:task_flow/ui/views/settings/settings_view.dart';
 import 'package:task_flow/ui/views/calendar/calendar_view.dart';
 import 'package:task_flow/ui/views/projects/projects_view.dart';
+import 'package:task_flow/ui/views/add_project/add_project_view.dart';
+import 'package:task_flow/ui/views/todo_tasks/todo_tasks_view.dart';
 // @stacked-import
 
 //  flutter clean && flutter pub get && stacked generate
@@ -35,6 +37,8 @@ import 'package:task_flow/ui/views/projects/projects_view.dart';
     MaterialRoute(page: SettingsView),
     MaterialRoute(page: CalendarView),
     MaterialRoute(page: ProjectsView),
+    MaterialRoute(page: AddProjectView),
+    MaterialRoute(page: TodoTasksView),
 // @stacked-route
   ],
   dependencies: [

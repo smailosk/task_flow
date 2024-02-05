@@ -17,6 +17,17 @@ import 'add_environment_viewmodel.dart';
 class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
   const AddEnvironmentView({super.key});
 
+  // void _pickIcon(
+  //     BuildContext context, AddEnvironmentViewModel viewModel) async {
+  //   IconData? icon = await FlutterIconPicker.showIconPicker(context,
+  //       iconPackModes: [IconPack.material]);
+  //
+  //   if (icon != null) {
+  //     viewModel
+  //         .setIcon(icon); // You need to implement setIcon in your ViewModel
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddEnvironmentViewModel>.reactive(
@@ -42,12 +53,56 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
+                    verticalSpaceLarge,
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Environment Name',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    verticalSpaceTiny,
                     TextField(
                       controller: environmentNameController,
-                      decoration:
-                          const InputDecoration(labelText: 'Environment name'),
+                      decoration: const InputDecoration(
+                          labelText: 'Environment Name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          fillColor: Colors.purpleAccent),
                     ),
-                    verticalSpaceLarge,
+                    verticalSpaceMedium,
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Environment Icon: '
+                        '=> ToDo (add Icon Picker)',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    // Column(
+                    //   children: [
+                    //     IconButton(
+                    //       icon: Icon(Icons.palette), // Use an icon that suggests picking an icon
+                    //       onPressed: () => viewModel.selectedIcon,
+                    //     ),
+                    //     SizedBox(width: 10), // Spacing between button and displayed icon
+                    //     Icon(viewModel.selectedIcon ?? Icons.help_outline, size: 24), // Display the selected icon or a placeholder
+                    //   ],
+                    // ),
+                    verticalSpaceMedium,
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Environment Color',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    verticalSpaceTiny,
                     SizedBox(
                       width: screenWidth(context),
                       height: 50,
@@ -66,9 +121,7 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                                     ));
                           }),
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    verticalSpaceLarge,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -83,20 +136,6 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                           text: 'Create Environment',
                           color: const Color(0xFF24A19C),
                         ),
-                        // ElevatedButton(
-                        //   onPressed: () {},
-                        //   style: ElevatedButton.styleFrom(
-                        //     backgroundColor: const Color(0xFF24A19C),
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(10),
-                        //     ),
-                        //   ),
-                        //   child: const Text('Create Environment',
-                        //       style: TextStyle(
-                        //         color: Colors.white,
-                        //         fontWeight: FontWeight.bold,
-                        //       )),
-                        // ),
                       ],
                     )
                   ],

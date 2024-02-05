@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:task_flow/app/app.locator.dart';
@@ -12,10 +13,19 @@ class AddEnvironmentViewModel extends FormViewModel {
   final _log = getLogger('AddEnvironmentViewModel');
   final _navigationService = locator<NavigationService>();
   int _selectedColorIndex = 0;
+
   int get selectedColorIndex => _selectedColorIndex;
 
   final _colors = <String>[];
+
   List<String> get colors => _colors;
+
+  IconData? selectedIcon;
+
+  void setIcon(IconData icon) {
+    selectedIcon = icon;
+    notifyListeners();
+  }
 
   void updateSelectedColor(int index) {
     environmentColorValue = _colors[index];
