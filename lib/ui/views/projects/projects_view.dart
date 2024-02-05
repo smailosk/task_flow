@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/core/models/project/project.dart';
@@ -35,7 +37,7 @@ class ProjectsView extends StatelessWidget {
               child: ReusableIconButton(
                 icon: Icons.add,
                 text: 'Add Project',
-                onPressed: () {},
+                onPressed: viewmodel.navigateToAddProject,
                 textColor: Colors.white,
                 backgroundColor: const Color(0xFF24A19C),
                 borderRadius: 8.0, // Set the desired border radius
@@ -75,7 +77,7 @@ class ProjectsView extends StatelessWidget {
 }
 
 class ProjectCard extends ViewModelWidget<ProjectsViewModel> {
-  final Project project;
+  final ProjectModel project;
   final int tasksToShow = 2;
 
   const ProjectCard({super.key, required this.project});
@@ -107,16 +109,22 @@ class ProjectCard extends ViewModelWidget<ProjectsViewModel> {
             ),
             // Tasks
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: viewModel.getTasksForProject(project.id).isEmpty
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: viewModel
                     .getTasksForProject(project.id)
                     .map((e) => Text(e.title))
                     .toList()
-                    .sublist(0, 2),
+                    .sublist(
+                      0,
+                      min(2, viewModel.getTasksForProject(project.id).length),
+                    ),
               ),
             ),
+
             if (viewModel.getTasksForProject(project.id).length > tasksToShow)
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),

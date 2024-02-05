@@ -3,6 +3,7 @@ import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/error_handling/failures/functions_failures.dart';
 import 'package:task_flow/core/error_handling/failures/general_failure.dart';
 import 'package:task_flow/core/models/environment/environment.dart';
+import 'package:task_flow/core/models/project/project.dart';
 
 class FunctionsService {
   final _functions = FirebaseFunctions.instance;
@@ -34,19 +35,37 @@ class FunctionsService {
     }
   }
 
-  Future<Environment> createEnvironment(Environment environment) async {
+  Future<EnvironmentModel> createEnvironment(
+      EnvironmentModel environment) async {
     try {
       final data = await _callCloudFunction('createEnvironment',
           data: environment.toJson());
 
-      return Environment.fromJson(data);
+      return EnvironmentModel.fromJson(data);
     } on FunctionsFailure {
       rethrow;
     } catch (exception, stackTrace) {
       throw GeneralFailure(
           type: GeneralFailureType.unexpectedError,
           description:
-              'FunctionsService - addEnvironment ${exception.toString()}',
+              'FunctionsService - createEnvironment ${exception.toString()}',
+          stackTrace: stackTrace);
+    }
+  }
+
+  Future<ProjectModel> createProject(ProjectModel project) async {
+    try {
+      final data =
+          await _callCloudFunction('createProject', data: project.toJson());
+      _log.wtf(data);
+      return ProjectModel.fromJson(data);
+    } on FunctionsFailure {
+      rethrow;
+    } catch (exception, stackTrace) {
+      throw GeneralFailure(
+          type: GeneralFailureType.unexpectedError,
+          description:
+              'FunctionsService - createProject ${exception.toString()}',
           stackTrace: stackTrace);
     }
   }

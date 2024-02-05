@@ -18,7 +18,7 @@ class EnvironmentViewModel extends ReactiveViewModel {
   @override
   List<ListenableServiceMixin> get listenableServices => [_repo];
 
-  List<Environment> get environments => _repo.environments.values.toList();
+  List<EnvironmentModel> get environments => _repo.environments.values.toList();
   init() {
     // _environments.clear();
     // _environments.addAll(_repo.environments.values.toList());

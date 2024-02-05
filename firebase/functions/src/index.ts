@@ -231,14 +231,13 @@ export const createProject = onCall(async (request) => {
             name: name,
             parentEnvironmentId: parentEnvironmentId,
             color: color,
-            // Initialize other necessary fields for the project
             members: [userId] // Set the creator as the first member
         };
 
         // Save the new project to Firestore
         await firestoreDb.collection('Projects').doc(newProject.id).set(newProject);
 
-        return { message: 'Project created successfully', projectId: newProject.id };
+        return newProject;
     } catch (error) {
         console.error('Error creating project:', error);
         throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);

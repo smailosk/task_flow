@@ -43,10 +43,12 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           body: Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.only(
+                  top: 15, left: 15, right: 15, bottom: 0),
               child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
+                padding: const EdgeInsets.only(
+                    top: 15, left: 15, right: 15, bottom: 0),
+                child: ListView(
                   children: [
                     const Text(
                       'Create new Environment',

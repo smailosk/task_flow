@@ -3,15 +3,15 @@ part 'project.freezed.dart';
 part 'project.g.dart';
 
 @freezed
-class Project with _$Project {
-  const factory Project({
+class ProjectModel with _$ProjectModel {
+  const factory ProjectModel({
     required String id,
     required String name,
     required String parentEnvironmentId,
     required List<String> members,
     required String color,
-  }) = _Project;
+  }) = _ProjectModel;
 
-  factory Project.fromJson(Map<String, dynamic> json) =>
-      _$ProjectFromJson(json);
+  factory ProjectModel.fromJson(Map<String, dynamic> json) =>
+      _$ProjectModelFromJson(json);
 }

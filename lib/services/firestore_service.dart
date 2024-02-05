@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/core/error_handling/failures/general_failure.dart';
 import 'package:task_flow/core/models/environment/environment.dart';
@@ -14,9 +15,7 @@ class FirestoreService {
     _firestore.useFirestoreEmulator('127.0.0.1', 8080);
   }
 
-  Future<List<Environment>> fetchEnvironments() async {
-    if (_auth.uid == null) throw GeneralFailure();
-
+  Future<List<EnvironmentModel>> fetchEnvironments() async {
     try {
       final snapshot = await _firestore
           .collection('Environments')
@@ -26,8 +25,9 @@ class FirestoreService {
           )
           .get();
 
-      final envs =
-          snapshot.docs.map((e) => Environment.fromJson(e.data())).toList();
+      final envs = snapshot.docs
+          .map((e) => EnvironmentModel.fromJson(e.data()))
+          .toList();
 
       return envs;
     } catch (e) {
@@ -35,7 +35,7 @@ class FirestoreService {
     }
   }
 
-  Future<List<Project>> fetchProjects() async {
+  Future<List<ProjectModel>> fetchProjects() async {
     try {
       final snapshot = await _firestore
           .collection('Projects')
@@ -46,14 +46,14 @@ class FirestoreService {
           .get();
 
       final projects =
-          snapshot.docs.map((e) => Project.fromJson(e.data())).toList();
+          snapshot.docs.map((e) => ProjectModel.fromJson(e.data())).toList();
       return projects;
     } catch (e) {
       throw GeneralFailure();
     }
   }
 
-  Future<List<ToDoTask>> fetchTasksForProject(String projectId,
+  Future<List<TaskModel>> fetchTasksForProject(String projectId,
       {int limit = 100}) async {
     try {
       final snapshot = await _firestore
@@ -66,15 +66,15 @@ class FirestoreService {
           .get();
 
       final tasks =
-          snapshot.docs.map((e) => ToDoTask.fromJson(e.data())).toList();
+          snapshot.docs.map((e) => TaskModel.fromJson(e.data())).toList();
       return tasks;
     } catch (e) {
       throw GeneralFailure(description: e.toString());
     }
-    return [];
   }
 
-  Future<List<Environment>> fetchEnvironmentsByIds(List<String> ids) async {
+  Future<List<EnvironmentModel>> fetchEnvironmentsByIds(
+      List<String> ids) async {
     try {
       final snapshot = await _firestore
           .collection('Environments')
@@ -84,8 +84,9 @@ class FirestoreService {
           )
           .get();
 
-      final envs =
-          snapshot.docs.map((e) => Environment.fromJson(e.data())).toList();
+      final envs = snapshot.docs
+          .map((e) => EnvironmentModel.fromJson(e.data()))
+          .toList();
 
       return envs;
     } catch (e) {
@@ -93,7 +94,7 @@ class FirestoreService {
     }
   }
 
-  Future<List<Project>> fetchProjectsByIds(List<String> ids) async {
+  Future<List<ProjectModel>> fetchProjectsByIds(List<String> ids) async {
     try {
       final snapshot = await _firestore
           .collection('Projects')
@@ -104,7 +105,7 @@ class FirestoreService {
           .get();
 
       final projects =
-          snapshot.docs.map((e) => Project.fromJson(e.data())).toList();
+          snapshot.docs.map((e) => ProjectModel.fromJson(e.data())).toList();
       return projects;
     } catch (e) {
       throw GeneralFailure();

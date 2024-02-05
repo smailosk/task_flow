@@ -6,8 +6,8 @@ part of 'task.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ToDoTaskImpl _$$ToDoTaskImplFromJson(Map<String, dynamic> json) =>
-    _$ToDoTaskImpl(
+_$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
+    _$TaskModelImpl(
       title: json['title'] as String,
       id: json['id'] as String,
       done: json['done'] as bool,
@@ -17,7 +17,7 @@ _$ToDoTaskImpl _$$ToDoTaskImplFromJson(Map<String, dynamic> json) =>
       assignee: json['assignee'] as String,
     );
 
-Map<String, dynamic> _$$ToDoTaskImplToJson(_$ToDoTaskImpl instance) =>
+Map<String, dynamic> _$$TaskModelImplToJson(_$TaskModelImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
       'id': instance.id,

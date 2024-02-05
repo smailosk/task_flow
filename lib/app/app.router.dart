@@ -5,12 +5,13 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i10;
+import 'package:flutter/material.dart' as _i12;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i11;
+import 'package:stacked_services/stacked_services.dart' as _i13;
 import 'package:task_flow/ui/views/add_environment/add_environment_view.dart'
     as _i6;
+import 'package:task_flow/ui/views/add_project/add_project_view.dart' as _i10;
 import 'package:task_flow/ui/views/calendar/calendar_view.dart' as _i8;
 import 'package:task_flow/ui/views/environment/environment_view.dart' as _i5;
 import 'package:task_flow/ui/views/home/home_view.dart' as _i2;
@@ -18,6 +19,7 @@ import 'package:task_flow/ui/views/login/login_view.dart' as _i4;
 import 'package:task_flow/ui/views/projects/projects_view.dart' as _i9;
 import 'package:task_flow/ui/views/settings/settings_view.dart' as _i7;
 import 'package:task_flow/ui/views/startup/startup_view.dart' as _i3;
+import 'package:task_flow/ui/views/todo_tasks/todo_tasks_view.dart' as _i11;
 
 class Routes {
   static const homeView = '/home-view';
@@ -36,6 +38,10 @@ class Routes {
 
   static const projectsView = '/projects-view';
 
+  static const addProjectView = '/add-project-view';
+
+  static const todoTasksView = '/todo-tasks-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -45,6 +51,8 @@ class Routes {
     settingsView,
     calendarView,
     projectsView,
+    addProjectView,
+    todoTasksView,
   };
 }
 
@@ -82,56 +90,78 @@ class StackedRouter extends _i1.RouterBase {
       Routes.projectsView,
       page: _i9.ProjectsView,
     ),
+    _i1.RouteDef(
+      Routes.addProjectView,
+      page: _i10.AddProjectView,
+    ),
+    _i1.RouteDef(
+      Routes.todoTasksView,
+      page: _i11.TodoTasksView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.LoginView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.LoginView(),
         settings: data,
       );
     },
     _i5.EnvironmentView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.EnvironmentView(),
         settings: data,
       );
     },
     _i6.AddEnvironmentView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.AddEnvironmentView(),
         settings: data,
       );
     },
     _i7.SettingsView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.SettingsView(),
         settings: data,
       );
     },
     _i8.CalendarView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.CalendarView(),
         settings: data,
       );
     },
     _i9.ProjectsView: (data) {
       final args = data.getArgs<ProjectsViewArguments>(nullOk: false);
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i9.ProjectsView(key: args.key, environmentId: args.environmentId),
+        settings: data,
+      );
+    },
+    _i10.AddProjectView: (data) {
+      final args = data.getArgs<AddProjectViewArguments>(nullOk: false);
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => _i10.AddProjectView(
+            key: args.key, environmentId: args.environmentId),
+        settings: data,
+      );
+    },
+    _i11.TodoTasksView: (data) {
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i11.TodoTasksView(),
         settings: data,
       );
     },
@@ -150,7 +180,7 @@ class ProjectsViewArguments {
     required this.environmentId,
   });
 
-  final _i10.Key? key;
+  final _i12.Key? key;
 
   final String environmentId;
 
@@ -171,7 +201,34 @@ class ProjectsViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i11.NavigationService {
+class AddProjectViewArguments {
+  const AddProjectViewArguments({
+    this.key,
+    required this.environmentId,
+  });
+
+  final _i12.Key? key;
+
+  final String environmentId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "environmentId": "$environmentId"}';
+  }
+
+  @override
+  bool operator ==(covariant AddProjectViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.environmentId == environmentId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ environmentId.hashCode;
+  }
+}
+
+extension NavigatorStateExtension on _i13.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -271,7 +328,7 @@ extension NavigatorStateExtension on _i11.NavigationService {
   }
 
   Future<dynamic> navigateToProjectsView({
-    _i10.Key? key,
+    _i12.Key? key,
     required String environmentId,
     int? routerId,
     bool preventDuplicates = true,
@@ -282,6 +339,38 @@ extension NavigatorStateExtension on _i11.NavigationService {
     return navigateTo<dynamic>(Routes.projectsView,
         arguments:
             ProjectsViewArguments(key: key, environmentId: environmentId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToAddProjectView({
+    _i12.Key? key,
+    required String environmentId,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.addProjectView,
+        arguments:
+            AddProjectViewArguments(key: key, environmentId: environmentId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToTodoTasksView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.todoTasksView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -387,7 +476,7 @@ extension NavigatorStateExtension on _i11.NavigationService {
   }
 
   Future<dynamic> replaceWithProjectsView({
-    _i10.Key? key,
+    _i12.Key? key,
     required String environmentId,
     int? routerId,
     bool preventDuplicates = true,
@@ -398,6 +487,38 @@ extension NavigatorStateExtension on _i11.NavigationService {
     return replaceWith<dynamic>(Routes.projectsView,
         arguments:
             ProjectsViewArguments(key: key, environmentId: environmentId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithAddProjectView({
+    _i12.Key? key,
+    required String environmentId,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.addProjectView,
+        arguments:
+            AddProjectViewArguments(key: key, environmentId: environmentId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithTodoTasksView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.todoTasksView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

@@ -6,8 +6,9 @@ part of 'environment.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$EnvironmentImpl _$$EnvironmentImplFromJson(Map<String, dynamic> json) =>
-    _$EnvironmentImpl(
+_$EnvironmentModelImpl _$$EnvironmentModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$EnvironmentModelImpl(
       id: json['id'] as String,
       name: json['name'] as String,
       icon: json['icon'] as String,
@@ -16,7 +17,8 @@ _$EnvironmentImpl _$$EnvironmentImplFromJson(Map<String, dynamic> json) =>
           (json['admins'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
-Map<String, dynamic> _$$EnvironmentImplToJson(_$EnvironmentImpl instance) =>
+Map<String, dynamic> _$$EnvironmentModelImplToJson(
+        _$EnvironmentModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

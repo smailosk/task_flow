@@ -9,14 +9,14 @@ class ReusableIconButton extends StatelessWidget {
   final double borderRadius;
 
   const ReusableIconButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     required this.onPressed,
     required this.backgroundColor,
     this.borderRadius = 10,
     required this.textColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
