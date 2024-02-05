@@ -36,7 +36,7 @@ class AddProjectView extends StatelessWidget {
                   verticalSpaceSmall,
                   const TextField(
                     decoration: InputDecoration(
-                      labelText: 'Project name',
+                      hintText: 'Project name',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide(color: Colors.black),

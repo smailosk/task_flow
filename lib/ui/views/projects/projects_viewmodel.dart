@@ -3,7 +3,6 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/core/models/project/project.dart';
 import 'package:task_flow/core/models/task/task.dart';
-import 'package:task_flow/services/firestore_service.dart';
 import 'package:task_flow/services/repo_service.dart';
 
 class ProjectsViewModel extends BaseViewModel {
