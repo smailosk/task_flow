@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:stacked/stacked.dart';
-import 'package:task_flow/ui/views/add_task/add_task_view.dart';
+import 'package:task_flow/ui/views/edit_profile/edit_profile_view.dart';
 import 'package:task_flow/ui/views/environment/environment_view.dart';
 import 'package:task_flow/ui/views/settings/settings_view.dart';
+
 import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
@@ -54,9 +55,7 @@ class HomeView extends StackedView<HomeViewModel> {
       case 1:
         widget = const SizedBox.shrink();
       case 2:
-        widget = AddTaskView(
-          projectId: '',
-        );
+        widget = const EditProfileView();
       case 3:
         widget = const SettingsView();
     }

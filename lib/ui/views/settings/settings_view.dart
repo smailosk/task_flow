@@ -97,7 +97,6 @@ class SettingsView extends StatelessWidget {
                     elevation: 3,
                     foregroundColor: Colors.black,
                     backgroundColor: const Color(0xFFF7E987),
-
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
