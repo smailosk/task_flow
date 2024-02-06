@@ -18,6 +18,7 @@ import 'package:task_flow/ui/views/projects/projects_view.dart';
 import 'package:task_flow/ui/views/add_project/add_project_view.dart';
 import 'package:task_flow/ui/views/todo_tasks/todo_tasks_view.dart';
 import 'package:task_flow/ui/views/add_todo_task/add_todo_task_view.dart';
+import 'package:task_flow/ui/views/profile/profile_view.dart';
 // @stacked-import
 
 //  flutter clean && flutter pub get && stacked generate
@@ -41,6 +42,7 @@ import 'package:task_flow/ui/views/add_todo_task/add_todo_task_view.dart';
     MaterialRoute(page: AddProjectView),
     MaterialRoute(page: TodoTasksView),
     MaterialRoute(page: AddTodoTaskView),
+    MaterialRoute(page: ProfileView),
 // @stacked-route
   ],
   dependencies: [

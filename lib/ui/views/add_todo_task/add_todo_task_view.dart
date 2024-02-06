@@ -34,7 +34,9 @@ class AddTodoTaskView extends StatelessWidget {
                       child: Text(
                         'Task Title:',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal),
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                     verticalSpaceSmall,

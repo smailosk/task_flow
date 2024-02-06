@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:stacked/stacked.dart';
-import 'package:task_flow/ui/views/add_project/add_project_view.dart';
 import 'package:task_flow/ui/views/add_todo_task/add_todo_task_view.dart';
 import 'package:task_flow/ui/views/environment/environment_view.dart';
 import 'package:task_flow/ui/views/settings/settings_view.dart';
@@ -25,8 +24,8 @@ class HomeView extends StackedView<HomeViewModel> {
         // shape: const RoundedRectangleBorder(
         //   borderRadius: BorderRadius.all(Radius.circular(30)),
         // ),
-        snakeViewColor: Colors.green,
-        selectedItemColor: Colors.green,
+        snakeViewColor: const Color(0xFF24A19C),
+        selectedItemColor: const Color(0xFF24A19C),
         unselectedItemColor: Colors.blueGrey,
         showUnselectedLabels: false,
         showSelectedLabels: false,

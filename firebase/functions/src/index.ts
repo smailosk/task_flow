@@ -7,6 +7,9 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  * 
  * From folder functions: npm run build && firebase emulators:start --only functions
+
+ * Ismail: sudo npm run build && sudo firebase emulators:start
+
  */
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import * as functions from 'firebase-functions';
