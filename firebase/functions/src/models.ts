@@ -1,3 +1,4 @@
+
 export interface Environment {
     id: string;
     name: string;
@@ -20,8 +21,8 @@ export interface Task {
     done: boolean;
     details: string;
     parentProjectId: string;
-    deadline: Date; // or firebase.firestore.Timestamp if using Firestore
-    assignee: string; // User ID from project members
+    deadline: number;
+    assignee: string;
 }
 
 export interface User {

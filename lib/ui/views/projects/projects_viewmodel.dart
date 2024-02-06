@@ -21,7 +21,7 @@ class ProjectsViewModel extends ReactiveViewModel {
       .toList();
 
   List<TaskModel> getTasksForProject(String projectId) {
-    return _repoService.tasksByProject[projectId] ?? [];
+    return _repoService.tasksByProject[projectId]?.values.toList() ?? [];
   }
 
   init() async {
@@ -35,6 +35,13 @@ class ProjectsViewModel extends ReactiveViewModel {
 
   navigateToAddProject() {
     _navigationService.navigateToAddProjectView(environmentId: environmentId);
+  }
+
+  navigateToTasksView(int index) {
+    _navigationService.navigateTo(
+      Routes.tasksView,
+      arguments: TasksViewArguments(projectId: projects[index].id),
+    );
   }
 
   back() {

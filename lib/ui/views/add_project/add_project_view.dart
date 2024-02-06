@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-import 'package:task_flow/core/models/environment/environment.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/common/widgets/color_picker_item_widget.dart';
 
@@ -54,8 +53,9 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                     ),
                   ),
                   verticalSpaceSmall,
-                  const TextField(
-                    decoration: InputDecoration(
+                  TextField(
+                    controller: projectNameController,
+                    decoration: const InputDecoration(
                       hintText: 'Project name',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),

@@ -17,11 +17,11 @@ class RepoService with ListenableServiceMixin {
 
   final Map<String, EnvironmentModel> _environments = {};
   final Map<String, ProjectModel> _projects = {};
-  final Map<String, List<TaskModel>> _tasksByProject = {};
+  final Map<String, Map<String, TaskModel>> _tasksByProject = {};
 
   Map<String, EnvironmentModel> get environments => _environments;
   Map<String, ProjectModel> get projects => _projects;
-  Map<String, List<TaskModel>> get tasksByProject => _tasksByProject;
+  Map<String, Map<String, TaskModel>> get tasksByProject => _tasksByProject;
 
   init() async {
     _environments.clear();
@@ -96,7 +96,7 @@ class RepoService with ListenableServiceMixin {
   Future<List<TaskModel>> fetchTasksForProject(String projectId) async {
     try {
       final data = await _firestore.fetchTasksForProject(projectId);
-      _tasksByProject[projectId] = data + data + data;
+      _tasksByProject[projectId] = {for (var e in data) e.id: e};
       return data;
     } on Failure catch (e) {
       _log.e('RepoService - fetchTasksForProject', e);
@@ -108,6 +108,41 @@ class RepoService with ListenableServiceMixin {
         stackTrace: s,
       );
     }
+  }
+
+  Future<void> setTaskAsDone(TaskModel task, bool doneValue) async {
+    try {
+      _tasksByProject[task.parentProjectId]?[task.id] =
+          _tasksByProject[task.parentProjectId]![task.id]!
+              .copyWith(done: doneValue);
+      notifyListeners();
+      await _functions.markTaskDone(TaskModel(
+          title: '',
+          id: task.id,
+          done: doneValue,
+          details: '',
+          parentProjectId: task.parentProjectId,
+          deadline: null,
+          assignee: ''));
+    } on Failure catch (e) {
+      _log.e('RepoService - setTaskDone', e);
+      _tasksByProject[task.parentProjectId]?[task.id] =
+          _tasksByProject[task.parentProjectId]![task.id]!
+              .copyWith(done: !doneValue);
+      rethrow;
+    } catch (e, s) {
+      _tasksByProject[task.parentProjectId]?[task.id] =
+          _tasksByProject[task.parentProjectId]![task.id]!
+              .copyWith(done: !doneValue);
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - setTaskDone ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+
+    await Future.delayed(const Duration(milliseconds: 300));
+    notifyListeners();
   }
 
   // _fetchProjectsByIds(List<String> ids) async {
@@ -169,6 +204,24 @@ class RepoService with ListenableServiceMixin {
       throw GeneralFailure(
         type: GeneralFailureType.unexpectedError,
         description: 'RepoService - addNewProject ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future<void> addNewTask(TaskModel task) async {
+    try {
+      final newTask = await _functions.createTask(task);
+
+      _tasksByProject[task.parentProjectId]![newTask.id] = newTask;
+      notifyListeners();
+    } on Failure catch (e) {
+      _log.e('RepoService - addNewTask', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - addNewTask ${e.toString()}',
         stackTrace: s,
       );
     }

@@ -12,7 +12,7 @@ part of 'task.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 TaskModel _$TaskModelFromJson(Map<String, dynamic> json) {
   return _TaskModel.fromJson(json);
@@ -25,9 +25,7 @@ mixin _$TaskModel {
   bool get done => throw _privateConstructorUsedError;
   String get details => throw _privateConstructorUsedError;
   String get parentProjectId => throw _privateConstructorUsedError;
-  @JsonKey(
-      fromJson: Converters.timestampToDateTime,
-      toJson: Converters.dateTimeToTimestamp)
+  @JsonKey(fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
   DateTime? get deadline => throw _privateConstructorUsedError;
   String get assignee => throw _privateConstructorUsedError;
 
@@ -49,8 +47,7 @@ abstract class $TaskModelCopyWith<$Res> {
       String details,
       String parentProjectId,
       @JsonKey(
-          fromJson: Converters.timestampToDateTime,
-          toJson: Converters.dateTimeToTimestamp)
+          fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
       DateTime? deadline,
       String assignee});
 }
@@ -124,8 +121,7 @@ abstract class _$$TaskModelImplCopyWith<$Res>
       String details,
       String parentProjectId,
       @JsonKey(
-          fromJson: Converters.timestampToDateTime,
-          toJson: Converters.dateTimeToTimestamp)
+          fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
       DateTime? deadline,
       String assignee});
 }
@@ -192,8 +188,7 @@ class _$TaskModelImpl implements _TaskModel {
       required this.details,
       required this.parentProjectId,
       @JsonKey(
-          fromJson: Converters.timestampToDateTime,
-          toJson: Converters.dateTimeToTimestamp)
+          fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
       required this.deadline,
       required this.assignee});
 
@@ -211,9 +206,7 @@ class _$TaskModelImpl implements _TaskModel {
   @override
   final String parentProjectId;
   @override
-  @JsonKey(
-      fromJson: Converters.timestampToDateTime,
-      toJson: Converters.dateTimeToTimestamp)
+  @JsonKey(fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
   final DateTime? deadline;
   @override
   final String assignee;
@@ -267,8 +260,7 @@ abstract class _TaskModel implements TaskModel {
       required final String details,
       required final String parentProjectId,
       @JsonKey(
-          fromJson: Converters.timestampToDateTime,
-          toJson: Converters.dateTimeToTimestamp)
+          fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
       required final DateTime? deadline,
       required final String assignee}) = _$TaskModelImpl;
 
@@ -286,9 +278,7 @@ abstract class _TaskModel implements TaskModel {
   @override
   String get parentProjectId;
   @override
-  @JsonKey(
-      fromJson: Converters.timestampToDateTime,
-      toJson: Converters.dateTimeToTimestamp)
+  @JsonKey(fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
   DateTime? get deadline;
   @override
   String get assignee;

@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:task_flow/core/utils/converters.dart';
 part 'task.freezed.dart';
@@ -15,8 +14,7 @@ class TaskModel with _$TaskModel {
     required String details,
     required String parentProjectId,
     @JsonKey(
-        fromJson: Converters.timestampToDateTime,
-        toJson: Converters.dateTimeToTimestamp)
+        fromJson: Converters.intToDateTime, toJson: Converters.dateTimeToInt)
     required DateTime? deadline,
     required String assignee,
   }) = _TaskModel;

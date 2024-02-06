@@ -13,7 +13,7 @@ _$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
       done: json['done'] as bool,
       details: json['details'] as String,
       parentProjectId: json['parentProjectId'] as String,
-      deadline: Converters.timestampToDateTime(json['deadline'] as Timestamp?),
+      deadline: Converters.intToDateTime(json['deadline'] as int?),
       assignee: json['assignee'] as String,
     );
 
@@ -24,6 +24,6 @@ Map<String, dynamic> _$$TaskModelImplToJson(_$TaskModelImpl instance) =>
       'done': instance.done,
       'details': instance.details,
       'parentProjectId': instance.parentProjectId,
-      'deadline': Converters.dateTimeToTimestamp(instance.deadline),
+      'deadline': Converters.dateTimeToInt(instance.deadline),
       'assignee': instance.assignee,
     };

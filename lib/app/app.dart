@@ -2,6 +2,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:task_flow/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:task_flow/ui/dialogs/info_alert/info_alert_dialog.dart';
+import 'package:task_flow/ui/views/add_task/add_task_view.dart';
 import 'package:task_flow/ui/views/home/home_view.dart';
 import 'package:task_flow/ui/views/startup/startup_view.dart';
 import 'package:task_flow/ui/views/login/login_view.dart';
@@ -15,9 +16,8 @@ import 'package:task_flow/ui/views/settings/settings_view.dart';
 import 'package:task_flow/ui/views/calendar/calendar_view.dart';
 import 'package:task_flow/ui/views/projects/projects_view.dart';
 import 'package:task_flow/ui/views/add_project/add_project_view.dart';
-import 'package:task_flow/ui/views/todo_tasks/todo_tasks_view.dart';
-import 'package:task_flow/ui/views/add_todo_task/add_todo_task_view.dart';
-import 'package:task_flow/ui/views/profile/profile_view.dart';
+import 'package:task_flow/ui/views/tasks/tasks_view.dart';
+import 'package:task_flow/ui/views/add_task/add_task_view.dart';
 // @stacked-import
 
 //  flutter clean && flutter pub get && stacked generate
@@ -39,9 +39,8 @@ import 'package:task_flow/ui/views/profile/profile_view.dart';
     MaterialRoute(page: CalendarView),
     MaterialRoute(page: ProjectsView),
     MaterialRoute(page: AddProjectView),
-    MaterialRoute(page: TodoTasksView),
-    MaterialRoute(page: AddTodoTaskView),
-    MaterialRoute(page: ProfileView),
+    MaterialRoute(page: TasksView),
+    MaterialRoute(page: AddTaskView),
 // @stacked-route
   ],
   dependencies: [

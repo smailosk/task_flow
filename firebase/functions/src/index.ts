@@ -15,7 +15,7 @@ import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import * as functions from 'firebase-functions';
 
 import { initializeApp } from "firebase-admin/app";
-import { FieldValue, getFirestore } from "firebase-admin/firestore";
+import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
 import { Environment, Project, Task, FunctionsErrorCodes } from "./models";
 import { generateRandomColor } from "./utils";
 initializeApp();
@@ -94,7 +94,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
             id: firestoreDb.collection('Tasks').doc().id,
             details: 'Details of Example Task 1',
             parentProjectId: projectData.id,
-            deadline: new Date(), // Example deadline
+            deadline: Timestamp.now().toMillis(),
             assignee: user.uid,
             done: false
         }, {
@@ -102,7 +102,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
             id: firestoreDb.collection('Tasks').doc().id,
             details: 'Details of Example Task 2',
             parentProjectId: projectData.id,
-            deadline: new Date(), // Example deadline
+            deadline: Timestamp.now().toMillis(),
             assignee: user.uid,
             done: false
         }];
@@ -405,14 +405,13 @@ export const createTask = onCall(async (request) => {
     // Validate incoming data for the task
     if (typeof request.data.title !== 'string' ||
         typeof request.data.details !== 'string' ||
-        typeof request.data.parentProjectId !== 'string' ||
-        typeof request.data.deadline !== 'string' // Ensure deadline is in the correct format
+        typeof request.data.parentProjectId !== 'string'
         // Add additional validation as necessary
     ) {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const { title, details, parentProjectId, deadline } = request.data; // Destructure the task data
+    const { title, details, parentProjectId, deadline, } = request.data; // Destructure the task data
     const assignee = request.auth.uid; // Assign task to the creator by default
 
     try {
@@ -422,7 +421,7 @@ export const createTask = onCall(async (request) => {
             title,
             details,
             parentProjectId,
-            deadline: new Date(deadline), // Convert string to Date object
+            deadline, // Convert string to Date object
             assignee,
             done: false // Default to not done
         };
@@ -430,7 +429,7 @@ export const createTask = onCall(async (request) => {
         // Save the new task to Firestore
         await firestoreDb.collection('Tasks').doc(newTask.id).set(newTask);
 
-        return { message: 'Task created successfully', taskId: newTask.id };
+        return newTask;
     } catch (error) {
         console.error('Error creating task:', error);
         throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
@@ -492,20 +491,21 @@ export const markTaskDone = onCall(async (request) => {
     if (!request.auth) {
         throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
     }
+    console.error(request.data);
+
 
     // Validate incoming data
-    if (typeof request.data.taskId !== 'string' ||
+    if (typeof request.data.id !== 'string' ||
         typeof request.data.done !== 'boolean') {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const { taskId, done } = request.data;
+    const { id, done } = request.data;
 
     try {
-        // Update the 'done' status of the task
-        await firestoreDb.collection('Tasks').doc(taskId).update({ done });
+        await firestoreDb.collection('Tasks').doc(id).update({ done });
 
-        return { message: `Task marked as ${done ? 'done' : 'undone'} successfully` };
+        return {};
     } catch (error) {
         console.error('Error marking task as done/undone:', error);
         throw new HttpsError(FunctionsErrorCodes.INTERNAL, 'Unable to mark task as done/undone.');

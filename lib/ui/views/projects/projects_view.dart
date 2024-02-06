@@ -61,8 +61,11 @@ class ProjectsView extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: viewmodel.projects.length,
                     itemBuilder: (context, index) {
-                      return ProjectCard(
-                        project: viewmodel.projects[index],
+                      return GestureDetector(
+                        onTap: () => viewmodel.navigateToTasksView(index),
+                        child: ProjectCard(
+                          project: viewmodel.projects[index],
+                        ),
                       );
                     },
                   ),
@@ -133,19 +136,6 @@ class ProjectCard extends ViewModelWidget<ProjectsViewModel> {
                   textAlign: TextAlign.start,
                 ), // Indication that there are more tasks
               ),
-            // const Divider(color: Colors.grey, endIndent: 8, indent: 8),
-            // // Deadline section
-            // Padding(
-            //   padding: const EdgeInsets.all(8),
-            //   child: Text(
-            //     'Deadline: ${project.deadline}',
-            //     style: const TextStyle(
-            //       fontSize: 14,
-            //       color: Colors.black,
-            //       fontWeight: FontWeight.w400,
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

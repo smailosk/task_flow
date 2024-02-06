@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/ui/common/form_validators.dart';
@@ -118,24 +116,24 @@ class LoginView extends StatelessWidget with $LoginView {
                   ],
                 ),
                 const SizedBox(height: 30),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SignInButton(
-                      Buttons.Facebook,
-                      onPressed: () {},
-                    ),
-                    SignInButton(
-                      Buttons.Google,
-                      onPressed: () {},
-                    ),
-                    SignInButton(
-                      Buttons.Twitter,
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //     SignInButton(
+                //       Buttons.Facebook,
+                //       onPressed: () {},
+                //     ),
+                //     SignInButton(
+                //       Buttons.Google,
+                //       onPressed: () {},
+                //     ),
+                //     SignInButton(
+                //       Buttons.Twitter,
+                //       onPressed: () {},
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 30),
                 TextButton(
                   onPressed: () {},
                   child: const Text('Don’t have an account? Register Now',

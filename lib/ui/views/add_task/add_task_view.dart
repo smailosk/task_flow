@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked/stacked_annotations.dart';
+import 'package:task_flow/ui/views/add_task/add_task_view.form.dart';
 
 import '../../common/ui_helpers.dart';
 import '../../common/widgets/main_button.dart';
-import 'add_todo_task_viewmodel.dart';
+import 'add_task_viewmodel.dart';
 
-class AddTodoTaskView extends StatelessWidget {
-  const AddTodoTaskView({super.key});
-
+@FormView(fields: [
+  FormTextField(name: 'taskTitle'),
+  FormTextField(name: 'taskDetails'),
+])
+class AddTaskView extends StatelessWidget with $AddTaskView {
+  const AddTaskView({super.key, required this.projectId});
+  final String projectId;
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AddTodoTaskViewModel>.reactive(
-      viewModelBuilder: () => AddTodoTaskViewModel(),
+    return ViewModelBuilder<AddTaskViewModel>.reactive(
+      viewModelBuilder: () => AddTaskViewModel(projectId),
+      onViewModelReady: (viewModel) {
+        syncFormWithViewModel(viewModel);
+      },
+      onDispose: (viewModel) {
+        disposeForm();
+      },
       builder: (context, viewModel, child) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
@@ -40,8 +52,9 @@ class AddTodoTaskView extends StatelessWidget {
                       ),
                     ),
                     verticalSpaceSmall,
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: taskTitleController,
+                      decoration: const InputDecoration(
                         hintText: 'Task Title',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -60,6 +73,7 @@ class AddTodoTaskView extends StatelessWidget {
                     ),
                     verticalSpaceSmall,
                     TextField(
+                      controller: taskDetailsController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       minLines: 3,
@@ -156,14 +170,14 @@ class AddTodoTaskView extends StatelessWidget {
                       children: [
                         MainButton(
                           enabled: true,
-                          onPressed: () {},
+                          onPressed: viewModel.back,
                           text: 'Cancel',
                         ),
                         MainButton(
                           enabled: true,
                           text: 'Create Task',
                           color: const Color(0xFF24A19C),
-                          onPressed: () {},
+                          onPressed: viewModel.createTask,
                         ),
                       ],
                     )
