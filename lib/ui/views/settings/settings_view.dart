@@ -48,7 +48,7 @@ class SettingsView extends StatelessWidget {
                   title: const Text('Personal Information'),
                   trailing: const Icon(Icons.edit),
                   onTap: () {
-                    // TODO: Navigate to edit information
+                    // TODO: Navigate to edit profile
                   },
                 ),
               ),
@@ -82,14 +82,13 @@ class SettingsView extends StatelessWidget {
               ),
               const Spacer(),
               SizedBox(
-                // height: 50,
                 width: screenWidth - (tilePadding * 2),
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.logout),
                   label: const Text(
                     'Logout',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.normal,
                       fontSize: 18,
                     ),
                   ),
@@ -98,8 +97,7 @@ class SettingsView extends StatelessWidget {
                     elevation: 3,
                     foregroundColor: Colors.black,
                     backgroundColor: const Color(0xFFF7E987),
-                      // 24A19C
-                    // Button text color
+
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
