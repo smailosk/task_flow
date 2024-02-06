@@ -54,7 +54,7 @@ class HomeView extends StackedView<HomeViewModel> {
       case 0:
         widget = const EnvironmentView();
       case 1:
-        widget = const TodoTasksView();
+        widget = const SizedBox.shrink();
       case 2:
         widget = const AddTodoTaskView();
       case 3:

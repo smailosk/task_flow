@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:task_flow/core/utils/converters.dart';
@@ -5,8 +7,8 @@ part 'task.freezed.dart';
 part 'task.g.dart';
 
 @freezed
-class ToDoTask with _$ToDoTask {
-  const factory ToDoTask({
+class TaskModel with _$TaskModel {
+  const factory TaskModel({
     required String title,
     required String id,
     required bool done,
@@ -17,8 +19,8 @@ class ToDoTask with _$ToDoTask {
         toJson: Converters.dateTimeToTimestamp)
     required DateTime? deadline,
     required String assignee,
-  }) = _ToDoTask;
+  }) = _TaskModel;
 
-  factory ToDoTask.fromJson(Map<String, dynamic> json) =>
-      _$ToDoTaskFromJson(json);
+  factory TaskModel.fromJson(Map<String, dynamic> json) =>
+      _$TaskModelFromJson(json);
 }

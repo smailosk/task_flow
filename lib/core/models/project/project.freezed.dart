@@ -14,12 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Project _$ProjectFromJson(Map<String, dynamic> json) {
-  return _Project.fromJson(json);
+ProjectModel _$ProjectModelFromJson(Map<String, dynamic> json) {
+  return _ProjectModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Project {
+mixin _$ProjectModel {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get parentEnvironmentId => throw _privateConstructorUsedError;
@@ -28,13 +28,15 @@ mixin _$Project {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ProjectCopyWith<Project> get copyWith => throw _privateConstructorUsedError;
+  $ProjectModelCopyWith<ProjectModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ProjectCopyWith<$Res> {
-  factory $ProjectCopyWith(Project value, $Res Function(Project) then) =
-      _$ProjectCopyWithImpl<$Res, Project>;
+abstract class $ProjectModelCopyWith<$Res> {
+  factory $ProjectModelCopyWith(
+          ProjectModel value, $Res Function(ProjectModel) then) =
+      _$ProjectModelCopyWithImpl<$Res, ProjectModel>;
   @useResult
   $Res call(
       {String id,
@@ -45,9 +47,9 @@ abstract class $ProjectCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ProjectCopyWithImpl<$Res, $Val extends Project>
-    implements $ProjectCopyWith<$Res> {
-  _$ProjectCopyWithImpl(this._value, this._then);
+class _$ProjectModelCopyWithImpl<$Res, $Val extends ProjectModel>
+    implements $ProjectModelCopyWith<$Res> {
+  _$ProjectModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -89,10 +91,11 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
 }
 
 /// @nodoc
-abstract class _$$ProjectImplCopyWith<$Res> implements $ProjectCopyWith<$Res> {
-  factory _$$ProjectImplCopyWith(
-          _$ProjectImpl value, $Res Function(_$ProjectImpl) then) =
-      __$$ProjectImplCopyWithImpl<$Res>;
+abstract class _$$ProjectModelImplCopyWith<$Res>
+    implements $ProjectModelCopyWith<$Res> {
+  factory _$$ProjectModelImplCopyWith(
+          _$ProjectModelImpl value, $Res Function(_$ProjectModelImpl) then) =
+      __$$ProjectModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -104,11 +107,11 @@ abstract class _$$ProjectImplCopyWith<$Res> implements $ProjectCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$ProjectImplCopyWithImpl<$Res>
-    extends _$ProjectCopyWithImpl<$Res, _$ProjectImpl>
-    implements _$$ProjectImplCopyWith<$Res> {
-  __$$ProjectImplCopyWithImpl(
-      _$ProjectImpl _value, $Res Function(_$ProjectImpl) _then)
+class __$$ProjectModelImplCopyWithImpl<$Res>
+    extends _$ProjectModelCopyWithImpl<$Res, _$ProjectModelImpl>
+    implements _$$ProjectModelImplCopyWith<$Res> {
+  __$$ProjectModelImplCopyWithImpl(
+      _$ProjectModelImpl _value, $Res Function(_$ProjectModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -120,7 +123,7 @@ class __$$ProjectImplCopyWithImpl<$Res>
     Object? members = null,
     Object? color = null,
   }) {
-    return _then(_$ProjectImpl(
+    return _then(_$ProjectModelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -147,8 +150,8 @@ class __$$ProjectImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ProjectImpl implements _Project {
-  const _$ProjectImpl(
+class _$ProjectModelImpl implements _ProjectModel {
+  const _$ProjectModelImpl(
       {required this.id,
       required this.name,
       required this.parentEnvironmentId,
@@ -156,8 +159,8 @@ class _$ProjectImpl implements _Project {
       required this.color})
       : _members = members;
 
-  factory _$ProjectImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ProjectImplFromJson(json);
+  factory _$ProjectModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ProjectModelImplFromJson(json);
 
   @override
   final String id;
@@ -178,14 +181,14 @@ class _$ProjectImpl implements _Project {
 
   @override
   String toString() {
-    return 'Project(id: $id, name: $name, parentEnvironmentId: $parentEnvironmentId, members: $members, color: $color)';
+    return 'ProjectModel(id: $id, name: $name, parentEnvironmentId: $parentEnvironmentId, members: $members, color: $color)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProjectImpl &&
+            other is _$ProjectModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.parentEnvironmentId, parentEnvironmentId) ||
@@ -202,26 +205,27 @@ class _$ProjectImpl implements _Project {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProjectImplCopyWith<_$ProjectImpl> get copyWith =>
-      __$$ProjectImplCopyWithImpl<_$ProjectImpl>(this, _$identity);
+  _$$ProjectModelImplCopyWith<_$ProjectModelImpl> get copyWith =>
+      __$$ProjectModelImplCopyWithImpl<_$ProjectModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProjectImplToJson(
+    return _$$ProjectModelImplToJson(
       this,
     );
   }
 }
 
-abstract class _Project implements Project {
-  const factory _Project(
+abstract class _ProjectModel implements ProjectModel {
+  const factory _ProjectModel(
       {required final String id,
       required final String name,
       required final String parentEnvironmentId,
       required final List<String> members,
-      required final String color}) = _$ProjectImpl;
+      required final String color}) = _$ProjectModelImpl;
 
-  factory _Project.fromJson(Map<String, dynamic> json) = _$ProjectImpl.fromJson;
+  factory _ProjectModel.fromJson(Map<String, dynamic> json) =
+      _$ProjectModelImpl.fromJson;
 
   @override
   String get id;
@@ -235,6 +239,6 @@ abstract class _Project implements Project {
   String get color;
   @override
   @JsonKey(ignore: true)
-  _$$ProjectImplCopyWith<_$ProjectImpl> get copyWith =>
+  _$$ProjectModelImplCopyWith<_$ProjectModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

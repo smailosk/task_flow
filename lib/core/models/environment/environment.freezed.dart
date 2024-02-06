@@ -14,12 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Environment _$EnvironmentFromJson(Map<String, dynamic> json) {
-  return _Environment.fromJson(json);
+EnvironmentModel _$EnvironmentModelFromJson(Map<String, dynamic> json) {
+  return _EnvironmentModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Environment {
+mixin _$EnvironmentModel {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
@@ -28,24 +28,24 @@ mixin _$Environment {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $EnvironmentCopyWith<Environment> get copyWith =>
+  $EnvironmentModelCopyWith<EnvironmentModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $EnvironmentCopyWith<$Res> {
-  factory $EnvironmentCopyWith(
-          Environment value, $Res Function(Environment) then) =
-      _$EnvironmentCopyWithImpl<$Res, Environment>;
+abstract class $EnvironmentModelCopyWith<$Res> {
+  factory $EnvironmentModelCopyWith(
+          EnvironmentModel value, $Res Function(EnvironmentModel) then) =
+      _$EnvironmentModelCopyWithImpl<$Res, EnvironmentModel>;
   @useResult
   $Res call(
       {String id, String name, String icon, String color, List<String> admins});
 }
 
 /// @nodoc
-class _$EnvironmentCopyWithImpl<$Res, $Val extends Environment>
-    implements $EnvironmentCopyWith<$Res> {
-  _$EnvironmentCopyWithImpl(this._value, this._then);
+class _$EnvironmentModelCopyWithImpl<$Res, $Val extends EnvironmentModel>
+    implements $EnvironmentModelCopyWith<$Res> {
+  _$EnvironmentModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -87,11 +87,11 @@ class _$EnvironmentCopyWithImpl<$Res, $Val extends Environment>
 }
 
 /// @nodoc
-abstract class _$$EnvironmentImplCopyWith<$Res>
-    implements $EnvironmentCopyWith<$Res> {
-  factory _$$EnvironmentImplCopyWith(
-          _$EnvironmentImpl value, $Res Function(_$EnvironmentImpl) then) =
-      __$$EnvironmentImplCopyWithImpl<$Res>;
+abstract class _$$EnvironmentModelImplCopyWith<$Res>
+    implements $EnvironmentModelCopyWith<$Res> {
+  factory _$$EnvironmentModelImplCopyWith(_$EnvironmentModelImpl value,
+          $Res Function(_$EnvironmentModelImpl) then) =
+      __$$EnvironmentModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -99,11 +99,11 @@ abstract class _$$EnvironmentImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$EnvironmentImplCopyWithImpl<$Res>
-    extends _$EnvironmentCopyWithImpl<$Res, _$EnvironmentImpl>
-    implements _$$EnvironmentImplCopyWith<$Res> {
-  __$$EnvironmentImplCopyWithImpl(
-      _$EnvironmentImpl _value, $Res Function(_$EnvironmentImpl) _then)
+class __$$EnvironmentModelImplCopyWithImpl<$Res>
+    extends _$EnvironmentModelCopyWithImpl<$Res, _$EnvironmentModelImpl>
+    implements _$$EnvironmentModelImplCopyWith<$Res> {
+  __$$EnvironmentModelImplCopyWithImpl(_$EnvironmentModelImpl _value,
+      $Res Function(_$EnvironmentModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -115,7 +115,7 @@ class __$$EnvironmentImplCopyWithImpl<$Res>
     Object? color = null,
     Object? admins = null,
   }) {
-    return _then(_$EnvironmentImpl(
+    return _then(_$EnvironmentModelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -142,8 +142,10 @@ class __$$EnvironmentImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$EnvironmentImpl with DiagnosticableTreeMixin implements _Environment {
-  const _$EnvironmentImpl(
+class _$EnvironmentModelImpl
+    with DiagnosticableTreeMixin
+    implements _EnvironmentModel {
+  const _$EnvironmentModelImpl(
       {required this.id,
       required this.name,
       required this.icon,
@@ -151,8 +153,8 @@ class _$EnvironmentImpl with DiagnosticableTreeMixin implements _Environment {
       required final List<String> admins})
       : _admins = admins;
 
-  factory _$EnvironmentImpl.fromJson(Map<String, dynamic> json) =>
-      _$$EnvironmentImplFromJson(json);
+  factory _$EnvironmentModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EnvironmentModelImplFromJson(json);
 
   @override
   final String id;
@@ -172,14 +174,14 @@ class _$EnvironmentImpl with DiagnosticableTreeMixin implements _Environment {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Environment(id: $id, name: $name, icon: $icon, color: $color, admins: $admins)';
+    return 'EnvironmentModel(id: $id, name: $name, icon: $icon, color: $color, admins: $admins)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'Environment'))
+      ..add(DiagnosticsProperty('type', 'EnvironmentModel'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('icon', icon))
@@ -191,7 +193,7 @@ class _$EnvironmentImpl with DiagnosticableTreeMixin implements _Environment {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EnvironmentImpl &&
+            other is _$EnvironmentModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.icon, icon) || other.icon == icon) &&
@@ -207,27 +209,28 @@ class _$EnvironmentImpl with DiagnosticableTreeMixin implements _Environment {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$EnvironmentImplCopyWith<_$EnvironmentImpl> get copyWith =>
-      __$$EnvironmentImplCopyWithImpl<_$EnvironmentImpl>(this, _$identity);
+  _$$EnvironmentModelImplCopyWith<_$EnvironmentModelImpl> get copyWith =>
+      __$$EnvironmentModelImplCopyWithImpl<_$EnvironmentModelImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EnvironmentImplToJson(
+    return _$$EnvironmentModelImplToJson(
       this,
     );
   }
 }
 
-abstract class _Environment implements Environment {
-  const factory _Environment(
+abstract class _EnvironmentModel implements EnvironmentModel {
+  const factory _EnvironmentModel(
       {required final String id,
       required final String name,
       required final String icon,
       required final String color,
-      required final List<String> admins}) = _$EnvironmentImpl;
+      required final List<String> admins}) = _$EnvironmentModelImpl;
 
-  factory _Environment.fromJson(Map<String, dynamic> json) =
-      _$EnvironmentImpl.fromJson;
+  factory _EnvironmentModel.fromJson(Map<String, dynamic> json) =
+      _$EnvironmentModelImpl.fromJson;
 
   @override
   String get id;
@@ -241,6 +244,6 @@ abstract class _Environment implements Environment {
   List<String> get admins;
   @override
   @JsonKey(ignore: true)
-  _$$EnvironmentImplCopyWith<_$EnvironmentImpl> get copyWith =>
+  _$$EnvironmentModelImplCopyWith<_$EnvironmentModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

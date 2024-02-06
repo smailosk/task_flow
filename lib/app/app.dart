@@ -7,7 +7,6 @@ import 'package:task_flow/ui/views/startup/startup_view.dart';
 import 'package:task_flow/ui/views/login/login_view.dart';
 import 'package:task_flow/ui/views/environment/environment_view.dart';
 import 'package:task_flow/services/auth_service.dart';
-import 'package:task_flow/services/google_auth_service.dart';
 import 'package:task_flow/services/functions_service.dart';
 import 'package:task_flow/services/repo_service.dart';
 import 'package:task_flow/services/firestore_service.dart';
@@ -51,7 +50,7 @@ import 'package:task_flow/ui/views/profile/profile_view.dart';
     LazySingleton(classType: NavigationService),
 
     LazySingleton(classType: AuthService),
-    LazySingleton(classType: GoogleAuthService),
+    // LazySingleton(classType: GoogleAuthService),
     LazySingleton(classType: FunctionsService),
     LazySingleton(classType: RepoService),
     LazySingleton(classType: FirestoreService),

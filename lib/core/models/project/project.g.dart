@@ -6,8 +6,8 @@ part of 'project.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ProjectImpl _$$ProjectImplFromJson(Map<String, dynamic> json) =>
-    _$ProjectImpl(
+_$ProjectModelImpl _$$ProjectModelImplFromJson(Map<String, dynamic> json) =>
+    _$ProjectModelImpl(
       id: json['id'] as String,
       name: json['name'] as String,
       parentEnvironmentId: json['parentEnvironmentId'] as String,
@@ -16,7 +16,7 @@ _$ProjectImpl _$$ProjectImplFromJson(Map<String, dynamic> json) =>
       color: json['color'] as String,
     );
 
-Map<String, dynamic> _$$ProjectImplToJson(_$ProjectImpl instance) =>
+Map<String, dynamic> _$$ProjectModelImplToJson(_$ProjectModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

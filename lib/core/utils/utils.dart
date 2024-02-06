@@ -1,10 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:task_flow/app/app.logger.dart';
 
 class Utils {
-  static final _log = getLogger('Utils');
+  // static final _log = getLogger('Utils');
   static Color hexToColor(String hexString) {
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');

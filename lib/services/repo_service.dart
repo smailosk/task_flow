@@ -15,13 +15,13 @@ class RepoService with ListenableServiceMixin {
   final _functions = locator<FunctionsService>();
   final _log = getLogger('RepoService');
 
-  final Map<String, Environment> _environments = {};
-  final Map<String, Project> _projects = {};
-  final Map<String, List<ToDoTask>> _tasksByProject = {};
+  final Map<String, EnvironmentModel> _environments = {};
+  final Map<String, ProjectModel> _projects = {};
+  final Map<String, List<TaskModel>> _tasksByProject = {};
 
-  Map<String, Environment> get environments => _environments;
-  Map<String, Project> get projects => _projects;
-  Map<String, List<ToDoTask>> get tasksByProject => _tasksByProject;
+  Map<String, EnvironmentModel> get environments => _environments;
+  Map<String, ProjectModel> get projects => _projects;
+  Map<String, List<TaskModel>> get tasksByProject => _tasksByProject;
 
   init() async {
     _environments.clear();
@@ -93,7 +93,7 @@ class RepoService with ListenableServiceMixin {
     }
   }
 
-  Future<List<ToDoTask>> fetchTasksForProject(String projectId) async {
+  Future<List<TaskModel>> fetchTasksForProject(String projectId) async {
     try {
       final data = await _firestore.fetchTasksForProject(projectId);
       _tasksByProject[projectId] = data + data + data;
@@ -128,7 +128,7 @@ class RepoService with ListenableServiceMixin {
 
   Future<void> addNewEnvironment(String name, String color, String icon) async {
     try {
-      final env = await _functions.createEnvironment(Environment(
+      final env = await _functions.createEnvironment(EnvironmentModel(
         id: '',
         admins: [],
         name: name,
@@ -145,6 +145,30 @@ class RepoService with ListenableServiceMixin {
       throw GeneralFailure(
         type: GeneralFailureType.unexpectedError,
         description: 'RepoService - addNewEnvironment ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future<void> addNewProject(
+      String name, String color, String environmentId) async {
+    try {
+      final project = await _functions.createProject(ProjectModel(
+        id: '',
+        name: name,
+        color: color,
+        parentEnvironmentId: environmentId,
+        members: [],
+      ));
+      _projects[project.id] = project;
+      notifyListeners();
+    } on FunctionsFailure catch (e) {
+      _log.e('RepoService - addNewProject', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - addNewProject ${e.toString()}',
         stackTrace: s,
       );
     }

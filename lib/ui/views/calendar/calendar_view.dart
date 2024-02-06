@@ -4,7 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'calendar_viewmodel.dart';
 
 class CalendarView extends StatelessWidget {
-  const CalendarView({Key? key}) : super(key: key);
+  const CalendarView({super.key});
 
   @override
   Widget build(BuildContext context) {
