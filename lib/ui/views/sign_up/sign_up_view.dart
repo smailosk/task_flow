@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-import 'package:task_flow/ui/common/form_validators.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
+import 'package:task_flow/ui/views/sign_up/sign_up_view.form.dart';
 
-import 'login_view.form.dart';
-import 'login_viewmodel.dart';
+import 'sign_up_viewmodel.dart';
 
 @FormView(autoTextFieldValidation: false, fields: [
-  FormTextField(name: 'email', validator: FormValidators.validateEmail),
-  FormTextField(name: 'password', validator: FormValidators.validatePassword)
+  FormTextField(name: 'userName'),
+  FormTextField(name: 'email'),
+  FormTextField(name: 'password'),
+  FormTextField(name: 'confirmPassword'),
 ])
-class LoginView extends StatelessWidget with $LoginView {
-  const LoginView({super.key});
+class SignUpView extends StatelessWidget with $SignUpView {
+  const SignUpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-      onDispose: (viewModel) => disposeForm(),
-      viewModelBuilder: () => LoginViewModel(),
-      onViewModelReady: (viewModel) {
-        syncFormWithViewModel(viewModel);
-      },
+    return ViewModelBuilder<SignUpViewModel>.reactive(
+      viewModelBuilder: () => SignUpViewModel(),
       builder: (context, viewModel, child) => Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SafeArea(
           child: SingleChildScrollView(
             padding:
@@ -41,49 +39,66 @@ class LoginView extends StatelessWidget with $LoginView {
                   ),
                 ),
                 Text(
-                  'Login to your account',
+                  'Hello! Register to get started',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey.shade700,
-                  ),
+                      fontSize: 16,
+                      color: Colors.grey.shade700,
+                      fontWeight: FontWeight.normal),
                 ),
                 verticalSpaceMedium,
                 TextField(
-                  controller: emailController,
+                  controller: userNameController,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    labelText: 'Email',
-                    errorText: viewModel.emailValidationMessage,
+                    prefixIcon: const Icon(Icons.person_2_outlined),
+                    labelText: 'Username',
+                    // errorText: viewModel.emailValidationMessage,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                verticalSpace(20),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.email_outlined),
+                    labelText: 'Email',
+                    // errorText: viewModel.emailValidationMessage,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                verticalSpace(20),
                 TextField(
                   controller: passwordController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock_outline),
                     labelText: 'Password',
-                    errorText: viewModel.passwordValidationMessage,
+                    // errorText: viewModel.passwordValidationMessage,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   obscureText: true,
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text('Forgot password?',
-                        style: TextStyle(color: Colors.blueGrey)),
+                verticalSpace(20),
+                TextField(
+                  controller: confirmPasswordController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    labelText: 'Confirm Password',
+                    // errorText: viewModel.passwordValidationMessage,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
+                  obscureText: true,
                 ),
-                const SizedBox(height: 10),
+                verticalSpaceLarge,
                 ElevatedButton(
-                  onPressed: viewModel.signIn,
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF24A19C),
                     minimumSize: const Size(double.infinity, 50),
@@ -91,17 +106,15 @@ class LoginView extends StatelessWidget with $LoginView {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: viewModel.isBusy
-                      ? const CircularProgressIndicator()
-                      : const Text('Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            letterSpacing: 1,
-                            fontWeight: FontWeight.w700,
-                          )),
+                  child: const Text('Register',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.w700,
+                      )),
                 ),
-                const SizedBox(height: 20),
+                verticalSpaceMedium,
                 const Row(
                   children: [
                     Expanded(
@@ -111,7 +124,7 @@ class LoginView extends StatelessWidget with $LoginView {
                     )),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Or Login with'),
+                      child: Text('Or Register with'),
                     ),
                     Expanded(
                         child: Divider(
@@ -120,7 +133,7 @@ class LoginView extends StatelessWidget with $LoginView {
                     )),
                   ],
                 ),
-                const SizedBox(height: 30),
+                verticalSpaceMedium,
                 // Column(
                 //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 //   children: [
@@ -141,7 +154,7 @@ class LoginView extends StatelessWidget with $LoginView {
                 // const SizedBox(height: 30),
                 TextButton(
                   onPressed: () {},
-                  child: const Text('Don’t have an account? Register Now',
+                  child: const Text('Add FB, twitter and Google',
                       style: TextStyle(color: Colors.blueAccent)),
                 ),
               ],

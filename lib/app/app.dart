@@ -19,6 +19,7 @@ import 'package:task_flow/ui/views/add_project/add_project_view.dart';
 import 'package:task_flow/ui/views/tasks/tasks_view.dart';
 import 'package:task_flow/ui/views/add_task/add_task_view.dart';
 import 'package:task_flow/ui/views/edit_profile/edit_profile_view.dart';
+import 'package:task_flow/ui/views/sign_up/sign_up_view.dart';
 // @stacked-import
 
 //  flutter clean && flutter pub get && stacked generate
@@ -43,6 +44,7 @@ import 'package:task_flow/ui/views/edit_profile/edit_profile_view.dart';
     MaterialRoute(page: TasksView),
     MaterialRoute(page: AddTaskView),
     MaterialRoute(page: EditProfileView),
+    MaterialRoute(page: SignUpView),
 // @stacked-route
   ],
   dependencies: [
