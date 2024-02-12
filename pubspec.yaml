@@ -28,7 +28,7 @@ dependencies:
 
   #UI
   flutter_screenutil: ^5.9.0
-  animations: ^2.0.11
+  animations:
   google_fonts: ^6.1.0
   # flutter_signin_button: ^2.0.0
   flutter_snake_navigationbar: ^0.6.1

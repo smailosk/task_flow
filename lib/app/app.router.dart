@@ -5,15 +5,16 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i13;
+import 'package:flutter/material.dart' as _i14;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i14;
+import 'package:stacked_services/stacked_services.dart' as _i15;
 import 'package:task_flow/ui/views/add_environment/add_environment_view.dart'
     as _i6;
 import 'package:task_flow/ui/views/add_project/add_project_view.dart' as _i10;
 import 'package:task_flow/ui/views/add_task/add_task_view.dart' as _i12;
 import 'package:task_flow/ui/views/calendar/calendar_view.dart' as _i8;
+import 'package:task_flow/ui/views/edit_profile/edit_profile_view.dart' as _i13;
 import 'package:task_flow/ui/views/environment/environment_view.dart' as _i5;
 import 'package:task_flow/ui/views/home/home_view.dart' as _i2;
 import 'package:task_flow/ui/views/login/login_view.dart' as _i4;
@@ -45,6 +46,8 @@ class Routes {
 
   static const addTaskView = '/add-task-view';
 
+  static const editProfileView = '/edit-profile-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -57,6 +60,7 @@ class Routes {
     addProjectView,
     tasksView,
     addTaskView,
+    editProfileView,
   };
 }
 
@@ -106,54 +110,58 @@ class StackedRouter extends _i1.RouterBase {
       Routes.addTaskView,
       page: _i12.AddTaskView,
     ),
+    _i1.RouteDef(
+      Routes.editProfileView,
+      page: _i13.EditProfileView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.LoginView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.LoginView(),
         settings: data,
       );
     },
     _i5.EnvironmentView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.EnvironmentView(),
         settings: data,
       );
     },
     _i6.AddEnvironmentView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.AddEnvironmentView(),
         settings: data,
       );
     },
     _i7.SettingsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.SettingsView(),
         settings: data,
       );
     },
     _i8.CalendarView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.CalendarView(),
         settings: data,
       );
     },
     _i9.ProjectsView: (data) {
       final args = data.getArgs<ProjectsViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i9.ProjectsView(key: args.key, environmentId: args.environmentId),
         settings: data,
@@ -161,7 +169,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i10.AddProjectView: (data) {
       final args = data.getArgs<AddProjectViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => _i10.AddProjectView(
             key: args.key, environmentId: args.environmentId),
         settings: data,
@@ -169,7 +177,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i11.TasksView: (data) {
       final args = data.getArgs<TasksViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i11.TasksView(key: args.key, projectId: args.projectId),
         settings: data,
@@ -177,9 +185,15 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i12.AddTaskView: (data) {
       final args = data.getArgs<AddTaskViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i12.AddTaskView(key: args.key, projectId: args.projectId),
+        settings: data,
+      );
+    },
+    _i13.EditProfileView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i13.EditProfileView(),
         settings: data,
       );
     },
@@ -198,7 +212,7 @@ class ProjectsViewArguments {
     required this.environmentId,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final String environmentId;
 
@@ -225,7 +239,7 @@ class AddProjectViewArguments {
     required this.environmentId,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final String environmentId;
 
@@ -252,7 +266,7 @@ class TasksViewArguments {
     required this.projectId,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final String projectId;
 
@@ -279,7 +293,7 @@ class AddTaskViewArguments {
     required this.projectId,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final String projectId;
 
@@ -300,7 +314,7 @@ class AddTaskViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i14.NavigationService {
+extension NavigatorStateExtension on _i15.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -400,7 +414,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToProjectsView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String environmentId,
     int? routerId,
     bool preventDuplicates = true,
@@ -418,7 +432,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToAddProjectView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String environmentId,
     int? routerId,
     bool preventDuplicates = true,
@@ -436,7 +450,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToTasksView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String projectId,
     int? routerId,
     bool preventDuplicates = true,
@@ -453,7 +467,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToAddTaskView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String projectId,
     int? routerId,
     bool preventDuplicates = true,
@@ -463,6 +477,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.addTaskView,
         arguments: AddTaskViewArguments(key: key, projectId: projectId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToEditProfileView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.editProfileView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -568,7 +596,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithProjectsView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String environmentId,
     int? routerId,
     bool preventDuplicates = true,
@@ -586,7 +614,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithAddProjectView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String environmentId,
     int? routerId,
     bool preventDuplicates = true,
@@ -604,7 +632,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithTasksView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String projectId,
     int? routerId,
     bool preventDuplicates = true,
@@ -621,7 +649,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithAddTaskView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String projectId,
     int? routerId,
     bool preventDuplicates = true,
@@ -631,6 +659,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }) async {
     return replaceWith<dynamic>(Routes.addTaskView,
         arguments: AddTaskViewArguments(key: key, projectId: projectId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithEditProfileView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.editProfileView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

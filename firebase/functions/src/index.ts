@@ -8,7 +8,7 @@
  * 
  * From folder functions: npm run build && firebase emulators:start --only functions
 
- * Ismail: sudo npm run build && sudo firebase emulators:start
+ * Ismail: sudo npm run build && sudo firebase emulators:start 26240578
 
  */
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
