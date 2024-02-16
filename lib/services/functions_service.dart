@@ -100,4 +100,17 @@ class FunctionsService {
           stackTrace: stackTrace);
     }
   }
+
+  Future updateTask(TaskModel taskModel) {
+    try {
+      return _callCloudFunction('updateTask', data: taskModel.toJson());
+    } on FunctionsFailure {
+      rethrow;
+    } catch (exception, stackTrace) {
+      throw GeneralFailure(
+          type: GeneralFailureType.unexpectedError,
+          description: 'FunctionsService - updateTask ${exception.toString()}',
+          stackTrace: stackTrace);
+    }
+  }
 }

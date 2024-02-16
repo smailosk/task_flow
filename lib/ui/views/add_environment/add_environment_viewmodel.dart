@@ -5,6 +5,7 @@ import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/constants/colors.dart';
 import 'package:task_flow/core/error_handling/executor.dart';
+import 'package:task_flow/core/models/environment/environment.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/services/repo_service.dart';
 import 'package:task_flow/ui/views/add_environment/add_environment_view.form.dart';
@@ -21,6 +22,20 @@ class AddEnvironmentViewModel extends FormViewModel {
 
   IconData? selectedIcon;
 
+  AddEnvironmentViewModel({this.environmentModel});
+  final EnvironmentModel? environmentModel;
+
+  init() {
+    if (environmentModel != null) {
+      environmentNameValue = environmentModel!.name;
+      updateSelectedColor(colors.indexOf(environmentModel!.color));
+    } else {
+      updateSelectedColor(0);
+    }
+
+    setInitialised(true);
+  }
+
   void setIcon(IconData icon) {
     selectedIcon = icon;
     notifyListeners();
@@ -30,11 +45,6 @@ class AddEnvironmentViewModel extends FormViewModel {
     environmentColorValue = colors[index];
     _selectedColorIndex = index;
     notifyListeners();
-  }
-
-  init() {
-    setInitialised(true);
-    updateSelectedColor(0);
   }
 
   addEnvironment() {

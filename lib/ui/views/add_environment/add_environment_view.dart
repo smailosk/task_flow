@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
+import 'package:task_flow/core/models/environment/environment.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
 import 'package:task_flow/ui/common/widgets/color_picker_item_widget.dart';
@@ -15,8 +16,8 @@ import 'add_environment_viewmodel.dart';
   FormTextField(name: 'environmentIcon'),
 ])
 class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
-  const AddEnvironmentView({super.key});
-
+  const AddEnvironmentView({super.key, this.environmentModel});
+  final EnvironmentModel? environmentModel;
   // void _pickIcon(
   //     BuildContext context, AddEnvironmentViewModel viewModel) async {
   //   IconData? icon = await FlutterIconPicker.showIconPicker(context,
@@ -38,7 +39,8 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
         syncFormWithViewModel(viewModel);
         viewModel.init();
       },
-      viewModelBuilder: () => AddEnvironmentViewModel(),
+      viewModelBuilder: () =>
+          AddEnvironmentViewModel(environmentModel: environmentModel),
       builder: (context, viewModel, child) {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
@@ -50,10 +52,12 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                     top: 15, left: 15, right: 15, bottom: 0),
                 child: ListView(
                   children: [
-                    const Text(
-                      'Create new Environment',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    Text(
+                      environmentModel != null
+                          ? 'Edit Environment'
+                          : 'Create new Environment',
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     verticalSpaceLarge,
                     const Align(
@@ -135,7 +139,9 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                         MainButton(
                           enabled: viewModel.isFormValid,
                           onPressed: () => viewModel.addEnvironment(),
-                          text: 'Create Environment',
+                          text: environmentModel != null
+                              ? 'Save changes'
+                              : 'Create Environment',
                           color: const Color(0xFF24A19C),
                         ),
                       ],

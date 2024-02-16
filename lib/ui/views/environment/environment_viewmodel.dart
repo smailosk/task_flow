@@ -28,7 +28,7 @@ class EnvironmentViewModel extends ReactiveViewModel {
 
   navigatoToAddEnvironment() {
     _log.i('navigatoToAddEnvironment');
-    _navigationService.navigateTo(Routes.addEnvironmentView);
+    _navigationService.navigateToAddEnvironmentView(environmentModel: null);
   }
 
   openEnvironment(int index) {
@@ -37,5 +37,11 @@ class EnvironmentViewModel extends ReactiveViewModel {
         environmentId: environments[index].id);
     // _navigationService.navigateTo(Routes.environmentView,
     //     arguments: EnvironmentViewArguments(environment: environments[index]));
+  }
+
+  void navigateToEditEnvironment(int index) {
+    _log.i('navigateToEditEnvironment');
+    _navigationService.navigateToAddEnvironmentView(
+        environmentModel: environments[index]);
   }
 }

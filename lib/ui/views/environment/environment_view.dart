@@ -47,6 +47,8 @@ class EnvironmentView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () => viewModel.openEnvironment(index),
+                      onLongPressStart: (value) => _showCustomMenu(
+                          context, value.globalPosition, viewModel, index),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -58,6 +60,7 @@ class EnvironmentView extends StatelessWidget {
                             width: 100,
                           ),
                           verticalSpace(15),
+                          // Icon(Icons.home),
                           Text(
                             viewModel.environments[index].name,
                             textAlign: TextAlign.center,
@@ -86,5 +89,30 @@ class EnvironmentView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showCustomMenu(BuildContext context, Offset offset,
+      EnvironmentViewModel viewModel, int index) {
+    final RenderObject overlay =
+        Overlay.of(context).context.findRenderObject()!;
+
+    showMenu(
+        context: context,
+        items: [
+          PopupMenuItem(
+            child: const Row(children: [
+              Icon(Icons.edit),
+              SizedBox(width: 16),
+              Text('Edit')
+            ]),
+            onTap: () {
+              viewModel.navigateToEditEnvironment(index);
+            },
+          ),
+        ],
+        position: RelativeRect.fromRect(
+            Rect.fromLTWH(offset.dx, offset.dy, 30, 30),
+            Rect.fromLTWH(0, 0, overlay.paintBounds.size.width,
+                overlay.paintBounds.size.height)));
   }
 }

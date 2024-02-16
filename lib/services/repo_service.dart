@@ -226,4 +226,42 @@ class RepoService with ListenableServiceMixin {
       );
     }
   }
+
+  Future updateTask(TaskModel taskModel) async {
+    try {
+      _tasksByProject[taskModel.parentProjectId]?[taskModel.id] = taskModel;
+      notifyListeners();
+      // return _functions.updateTask(taskModel);
+    } on Failure catch (e) {
+      _log.e('RepoService - updateTask', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - updateTask ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future deleteTask(TaskModel task) async {
+    try {
+      _tasksByProject[task.parentProjectId]?.remove(task.id);
+      notifyListeners();
+      // return _functions.deleteTask(task);
+    } on Failure catch (e) {
+      _log.e('RepoService - deleteTask', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - deleteTask ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
+
+  ProjectModel getProjectById(String projectId) {
+    return _projects[projectId]!;
+  }
 }

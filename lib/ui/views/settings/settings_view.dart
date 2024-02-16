@@ -16,14 +16,16 @@ class SettingsView extends StatelessWidget {
       builder: (context, viewModel, child) => Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: ListView(
+            shrinkWrap: true,
             children: [
-              const Text(
-                'Profile',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
+              const Center(
+                child: Text(
+                  'Profile',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
               ),
               verticalSpaceMedium,
@@ -33,14 +35,16 @@ class SettingsView extends StatelessWidget {
                     NetworkImage('https://via.placeholder.com/150'),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Ismail Amor',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+              const Center(
+                child: Text(
+                  'Ismail Amor',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-              const Text('@ismail_amor'),
+              const Center(child: Text('@ismail_amor')),
               const SizedBox(height: 20),
               _buildSettingsTile(
                 ListTile(
@@ -48,7 +52,7 @@ class SettingsView extends StatelessWidget {
                   title: const Text('Personal Information'),
                   trailing: const Icon(Icons.edit),
                   onTap: () {
-                    // TODO: Navigate to edit profile
+                    viewModel.navigateToEditProfile();
                   },
                 ),
               ),
@@ -80,7 +84,7 @@ class SettingsView extends StatelessWidget {
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
               ),
-              const Spacer(),
+              verticalSpaceSmall,
               SizedBox(
                 width: screenWidth - (tilePadding * 2),
                 child: ElevatedButton.icon(

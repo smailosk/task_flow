@@ -12,4 +12,8 @@ class SettingsViewModel extends BaseViewModel {
     await _auth.signOut();
     _navigation.clearStackAndShow(Routes.startupView);
   }
+
+  navigateToEditProfile() {
+    _navigation.navigateTo(Routes.editProfileView);
+  }
 }

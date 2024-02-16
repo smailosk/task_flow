@@ -8,7 +8,9 @@
 import 'package:flutter/material.dart' as _i15;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i16;
+import 'package:stacked_services/stacked_services.dart' as _i18;
+import 'package:task_flow/core/models/environment/environment.dart' as _i16;
+import 'package:task_flow/core/models/task/task.dart' as _i17;
 import 'package:task_flow/ui/views/add_environment/add_environment_view.dart'
     as _i6;
 import 'package:task_flow/ui/views/add_project/add_project_view.dart' as _i10;
@@ -150,8 +152,12 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i6.AddEnvironmentView: (data) {
+      final args = data.getArgs<AddEnvironmentViewArguments>(
+        orElse: () => const AddEnvironmentViewArguments(),
+      );
       return _i15.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i6.AddEnvironmentView(),
+        builder: (context) => _i6.AddEnvironmentView(
+            key: args.key, environmentModel: args.environmentModel),
         settings: data,
       );
     },
@@ -194,8 +200,8 @@ class StackedRouter extends _i1.RouterBase {
     _i12.AddTaskView: (data) {
       final args = data.getArgs<AddTaskViewArguments>(nullOk: false);
       return _i15.MaterialPageRoute<dynamic>(
-        builder: (context) =>
-            _i12.AddTaskView(key: args.key, projectId: args.projectId),
+        builder: (context) => _i12.AddTaskView(
+            key: args.key, projectId: args.projectId, task: args.task),
         settings: data,
       );
     },
@@ -218,6 +224,33 @@ class StackedRouter extends _i1.RouterBase {
 
   @override
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
+}
+
+class AddEnvironmentViewArguments {
+  const AddEnvironmentViewArguments({
+    this.key,
+    this.environmentModel,
+  });
+
+  final _i15.Key? key;
+
+  final _i16.EnvironmentModel? environmentModel;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "environmentModel": "$environmentModel"}';
+  }
+
+  @override
+  bool operator ==(covariant AddEnvironmentViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.environmentModel == environmentModel;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ environmentModel.hashCode;
+  }
 }
 
 class ProjectsViewArguments {
@@ -305,30 +338,35 @@ class AddTaskViewArguments {
   const AddTaskViewArguments({
     this.key,
     required this.projectId,
+    this.task,
   });
 
   final _i15.Key? key;
 
   final String projectId;
 
+  final _i17.TaskModel? task;
+
   @override
   String toString() {
-    return '{"key": "$key", "projectId": "$projectId"}';
+    return '{"key": "$key", "projectId": "$projectId", "task": "$task"}';
   }
 
   @override
   bool operator ==(covariant AddTaskViewArguments other) {
     if (identical(this, other)) return true;
-    return other.key == key && other.projectId == projectId;
+    return other.key == key &&
+        other.projectId == projectId &&
+        other.task == task;
   }
 
   @override
   int get hashCode {
-    return key.hashCode ^ projectId.hashCode;
+    return key.hashCode ^ projectId.hashCode ^ task.hashCode;
   }
 }
 
-extension NavigatorStateExtension on _i16.NavigationService {
+extension NavigatorStateExtension on _i18.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -385,14 +423,18 @@ extension NavigatorStateExtension on _i16.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToAddEnvironmentView([
+  Future<dynamic> navigateToAddEnvironmentView({
+    _i15.Key? key,
+    _i16.EnvironmentModel? environmentModel,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.addEnvironmentView,
+        arguments: AddEnvironmentViewArguments(
+            key: key, environmentModel: environmentModel),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -483,6 +525,7 @@ extension NavigatorStateExtension on _i16.NavigationService {
   Future<dynamic> navigateToAddTaskView({
     _i15.Key? key,
     required String projectId,
+    _i17.TaskModel? task,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -490,7 +533,8 @@ extension NavigatorStateExtension on _i16.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.addTaskView,
-        arguments: AddTaskViewArguments(key: key, projectId: projectId),
+        arguments:
+            AddTaskViewArguments(key: key, projectId: projectId, task: task),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -581,14 +625,18 @@ extension NavigatorStateExtension on _i16.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithAddEnvironmentView([
+  Future<dynamic> replaceWithAddEnvironmentView({
+    _i15.Key? key,
+    _i16.EnvironmentModel? environmentModel,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.addEnvironmentView,
+        arguments: AddEnvironmentViewArguments(
+            key: key, environmentModel: environmentModel),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -679,6 +727,7 @@ extension NavigatorStateExtension on _i16.NavigationService {
   Future<dynamic> replaceWithAddTaskView({
     _i15.Key? key,
     required String projectId,
+    _i17.TaskModel? task,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -686,7 +735,8 @@ extension NavigatorStateExtension on _i16.NavigationService {
         transition,
   }) async {
     return replaceWith<dynamic>(Routes.addTaskView,
-        arguments: AddTaskViewArguments(key: key, projectId: projectId),
+        arguments:
+            AddTaskViewArguments(key: key, projectId: projectId, task: task),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

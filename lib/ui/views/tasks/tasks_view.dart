@@ -48,21 +48,40 @@ class TasksView extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ListTile(
-                  leading: Checkbox(
-                    value: task.done,
-                    onChanged: (value) {
-                      if (value == null) return;
-                      viewModel.toggleTaskCompletion(index, value);
-                    },
-                  ),
-                  title: Text(
-                    task.title,
-                    style: TextStyle(
-                        decoration: task.done
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none),
-                  ),
-                ),
+                    leading: Checkbox(
+                      value: task.done,
+                      onChanged: (value) {
+                        if (value == null) return;
+                        viewModel.toggleTaskCompletion(index, value);
+                      },
+                    ),
+                    title: Text(
+                      task.title,
+                      style: TextStyle(
+                          decoration: task.done
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none),
+                    ),
+                    trailing: PopupMenuButton(
+                      itemBuilder: (context) {
+                        return [
+                          PopupMenuItem<String>(
+                            value: 'edit',
+                            child: const Text('Edit'),
+                            onTap: () {
+                              viewModel.editTask(index);
+                            },
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'delete',
+                            child: const Text('Delete'),
+                            onTap: () {
+                              viewModel.deleteTask(index);
+                            },
+                          )
+                        ];
+                      },
+                    )),
               );
             },
           ),

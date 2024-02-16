@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
+import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/ui/views/add_task/add_task_view.form.dart';
 
 import '../../common/ui_helpers.dart';
@@ -12,14 +13,16 @@ import 'add_task_viewmodel.dart';
   FormTextField(name: 'taskDetails'),
 ])
 class AddTaskView extends StatelessWidget with $AddTaskView {
-  const AddTaskView({super.key, required this.projectId});
+  const AddTaskView({super.key, required this.projectId, this.task});
   final String projectId;
+  final TaskModel? task;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddTaskViewModel>.reactive(
-      viewModelBuilder: () => AddTaskViewModel(projectId),
+      viewModelBuilder: () => AddTaskViewModel(projectId, task),
       onViewModelReady: (viewModel) {
         syncFormWithViewModel(viewModel);
+        viewModel.init();
       },
       onDispose: (viewModel) {
         disposeForm();
@@ -33,9 +36,9 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                 padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
-                    const Text(
-                      'Create new Task',
-                      style: TextStyle(
+                    Text(
+                      task != null ? 'Edit Task' : 'Create new Task',
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -102,9 +105,9 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           padding: const EdgeInsets.all(8),
-                          child: const Text(
-                            'Project-Name',
-                            style: TextStyle(
+                          child: Text(
+                            viewModel.project?.name ?? 'No project found',
+                            style: const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w500,
                             ),
@@ -174,11 +177,16 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                           text: 'Cancel',
                         ),
                         MainButton(
-                          enabled: true,
-                          text: 'Create Task',
-                          color: const Color(0xFF24A19C),
-                          onPressed: viewModel.createTask,
-                        ),
+                            enabled: true,
+                            text: task != null ? 'Save changes' : 'Create Task',
+                            color: const Color(0xFF24A19C),
+                            onPressed: () {
+                              if (task != null) {
+                                viewModel.updateTask(task!);
+                              } else {
+                                viewModel.createTask();
+                              }
+                            }),
                       ],
                     )
                   ],
