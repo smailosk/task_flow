@@ -8,6 +8,7 @@ import 'package:task_flow/ui/common/widgets/color_picker_item_widget.dart';
 import 'package:task_flow/ui/common/widgets/main_button.dart';
 import 'package:task_flow/ui/views/add_environment/add_environment_view.form.dart';
 
+import '../../common/widgets/icons_picker_item _widget.dart';
 import 'add_environment_viewmodel.dart';
 
 @FormView(fields: [
@@ -17,17 +18,8 @@ import 'add_environment_viewmodel.dart';
 ])
 class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
   const AddEnvironmentView({super.key, this.environmentModel});
+
   final EnvironmentModel? environmentModel;
-  // void _pickIcon(
-  //     BuildContext context, AddEnvironmentViewModel viewModel) async {
-  //   IconData? icon = await FlutterIconPicker.showIconPicker(context,
-  //       iconPackModes: [IconPack.material]);
-  //
-  //   if (icon != null) {
-  //     viewModel
-  //         .setIcon(icon); // You need to implement setIcon in your ViewModel
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +44,16 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                     top: 15, left: 15, right: 15, bottom: 0),
                 child: ListView(
                   children: [
-                    Text(
-                      environmentModel != null
-                          ? 'Edit Environment'
-                          : 'Create new Environment',
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                    Center(
+                      child: Text(
+                        environmentModel != null
+                            ? 'Edit Environment'
+                            : 'Create new Environment',
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
                     ),
                     verticalSpaceLarge,
                     const Align(
@@ -65,47 +61,58 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                       child: Text(
                         'Environment Name',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal),
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                     verticalSpaceTiny,
                     TextField(
                       controller: environmentNameController,
                       decoration: const InputDecoration(
-                          labelText: 'Environment Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          fillColor: Colors.purpleAccent),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
+                      ),
                     ),
                     verticalSpaceMedium,
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Environment Icon: '
-                        '=> ToDo (add Icon Picker)',
+                        'Environment Icon: ',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal),
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
-                    // Column(
-                    //   children: [
-                    //     IconButton(
-                    //       icon: Icon(Icons.palette), // Use an icon that suggests picking an icon
-                    //       onPressed: () => viewModel.selectedIcon,
-                    //     ),
-                    //     SizedBox(width: 10), // Spacing between button and displayed icon
-                    //     Icon(viewModel.selectedIcon ?? Icons.help_outline, size: 24), // Display the selected icon or a placeholder
-                    //   ],
-                    // ),
+                    verticalSpaceTiny,
+                    SizedBox(
+                      width: screenWidth(context),
+                      height: 50,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: viewModel.icons.length,
+                        itemBuilder: (context, index) {
+                          final iconData = viewModel.icons[index];
+                          return IconPickerItemWidget(
+                            iconData: iconData,
+                            isSelected: viewModel.selectedIcon == iconData,
+                            onTap: () => viewModel.setIcon(iconData),
+                          );
+                        },
+                      ),
+                    ),
                     verticalSpaceMedium,
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Environment Color',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal),
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                     verticalSpaceTiny,

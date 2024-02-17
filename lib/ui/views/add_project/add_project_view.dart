@@ -32,16 +32,29 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
       builder: (context, viewModel, child) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Container(
-            padding:
-                const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
+            padding: const EdgeInsets.only(
+              top: 15,
+              left: 15,
+              right: 15,
+              bottom: 0,
+            ),
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 15, left: 15, right: 15, bottom: 0),
+                top: 15,
+                left: 15,
+                right: 15,
+                bottom: 0,
+              ),
               child: ListView(
                 children: [
-                  const Text(
-                    'Create new Project',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  const Center(
+                    child: Text(
+                      'Create new Project',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
                   ),
                   verticalSpaceLarge,
                   const Align(
@@ -49,14 +62,15 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                     child: Text(
                       'Project Name',
                       style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.normal),
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
                   ),
                   verticalSpaceSmall,
                   TextField(
                     controller: projectNameController,
                     decoration: const InputDecoration(
-                      hintText: 'Project name',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide(color: Colors.black),
@@ -72,21 +86,29 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                         child: Text(
                           'Environment',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.normal),
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
                       Container(
-                        color: Colors.red,
-                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: viewModel.environment?.color != null
+                              ? Color(int.parse(viewModel.environment!.color
+                                  .replaceFirst('#', '0xff')))
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            const Icon(Icons.cabin),
+                            const Icon(Icons.work),
                             horizontalSpaceSmall,
                             Text(
                               viewModel.environment?.name ?? '',
                               style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
@@ -100,7 +122,7 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                     child: Text(
                       'Project Color',
                       style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.normal),
+                          fontSize: 20, fontWeight: FontWeight.normal),
                     ),
                   ),
                   verticalSpaceTiny,

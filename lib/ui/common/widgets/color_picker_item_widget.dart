@@ -6,9 +6,11 @@ class ColorPickerItemWidget extends StatelessWidget {
       required this.color,
       this.isSelected = false,
       required this.onTap});
+
   final Color color;
   final bool isSelected;
   final Function() onTap;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,12 +26,13 @@ class ColorPickerItemWidget extends StatelessWidget {
                       color: color,
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: isSelected ? Colors.black : color, width: 2)),
-                  // padding: const EdgeInsets.all(8),
+                        color: isSelected ? Colors.black : color,
+                        width: 2,
+                      )),
                   child: isSelected
                       ? const Icon(
                           Icons.check,
-                          color: Colors.black,
+                          color: Colors.white,
                         )
                       : null)),
         ),

@@ -4,9 +4,9 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/constants/colors.dart';
+import 'package:task_flow/core/constants/icons.dart';
 import 'package:task_flow/core/error_handling/executor.dart';
 import 'package:task_flow/core/models/environment/environment.dart';
-import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/services/repo_service.dart';
 import 'package:task_flow/ui/views/add_environment/add_environment_view.form.dart';
 
@@ -20,9 +20,14 @@ class AddEnvironmentViewModel extends FormViewModel {
 
   List<String> get colors => kEnvironmentColors;
 
-  IconData? selectedIcon;
+  List<IconData> get icons => iconsList;
+
+  IconData? _selectedIcon;
+
+  IconData? get selectedIcon => _selectedIcon;
 
   AddEnvironmentViewModel({this.environmentModel});
+
   final EnvironmentModel? environmentModel;
 
   init() {
@@ -37,7 +42,7 @@ class AddEnvironmentViewModel extends FormViewModel {
   }
 
   void setIcon(IconData icon) {
-    selectedIcon = icon;
+    _selectedIcon = icon;
     notifyListeners();
   }
 

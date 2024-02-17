@@ -14,8 +14,10 @@ import 'add_task_viewmodel.dart';
 ])
 class AddTaskView extends StatelessWidget with $AddTaskView {
   const AddTaskView({super.key, required this.projectId, this.task});
+
   final String projectId;
   final TaskModel? task;
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddTaskViewModel>.reactive(
@@ -39,8 +41,8 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                     Text(
                       task != null ? 'Edit Task' : 'Create new Task',
                       style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                     verticalSpaceLarge,
@@ -49,7 +51,7 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                       child: Text(
                         'Task Title:',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 20,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
@@ -58,7 +60,6 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                     TextField(
                       controller: taskTitleController,
                       decoration: const InputDecoration(
-                        hintText: 'Task Title',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(color: Colors.black),
@@ -71,7 +72,9 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                       child: Text(
                         'Task Details:',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal),
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                     verticalSpaceSmall,
@@ -81,9 +84,9 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                       maxLines: null,
                       minLines: 3,
                       decoration: InputDecoration(
-                        hintText: "Enter your details here...",
+                        // hintText: "Enter your details here...",
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
@@ -96,7 +99,9 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                           child: Text(
                             'Project:',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.normal),
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                         Container(
@@ -108,8 +113,8 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                           child: Text(
                             viewModel.project?.name ?? 'No project found',
                             style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         )
@@ -124,20 +129,22 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                           child: Text(
                             'Time:',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.normal),
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           padding: const EdgeInsets.all(8),
                           child: const Text(
                             '10:00',
                             style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         )
@@ -152,13 +159,15 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                           child: Text(
                             'Assignee:',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.normal),
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: IconButton(
                             onPressed: () {},
