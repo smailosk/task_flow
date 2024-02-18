@@ -9,7 +9,7 @@ class EnvironmentModel with _$EnvironmentModel {
   const factory EnvironmentModel({
     required String id,
     required String name,
-    required String icon,
+    required int icon,
     required String color,
     required List<String> admins,
   }) = _EnvironmentModel;

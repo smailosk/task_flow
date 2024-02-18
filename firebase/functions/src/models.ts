@@ -2,7 +2,7 @@
 export interface Environment {
     id: string;
     name: string;
-    icon: string;
+    icon: number;
     color: string;
     admins: string[];
 }

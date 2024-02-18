@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/core/models/task/task.dart';
+import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/views/add_task/add_task_view.form.dart';
-
 import '../../common/ui_helpers.dart';
 import '../../common/widgets/main_button.dart';
 import 'add_task_viewmodel.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 @FormView(fields: [
   FormTextField(name: 'taskTitle'),
@@ -134,17 +135,27 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                             ),
                           ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: const Text(
-                            '10:00',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () async {
+                            DateTime? dateTime = await showOmniDateTimePicker(
+                                initialDate: viewModel.deadline,
+                                context: context,
+                                is24HourMode: true);
+
+                            viewModel.setDateTime(dateTime);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              Utils.formatDateTime(viewModel.deadline),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         )

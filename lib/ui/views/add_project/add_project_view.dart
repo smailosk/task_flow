@@ -93,16 +93,16 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: viewModel.environment?.color != null
-                              ? Color(int.parse(viewModel.environment!.color
-                                  .replaceFirst('#', '0xff')))
-                              : Colors.transparent,
+                          color: Utils.hexToColor(viewModel.environment!.color),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            const Icon(Icons.work),
+                            Icon(
+                              Utils.iconDataFromInt(
+                                  viewModel.environment!.icon),
+                            ),
                             horizontalSpaceSmall,
                             Text(
                               viewModel.environment?.name ?? '',

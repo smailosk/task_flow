@@ -13,7 +13,7 @@
  */
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import * as functions from 'firebase-functions';
-
+import { icons as icons } from './constants';
 import { initializeApp } from "firebase-admin/app";
 import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
 import { Environment, Project, Task, FunctionsErrorCodes } from "./models";
@@ -72,7 +72,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
         const environmentData: Environment = {
             id: firestoreDb.collection('Environments').doc().id,
             name: 'Default Environment',
-            icon: 'default_icon',
+            icon: icons[Math.floor(Math.random() * icons.length)],
             color: generateRandomColor(),
             admins: [user.uid]
         };
@@ -130,7 +130,7 @@ export const createEnvironment = onCall(async (request) => {
 
     // Validate incoming data
     if (typeof request.data.name !== 'string' ||
-        typeof request.data.icon !== 'string' ||
+        typeof request.data.icon !== 'number' ||
         typeof request.data.color !== 'string') {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }

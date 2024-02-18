@@ -1,5 +1,6 @@
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:task_flow/app/app.bottomsheets.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/core/error_handling/executor.dart';
 import 'package:task_flow/core/models/project/project.dart';
@@ -12,15 +13,30 @@ class AddTaskViewModel extends FormViewModel {
   final TaskModel? task;
   final _repoService = locator<RepoService>();
   final _navigationService = locator<NavigationService>();
-
+  final _bottomSheetService = locator<BottomSheetService>();
   AddTaskViewModel(this.projectId, this.task);
 
   ProjectModel? get project => _repoService.getProjectById(projectId);
+
+  // final _dateTimePickerController = BoardDateTimeController();
+
+  // BoardDateTimeController get dateTimePickerController =>
+  //     _dateTimePickerController;
 
   void init() {
     if (task != null) {
       taskTitleValue = task!.title;
       taskDetailsValue = task!.details;
+    }
+  }
+
+  DateTime _deadline = DateTime.now();
+  DateTime get deadline => _deadline;
+
+  setDateTime(DateTime? dateTime) {
+    if (dateTime != null) {
+      _deadline = dateTime;
+      notifyListeners();
     }
   }
 

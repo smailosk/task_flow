@@ -22,7 +22,7 @@ EnvironmentModel _$EnvironmentModelFromJson(Map<String, dynamic> json) {
 mixin _$EnvironmentModel {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get icon => throw _privateConstructorUsedError;
+  int get icon => throw _privateConstructorUsedError;
   String get color => throw _privateConstructorUsedError;
   List<String> get admins => throw _privateConstructorUsedError;
 
@@ -39,7 +39,7 @@ abstract class $EnvironmentModelCopyWith<$Res> {
       _$EnvironmentModelCopyWithImpl<$Res, EnvironmentModel>;
   @useResult
   $Res call(
-      {String id, String name, String icon, String color, List<String> admins});
+      {String id, String name, int icon, String color, List<String> admins});
 }
 
 /// @nodoc
@@ -73,7 +73,7 @@ class _$EnvironmentModelCopyWithImpl<$Res, $Val extends EnvironmentModel>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -95,7 +95,7 @@ abstract class _$$EnvironmentModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id, String name, String icon, String color, List<String> admins});
+      {String id, String name, int icon, String color, List<String> admins});
 }
 
 /// @nodoc
@@ -127,7 +127,7 @@ class __$$EnvironmentModelImplCopyWithImpl<$Res>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -161,7 +161,7 @@ class _$EnvironmentModelImpl
   @override
   final String name;
   @override
-  final String icon;
+  final int icon;
   @override
   final String color;
   final List<String> _admins;
@@ -225,7 +225,7 @@ abstract class _EnvironmentModel implements EnvironmentModel {
   const factory _EnvironmentModel(
       {required final String id,
       required final String name,
-      required final String icon,
+      required final int icon,
       required final String color,
       required final List<String> admins}) = _$EnvironmentModelImpl;
 
@@ -237,7 +237,7 @@ abstract class _EnvironmentModel implements EnvironmentModel {
   @override
   String get name;
   @override
-  String get icon;
+  int get icon;
   @override
   String get color;
   @override

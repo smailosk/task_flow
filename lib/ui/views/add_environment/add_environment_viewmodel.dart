@@ -20,11 +20,11 @@ class AddEnvironmentViewModel extends FormViewModel {
 
   List<String> get colors => kEnvironmentColors;
 
-  List<IconData> get icons => iconsList;
+  List<int> get icons => iconsList;
 
-  IconData? _selectedIcon;
+  int _selectedIcon = iconsList[0];
 
-  IconData? get selectedIcon => _selectedIcon;
+  int get selectedIcon => _selectedIcon;
 
   AddEnvironmentViewModel({this.environmentModel});
 
@@ -34,15 +34,17 @@ class AddEnvironmentViewModel extends FormViewModel {
     if (environmentModel != null) {
       environmentNameValue = environmentModel!.name;
       updateSelectedColor(colors.indexOf(environmentModel!.color));
+      setIcon(environmentModel!.icon);
     } else {
       updateSelectedColor(0);
+      setIcon(0);
     }
 
     setInitialised(true);
   }
 
-  void setIcon(IconData icon) {
-    _selectedIcon = icon;
+  void setIcon(int index) {
+    _selectedIcon = iconsList[index];
     notifyListeners();
   }
 
@@ -57,7 +59,7 @@ class AddEnvironmentViewModel extends FormViewModel {
     Executor.run(_repo.addNewEnvironment(
             environmentNameValue ?? 'No name provided',
             environmentColorValue ?? '#000000',
-            'environmentIconValue'))
+            selectedIcon ?? 0))
         .then((value) => value.fold((failure) {
               _log.e('Failed to add environment', failure);
               setBusy(false);

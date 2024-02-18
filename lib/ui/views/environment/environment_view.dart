@@ -58,6 +58,13 @@ class EnvironmentView extends StatelessWidget {
                                 viewModel.environments[index].color),
                             height: 100,
                             width: 100,
+                            child: Center(
+                              child: Icon(
+                                  Utils.iconDataFromInt(
+                                      viewModel.environments[index].icon),
+                                  color: Colors.white,
+                                  size: 40),
+                            ),
                           ),
                           verticalSpace(15),
                           // Icon(Icons.home),

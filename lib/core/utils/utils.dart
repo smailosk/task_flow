@@ -27,4 +27,17 @@ class Utils {
       );
     });
   }
+
+  static IconData iconDataFromInt(int icon) {
+    return IconData(icon, fontFamily: 'MaterialIcons');
+  }
+
+  static String formatDateTime(DateTime dateTime) {
+    String year = dateTime.year.toString();
+    String month = dateTime.month.toString().padLeft(2, '0');
+    String day = dateTime.day.toString().padLeft(2, '0');
+    String hour = dateTime.hour.toString().padLeft(2, '0');
+    String minute = dateTime.minute.toString().padLeft(2, '0');
+    return '$year/$month/$day $hour:$minute';
+  }
 }

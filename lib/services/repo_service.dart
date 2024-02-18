@@ -161,7 +161,7 @@ class RepoService with ListenableServiceMixin {
   //   }
   // }
 
-  Future<void> addNewEnvironment(String name, String color, String icon) async {
+  Future<void> addNewEnvironment(String name, String color, int icon) async {
     try {
       final env = await _functions.createEnvironment(EnvironmentModel(
         id: '',

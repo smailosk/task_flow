@@ -8,7 +8,7 @@ import 'package:task_flow/ui/common/widgets/color_picker_item_widget.dart';
 import 'package:task_flow/ui/common/widgets/main_button.dart';
 import 'package:task_flow/ui/views/add_environment/add_environment_view.form.dart';
 
-import '../../common/widgets/icons_picker_item _widget.dart';
+import '../../common/widgets/icons_picker_item_widget.dart';
 import 'add_environment_viewmodel.dart';
 
 @FormView(fields: [
@@ -97,9 +97,9 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                         itemBuilder: (context, index) {
                           final iconData = viewModel.icons[index];
                           return IconPickerItemWidget(
-                            iconData: iconData,
+                            iconData: Utils.iconDataFromInt(iconData),
                             isSelected: viewModel.selectedIcon == iconData,
-                            onTap: () => viewModel.setIcon(iconData),
+                            onTap: () => viewModel.setIcon(index),
                           );
                         },
                       ),

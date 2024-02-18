@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:task_flow/app/app.bottomsheets.dart';
 import 'package:task_flow/app/app.dialogs.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/app/app.router.dart';
@@ -13,7 +14,7 @@ Future<void> main() async {
   );
   await setupLocator();
   setupDialogUi();
-  // setupBottomSheetUi();
+  setupBottomSheetUi();
   runApp(const MainApp());
 }
 
