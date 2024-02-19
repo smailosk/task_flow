@@ -30,21 +30,20 @@ class SettingsView extends StatelessWidget {
               ),
               verticalSpaceMedium,
               const CircleAvatar(
-                radius: 50,
-                backgroundImage:
-                    NetworkImage('https://via.placeholder.com/150'),
+                radius: 100,
+                backgroundImage: NetworkImage('https://i.pravatar.cc/1000'),
               ),
               const SizedBox(height: 8),
-              const Center(
+              Center(
                 child: Text(
-                  'Ismail Amor',
-                  style: TextStyle(
+                  viewModel.displayName,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
                 ),
               ),
-              const Center(child: Text('@ismail_amor')),
+              Center(child: Text('@${viewModel.displayUserName}')),
               const SizedBox(height: 20),
               _buildSettingsTile(
                 ListTile(

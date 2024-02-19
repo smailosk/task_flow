@@ -8,6 +8,9 @@ class SettingsViewModel extends BaseViewModel {
   final _auth = locator<AuthService>();
   final _navigation = locator<NavigationService>();
 
+  String get displayName => _auth.displayName ?? '';
+  String get displayUserName => _auth.uid ?? '';
+
   signOut() async {
     await _auth.signOut();
     _navigation.clearStackAndShow(Routes.startupView);

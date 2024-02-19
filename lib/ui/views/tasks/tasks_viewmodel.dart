@@ -7,6 +7,7 @@ import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/services/repo_service.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../core/models/project/project.dart';
 
 class TasksViewModel extends ReactiveViewModel {
   @override
@@ -15,10 +16,13 @@ class TasksViewModel extends ReactiveViewModel {
   final _repoService = locator<RepoService>();
   final _log = getLogger('TasksViewModel');
   final String projectId;
+
   TasksViewModel(this.projectId);
 
   List<TaskModel> get tasks =>
       _repoService.tasksByProject[projectId]?.values.toList() ?? [];
+
+  ProjectModel? get project => _repoService.getProjectById(projectId);
 
   init() {
     setBusy(true);

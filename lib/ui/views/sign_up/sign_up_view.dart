@@ -13,7 +13,7 @@ import 'sign_up_viewmodel.dart';
   FormTextField(name: 'confirmPassword'),
 ])
 class SignUpView extends StatelessWidget with $SignUpView {
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({super.key});
 
   @override
   Widget build(BuildContext context) {

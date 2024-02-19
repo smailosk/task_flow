@@ -26,6 +26,7 @@ import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_she
 import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
 import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
 import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
+import 'package:task_flow/ui/views/search/search_view.dart';
 // @stacked-import
 
 //  flutter clean && flutter pub get && stacked generate
@@ -51,6 +52,7 @@ import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_she
     MaterialRoute(page: AddTaskView),
     MaterialRoute(page: EditProfileView),
     MaterialRoute(page: SignUpView),
+    MaterialRoute(page: SearchView),
 // @stacked-route
   ],
   dependencies: [

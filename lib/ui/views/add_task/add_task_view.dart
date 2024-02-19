@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/views/add_task/add_task_view.form.dart';
+
 import '../../common/ui_helpers.dart';
 import '../../common/widgets/main_button.dart';
 import 'add_task_viewmodel.dart';
-import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 @FormView(fields: [
   FormTextField(name: 'taskTitle'),
@@ -107,7 +108,7 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.redAccent,
+                            color: Utils.hexToColor(viewModel.project!.color),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           padding: const EdgeInsets.all(8),

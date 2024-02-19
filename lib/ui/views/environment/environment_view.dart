@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
+
 import 'environment_viewmodel.dart';
 
 class EnvironmentView extends StatelessWidget {
@@ -31,9 +32,20 @@ class EnvironmentView extends StatelessWidget {
                   child: Text(
                     'Welcome ${viewModel.displayName}',
                     style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
                   )),
-              const SizedBox(height: 10),
+              Divider(color: Colors.grey.shade200),
+              verticalSpace(20),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'My Environments',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              verticalSpaceMedium,
               Expanded(
                 child: GridView.builder(
                   itemCount: viewModel.environments.length,
@@ -48,26 +60,41 @@ class EnvironmentView extends StatelessWidget {
                     return GestureDetector(
                       onTap: () => viewModel.openEnvironment(index),
                       onLongPressStart: (value) => _showCustomMenu(
-                          context, value.globalPosition, viewModel, index),
+                        context,
+                        value.globalPosition,
+                        viewModel,
+                        index,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            color: Utils.hexToColor(
-                                viewModel.environments[index].color),
+                            decoration: BoxDecoration(
+                              color: Utils.hexToColor(
+                                  viewModel.environments[index].color),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.8),
+                                  spreadRadius: 1,
+                                  blurRadius: 3,
+                                  offset: const Offset(1, 3),
+                                ),
+                              ],
+                            ),
                             height: 100,
                             width: 100,
                             child: Center(
                               child: Icon(
-                                  Utils.iconDataFromInt(
-                                      viewModel.environments[index].icon),
-                                  color: Colors.white,
-                                  size: 40),
+                                Utils.iconDataFromInt(
+                                    viewModel.environments[index].icon),
+                                color: Colors.white,
+                                size: 40,
+                              ),
                             ),
                           ),
                           verticalSpace(15),
-                          // Icon(Icons.home),
                           Text(
                             viewModel.environments[index].name,
                             textAlign: TextAlign.center,
@@ -81,13 +108,6 @@ class EnvironmentView extends StatelessWidget {
                         ],
                       ),
                     );
-                    // return CategoryItem(
-                    //   title: viewModel.environments[index].name,
-                    //   color: Color(
-                    //       int.tryParse(viewModel.environments[index].color) ??
-                    //           0xFF24A19C),
-                    //   iconData: Icons.home,
-                    // );
                   },
                 ),
               ),
@@ -98,8 +118,12 @@ class EnvironmentView extends StatelessWidget {
     );
   }
 
-  void _showCustomMenu(BuildContext context, Offset offset,
-      EnvironmentViewModel viewModel, int index) {
+  void _showCustomMenu(
+    BuildContext context,
+    Offset offset,
+    EnvironmentViewModel viewModel,
+    int index,
+  ) {
     final RenderObject overlay =
         Overlay.of(context).context.findRenderObject()!;
 

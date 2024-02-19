@@ -38,6 +38,6 @@ class Utils {
     String day = dateTime.day.toString().padLeft(2, '0');
     String hour = dateTime.hour.toString().padLeft(2, '0');
     String minute = dateTime.minute.toString().padLeft(2, '0');
-    return '$year/$month/$day $hour:$minute';
+    return '$day/$month/$year - $hour:$minute';
   }
 }
