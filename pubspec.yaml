@@ -33,6 +33,7 @@ dependencies:
   # flutter_signin_button: ^2.0.0
   flutter_snake_navigationbar: ^0.6.1
   omni_datetime_picker: ^1.0.9
+  scroll_to_index: ^3.0.1
   # board_datetime_picker:
   #   git:
   #     url: https://github.com/KhalilAmor/board_datetime_picker

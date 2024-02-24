@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:task_flow/app/app.locator.dart';
+import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/error_handling/failures/general_failure.dart';
 import 'package:task_flow/core/models/environment/environment.dart';
 import 'package:task_flow/core/models/project/project.dart';
@@ -14,6 +15,7 @@ class FirestoreService {
   FirestoreService() {
     _firestore.useFirestoreEmulator('127.0.0.1', 8080);
   }
+  final _log = getLogger('FirestoreService');
 
   Future<List<EnvironmentModel>> fetchEnvironments() async {
     try {
@@ -24,7 +26,7 @@ class FirestoreService {
             arrayContains: _auth.uid!,
           )
           .get();
-
+      _log.i('fetchEnvironments - ${snapshot.docs.length}');
       final envs = snapshot.docs
           .map((e) => EnvironmentModel.fromJson(e.data()))
           .toList();

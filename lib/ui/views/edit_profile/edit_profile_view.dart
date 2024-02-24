@@ -9,7 +9,6 @@ import 'edit_profile_viewmodel.dart';
 
 @FormView(fields: [
   FormTextField(name: 'userName'),
-  FormTextField(name: 'fullName'),
   FormTextField(name: 'email'),
   FormTextField(name: 'password'),
 ])
@@ -20,9 +19,10 @@ class EditProfileView extends StackedView<EditProfileViewModel>
   Widget _buildTextField({
     required String label,
     TextEditingController? controller,
-    required String initialValue,
+    FocusNode? focusNode,
     bool obscureText = false,
     Widget? suffixIcon,
+    bool readOnly = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,6 +36,8 @@ class EditProfileView extends StackedView<EditProfileViewModel>
         ),
         verticalSpace(5),
         TextField(
+          focusNode: focusNode,
+          readOnly: readOnly,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -66,35 +68,35 @@ class EditProfileView extends StackedView<EditProfileViewModel>
             ),
             verticalSpace(30),
             _buildTextField(
+              focusNode: userNameFocusNode,
               controller: userNameController,
               label: 'Username',
-              initialValue: 'Username',
-              // controller: labelController,
             ),
             _buildTextField(
-              controller: fullNameController,
-              label: 'Full Name',
-              initialValue: 'Full Name',
-              // controller: fullNameController,
-            ),
+                focusNode: emailFocusNode,
+                controller: emailController,
+                label: 'Email',
+                readOnly: true),
             _buildTextField(
-              controller: emailController,
-              label: 'Email',
-              initialValue: 'Email',
-              // controller: emailController,
-            ),
-            _buildTextField(
+              focusNode: passwordFocusNode,
               controller: passwordController,
               label: 'Password',
-              initialValue: '********',
-              // controller: passwordController,
-              obscureText: true,
-              suffixIcon: TextButton(
-                child: const Text('Change Password'),
-                onPressed: () {
-                  // Handle password change
-                },
-              ),
+              readOnly: !viewModel.isEditingPassword,
+              suffixIcon: !viewModel.busy('password')
+                  ? TextButton(
+                      onPressed: () {
+                        if (viewModel.isEditingPassword) {
+                          viewModel.savePassword();
+                        } else {
+                          viewModel.editPassword();
+                          passwordFocusNode.requestFocus();
+                        }
+                      },
+                      child: viewModel.isEditingPassword
+                          ? const Text('Save New Password')
+                          : const Text('Change Password'),
+                    )
+                  : const CircularProgressIndicator(),
             ),
             verticalSpaceLarge,
             Row(
@@ -102,14 +104,14 @@ class EditProfileView extends StackedView<EditProfileViewModel>
               children: [
                 MainButton(
                   enabled: true,
-                  onPressed: () {},
+                  onPressed: viewModel.back,
                   text: 'Cancel',
                 ),
                 MainButton(
-                  enabled: true,
+                  enabled: viewModel.userNameUpdated,
                   text: 'Save Changes',
                   color: const Color(0xFF24A19C),
-                  onPressed: () {},
+                  onPressed: viewModel.changeUsername,
                 ),
               ],
             )
@@ -122,5 +124,19 @@ class EditProfileView extends StackedView<EditProfileViewModel>
   @override
   EditProfileViewModel viewModelBuilder(BuildContext context) {
     return EditProfileViewModel();
+  }
+
+  @override
+  void onViewModelReady(EditProfileViewModel viewModel) {
+    syncFormWithViewModel(viewModel);
+
+    viewModel.init();
+    super.onViewModelReady(viewModel);
+  }
+
+  @override
+  void onDispose(EditProfileViewModel viewModel) {
+    disposeForm();
+    super.onDispose(viewModel);
   }
 }

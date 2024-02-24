@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
+import 'package:task_flow/core/models/project/project.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/common/widgets/color_picker_item_widget.dart';
 
@@ -14,17 +16,19 @@ import 'add_project_viewmodel.dart';
   FormTextField(name: 'projectColor'),
 ])
 class AddProjectView extends StatelessWidget with $AddProjectView {
-  const AddProjectView({super.key, required this.environmentId});
+  AddProjectView({super.key, required this.environmentId, this.project});
 
   final String environmentId;
-
+  final ProjectModel? project;
+  final controller =
+      AutoScrollController(axis: Axis.horizontal, suggestedRowHeight: 50);
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddProjectViewModel>.reactive(
-      viewModelBuilder: () => AddProjectViewModel(environmentId),
+      viewModelBuilder: () => AddProjectViewModel(environmentId, project),
       onViewModelReady: (viewModel) {
         syncFormWithViewModel(viewModel);
-        viewModel.init();
+        viewModel.init(controller);
       },
       onDispose: (viewModel) {
         disposeForm();
@@ -47,10 +51,10 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
               ),
               child: ListView(
                 children: [
-                  const Center(
+                  Center(
                     child: Text(
-                      'Create new Project',
-                      style: TextStyle(
+                      project != null ? 'Edit Project' : 'Create new Project',
+                      style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
                       ),
@@ -132,14 +136,22 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: viewModel.colors.length,
+                        controller: controller,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return ColorPickerItemWidget(
-                              color: Utils.hexToColor(viewModel.colors[index]),
-                              isSelected: viewModel.selectedColorIndex == index,
-                              onTap: () => viewModel.updateSelectedColor(
-                                    index,
-                                  ));
+                          return AutoScrollTag(
+                            controller: controller,
+                            index: index,
+                            key: ValueKey(index),
+                            child: ColorPickerItemWidget(
+                                color:
+                                    Utils.hexToColor(viewModel.colors[index]),
+                                isSelected:
+                                    viewModel.selectedColorIndex == index,
+                                onTap: () => viewModel.updateSelectedColor(
+                                      index,
+                                    )),
+                          );
                         }),
                   ),
                   verticalSpaceLarge,
@@ -153,9 +165,11 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                       ),
                       MainButton(
                         enabled: viewModel.isFormValid && !viewModel.isBusy,
-                        text: 'Create Project',
+                        text: project != null ? 'Save' : 'Create Project',
                         color: const Color(0xFF24A19C),
-                        onPressed: viewModel.addProject,
+                        onPressed: project != null
+                            ? () => viewModel.updateProject()
+                            : () => viewModel.addProject(),
                       ),
                     ],
                   ),

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/core/models/project/project.dart';
 import 'package:task_flow/core/utils/utils.dart';
@@ -64,6 +65,7 @@ class ProjectsView extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => viewmodel.navigateToTasksView(index),
                         child: ProjectCard(
+                          index: index,
                           project: viewmodel.projects[index],
                         ),
                       );
@@ -82,8 +84,9 @@ class ProjectsView extends StatelessWidget {
 class ProjectCard extends ViewModelWidget<ProjectsViewModel> {
   final ProjectModel project;
   final int tasksToShow = 2;
+  final int index;
 
-  const ProjectCard({super.key, required this.project});
+  const ProjectCard({required this.index, super.key, required this.project});
 
   @override
   Widget build(BuildContext context, ProjectsViewModel viewModel) {
@@ -101,13 +104,36 @@ class ProjectCard extends ViewModelWidget<ProjectsViewModel> {
             Container(
               color: Utils.hexToColor(project.color),
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                project.name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    project.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    child: PopupMenuButton(
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                      ),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                        const PopupMenuItem(
+                            value: 'delete', child: Text('Delete')),
+                      ],
+                      onSelected: (value) {
+                        if (value == 'edit') viewModel.editProject(index);
+                        if (value == 'delete') viewModel.deleteProject(index);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
             // Tasks

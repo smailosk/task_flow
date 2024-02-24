@@ -30,6 +30,7 @@ class RepoService with ListenableServiceMixin {
     _log.i('RepoService - init');
     await _fetchEnvironments();
     final envToFetch = await _fetchProjects();
+    if (envToFetch.isEmpty) return;
     await _fetchEnvironmentByIds(envToFetch);
 
     _log.i('RepoService - init - _environments: ${_environments.length}');
@@ -44,6 +45,7 @@ class RepoService with ListenableServiceMixin {
       final data = await _firestore.fetchEnvironments();
       final envs = {for (var e in data) e.id: e};
       _environments.addAll(envs);
+      notifyListeners();
     } on Failure catch (e) {
       _log.e('RepoService - _fetchEnvironment', e);
       rethrow;
@@ -81,6 +83,7 @@ class RepoService with ListenableServiceMixin {
 
       final envs = {for (var e in data) e.id: e};
       _environments.addAll(envs);
+      notifyListeners();
     } on Failure catch (e) {
       _log.e('RepoService - _fetchEnvironmentByIds', e);
       rethrow;
@@ -229,6 +232,7 @@ class RepoService with ListenableServiceMixin {
 
   Future updateTask(TaskModel taskModel) async {
     try {
+      await _functions.updateTask(taskModel);
       _tasksByProject[taskModel.parentProjectId]?[taskModel.id] = taskModel;
       notifyListeners();
       // return _functions.updateTask(taskModel);
@@ -246,9 +250,9 @@ class RepoService with ListenableServiceMixin {
 
   Future deleteTask(TaskModel task) async {
     try {
+      await _functions.deleteTask(task);
       _tasksByProject[task.parentProjectId]?.remove(task.id);
       notifyListeners();
-      // return _functions.deleteTask(task);
     } on Failure catch (e) {
       _log.e('RepoService - deleteTask', e);
       rethrow;
@@ -263,5 +267,39 @@ class RepoService with ListenableServiceMixin {
 
   ProjectModel getProjectById(String projectId) {
     return _projects[projectId]!;
+  }
+
+  Future deleteProject(ProjectModel project) async {
+    try {
+      await _functions.deleteProject(project);
+      _projects.remove(project.id);
+      notifyListeners();
+    } on Failure catch (e) {
+      _log.e('RepoService - deleteProject', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - deleteProject ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future editProject(ProjectModel project) async {
+    try {
+      await _functions.editProject(project);
+      _projects[project.id] = project;
+      notifyListeners();
+    } on Failure catch (e) {
+      _log.e('RepoService - editProject', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - editProject ${e.toString()}',
+        stackTrace: s,
+      );
+    }
   }
 }

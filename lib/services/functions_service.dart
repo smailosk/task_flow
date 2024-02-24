@@ -113,4 +113,45 @@ class FunctionsService {
           stackTrace: stackTrace);
     }
   }
+
+  Future deleteTask(TaskModel task) {
+    try {
+      return _callCloudFunction('deleteTask', data: task.toJson());
+    } on FunctionsFailure {
+      rethrow;
+    } catch (exception, stackTrace) {
+      throw GeneralFailure(
+          type: GeneralFailureType.unexpectedError,
+          description: 'FunctionsService - deleteTask ${exception.toString()}',
+          stackTrace: stackTrace);
+    }
+  }
+
+  Future deleteProject(ProjectModel project) {
+    try {
+      return _callCloudFunction('deleteProject', data: project.toJson());
+    } on FunctionsFailure {
+      rethrow;
+    } catch (exception, stackTrace) {
+      throw GeneralFailure(
+          type: GeneralFailureType.unexpectedError,
+          description:
+              'FunctionsService - deleteProject ${exception.toString()}',
+          stackTrace: stackTrace);
+    }
+  }
+
+  Future editProject(ProjectModel project) {
+    try {
+      return _callCloudFunction('editProject', data: project.toJson());
+    } on FunctionsFailure {
+      rethrow;
+    } catch (exception, stackTrace) {
+      throw GeneralFailure(
+          type: GeneralFailureType.unexpectedError,
+          description:
+              'FunctionsService - updateProject ${exception.toString()}',
+          stackTrace: stackTrace);
+    }
+  }
 }

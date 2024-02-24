@@ -4,6 +4,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
 import 'package:task_flow/ui/views/sign_up/sign_up_view.form.dart';
 
+import '../../common/widgets/keyboard_dismiss_floating_button.dart';
 import 'sign_up_viewmodel.dart';
 
 @FormView(autoTextFieldValidation: false, fields: [
@@ -18,8 +19,13 @@ class SignUpView extends StatelessWidget with $SignUpView {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SignUpViewModel>.reactive(
+      onDispose: (viewModel) => disposeForm(),
+      onViewModelReady: (viewModel) {
+        syncFormWithViewModel(viewModel);
+      },
       viewModelBuilder: () => SignUpViewModel(),
       builder: (context, viewModel, child) => Scaffold(
+        floatingActionButton: const KeyboardDismissFloatingButton(),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: SafeArea(
           child: SingleChildScrollView(
@@ -98,7 +104,7 @@ class SignUpView extends StatelessWidget with $SignUpView {
                 ),
                 verticalSpaceLarge,
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: viewModel.signUp,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF24A19C),
                     minimumSize: const Size(double.infinity, 50),

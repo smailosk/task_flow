@@ -16,9 +16,16 @@ class Executor<T> {
             } else {
               return GeneralFailure(
                   type: GeneralFailureType.unexpectedError,
-                  description: obj.toString(),
+                  description: 'Executor expects failures to be thrown! \n$obj',
                   stackTrace: StackTrace.current);
             }
           }))
       .run();
+}
+
+extension ExecutorFutureExtension<T> on Future<T> {
+  Future<void> executeFuture(
+      void Function(Failure) onError, void Function(T) onSuccess) async {
+    Executor.run(this).then((value) => value.fold(onError, onSuccess));
+  }
 }

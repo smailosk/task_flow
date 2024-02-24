@@ -13,11 +13,10 @@
  */
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import * as functions from 'firebase-functions';
-import { icons as icons } from './constants';
+import { icons, kEnvironmentColors, kProjectColors } from './constants';
 import { initializeApp } from "firebase-admin/app";
 import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
 import { Environment, Project, Task, FunctionsErrorCodes } from "./models";
-import { generateRandomColor } from "./utils";
 initializeApp();
 const firestoreDb = getFirestore();
 
@@ -73,7 +72,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
             id: firestoreDb.collection('Environments').doc().id,
             name: 'Default Environment',
             icon: icons[Math.floor(Math.random() * icons.length)],
-            color: generateRandomColor(),
+            color: kEnvironmentColors[Math.floor(Math.random() * kEnvironmentColors.length)],
             admins: [user.uid]
         };
         await firestoreDb.collection('Environments').doc(environmentData.id).set(environmentData);
@@ -84,7 +83,7 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
             name: 'Default Project',
             parentEnvironmentId: environmentData.id,
             members: [user.uid],
-            color: generateRandomColor()
+            color: kProjectColors[Math.floor(Math.random() * kProjectColors.length)],
         };
         await firestoreDb.collection('Projects').doc(projectData.id).set(projectData);
 
@@ -253,12 +252,12 @@ export const deleteProject = onCall(async (request) => {
     }
 
     // Validate incoming data
-    if (typeof request.data.projectId !== 'string') {
+    if (typeof request.data.id !== 'string') {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
 
-    const projectId = request.data.projectId;
+    const projectId = request.data.id;
     const userId = request.auth.uid;
 
     try {
@@ -284,7 +283,11 @@ export const deleteProject = onCall(async (request) => {
             throw new HttpsError('permission-denied', 'User is not an admin of the parent environment');
         }
 
-        // User is an admin, proceed with deletion
+        await firestoreDb.collection('Tasks').where('parentProjectId', '==', projectId).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                doc.ref.delete();
+            });
+        });
         await projectRef.delete();
 
         return { message: 'Project deleted successfully' };
@@ -294,6 +297,56 @@ export const deleteProject = onCall(async (request) => {
     }
 });
 
+
+export const editProject = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data for the project
+    if (typeof request.data.id !== 'string' ||
+        typeof request.data.name !== 'string' ||
+        typeof request.data.color !== 'string'
+
+    ) {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const userId = request.auth.uid;
+    const { id, name, parentEnvironmentId, color } = request.data; // Destructure the project data from the request
+
+    try {
+        // Retrieve the parent environment to check if the user is an admin
+        const environmentRef = firestoreDb.collection('Environments').doc(parentEnvironmentId);
+        const environmentDoc = await environmentRef.get();
+
+        if (!environmentDoc.exists) {
+            throw new HttpsError('not-found', 'Parent environment not found');
+        }
+
+        const environmentData = environmentDoc.data() as Environment;
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of the parent environment');
+        }
+
+        // Create a new project with the provided data
+        const newProject: Project = {
+            id: id,
+            name: name,
+            parentEnvironmentId: parentEnvironmentId,
+            color: color,
+            members: [userId] // Set the creator as the first member
+        };
+
+        // Save the new project to Firestore
+        await firestoreDb.collection('Projects').doc(newProject.id).set(newProject);
+
+        return newProject;
+    } catch (error) {
+        console.error('Error creating project:', error);
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
+    }
+});
 
 export const addMemberToProject = onCall(async (request) => {
     if (!request.auth) {
@@ -405,7 +458,10 @@ export const createTask = onCall(async (request) => {
     // Validate incoming data for the task
     if (typeof request.data.title !== 'string' ||
         typeof request.data.details !== 'string' ||
-        typeof request.data.parentProjectId !== 'string'
+        typeof request.data.parentProjectId !== 'string' ||
+        typeof request.data.deadline !== 'number' ||
+        typeof request.data.assignee !== 'string'
+
         // Add additional validation as necessary
     ) {
         throw new HttpsError('invalid-argument', 'Invalid data format');
@@ -442,43 +498,78 @@ export const deleteTask = onCall(async (request) => {
     }
 
     // Validate incoming data
-    if (typeof request.data.taskId !== 'string') {
+    if (typeof request.data.id !== 'string') {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
 
-    const taskId = request.data.taskId;
-
+    const taskId = request.data.id;
+    const parentProjectId = request.data.parentProjectId;
     try {
-        // Delete the task
-        await firestoreDb.collection('Tasks').doc(taskId).delete();
+        var parentProjectRef = firestoreDb.collection('Projects').doc(parentProjectId);
+        const doc = await parentProjectRef.get();
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            const projectData = doc.data() as Project;
+            if (!projectData.members.includes(request.auth!.uid)) {
+                throw new HttpsError('permission-denied', 'User is not a member of the parent project');
+            } else {
+                await firestoreDb.collection('Tasks').doc(taskId).delete();
+                return {};
+            }
+        } else {
+            throw new HttpsError('not-found', 'Parent project not found');
+        }
 
-        return { message: 'Task deleted successfully' };
+
+
+
     } catch (error) {
         console.error('Error deleting task:', error);
         throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });
 
-export const modifyTask = onCall(async (request) => {
+export const updateTask = onCall(async (request) => {
     if (!request.auth) {
         throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
     }
 
-    // Validate incoming data
-    if (typeof request.data.taskId !== 'string' ||
-        typeof request.data.newDetails !== 'string' // Add additional checks for other fields you want to modify
+    // Validate incoming data for the task
+    if (typeof request.data.id !== 'string' ||
+        typeof request.data.title !== 'string' ||
+        typeof request.data.details !== 'string' ||
+        typeof request.data.parentProjectId !== 'string' ||
+        typeof request.data.deadline !== 'number' ||
+        typeof request.data.assignee !== 'string'
+
+        // Add additional validation as necessary
     ) {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const { taskId, newDetails } = request.data;
+
+    const { id, title, details, deadline, assignee, parentProjectId } = request.data;
 
     try {
-        // Update the task with new details
-        await firestoreDb.collection('Tasks').doc(taskId).update({ details: newDetails });
+        const parentProjectRef = firestoreDb.collection('Projects').doc(parentProjectId);
+        const doc = await parentProjectRef.get();
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            const projectData = doc.data() as Project;
+            if (!projectData.members.includes(request.auth!.uid)) {
+                throw new HttpsError('permission-denied', 'User is not a member of the parent project');
+            } else {
+                await firestoreDb.collection('Tasks').doc(id).update({ title: title, details: details, deadline: deadline, assignee: assignee });
+                return {};
+            }
+        } else {
+            throw new HttpsError('not-found', 'Parent project not found');
+        }
 
-        return { message: 'Task updated successfully' };
+        // await firestoreDb.collection('Tasks').doc(id).update({ title: title, details: details, deadline: deadline, assignee: assignee });
+
+        // return { message: 'Task updated successfully' };
     } catch (error) {
         console.error('Error modifying task:', error);
         throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);

@@ -2,6 +2,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/app/app.router.dart';
+import 'package:task_flow/core/error_handling/executor.dart';
 import 'package:task_flow/core/models/project/project.dart';
 import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/services/repo_service.dart';
@@ -42,6 +43,20 @@ class ProjectsViewModel extends ReactiveViewModel {
       Routes.tasksView,
       arguments: TasksViewArguments(projectId: projects[index].id),
     );
+  }
+
+  editProject(int index) {
+    _navigationService.navigateTo(
+      Routes.addProjectView,
+      arguments: AddProjectViewArguments(
+          project: projects[index], environmentId: environmentId),
+    );
+  }
+
+  deleteProject(int index) {
+    _repoService
+        .deleteProject(projects[index])
+        .executeFuture((error) {}, (success) {});
   }
 
   back() {

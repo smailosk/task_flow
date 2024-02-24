@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
+import 'package:task_flow/ui/common/app_colors.dart';
 import 'package:task_flow/ui/common/form_validators.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
+import 'package:task_flow/ui/common/widgets/keyboard_dismiss_floating_button.dart';
 
 import 'login_view.form.dart';
 import 'login_viewmodel.dart';
@@ -17,12 +19,13 @@ class LoginView extends StatelessWidget with $LoginView {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
-      onDispose: (viewModel) => disposeForm(),
       viewModelBuilder: () => LoginViewModel(),
+      onDispose: (viewModel) => disposeForm(),
       onViewModelReady: (viewModel) {
         syncFormWithViewModel(viewModel);
       },
       builder: (context, viewModel, child) => Scaffold(
+        floatingActionButton: const KeyboardDismissFloatingButton(),
         body: SafeArea(
           child: SingleChildScrollView(
             padding:
@@ -85,7 +88,7 @@ class LoginView extends StatelessWidget with $LoginView {
                 ElevatedButton(
                   onPressed: viewModel.signIn,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF24A19C),
+                    backgroundColor: kcPrimaryColor,
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -139,10 +142,24 @@ class LoginView extends StatelessWidget with $LoginView {
                 //   ],
                 // ),
                 // const SizedBox(height: 30),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('Don’t have an account? Register Now',
-                      style: TextStyle(color: Colors.blueAccent)),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Don’t have an account?',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        viewModel.navigateToSignUp();
+                      },
+                      child: const Text('Register Now',
+                          style: TextStyle(
+                              color: kcPrimaryColor,
+                              fontWeight: FontWeight.w900)),
+                    ),
+                  ],
                 ),
               ],
             ),

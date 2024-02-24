@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/error_handling/failures/auth_failures.dart';
 
 enum AccountProviders { email, facebook, google, apple }
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
-
+  final _log = getLogger('AuthService');
   AuthService() {
     _auth.useAuthEmulator('127.0.0.1', 9099);
   }
@@ -13,6 +14,8 @@ class AuthService {
   String? get uid => _auth.currentUser?.uid;
   String? get email => _auth.currentUser?.email;
   String? get displayName => _auth.currentUser?.displayName;
+
+  Future<User?> get currentUser => _auth.userChanges.call().first;
 
   Future<bool> isUserSignedIn() async {
     final user = await _auth.authStateChanges().first;
@@ -34,11 +37,33 @@ class AuthService {
     }
   }
 
-  Future<User?> createAccountWithEmail(String email, String password) async {
+  Future<User?> createAccountWithEmail(
+      String email, String password, String? displayName) async {
     try {
-      final user = await _auth.createUserWithEmailAndPassword(
+      final result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return user.user;
+      await result.user?.updateDisplayName(displayName);
+
+      return result.user;
+    } on FirebaseAuthException catch (exception) {
+      throw FirebaseAuthFailure.mapFirebaseAuthExceptionToFailure(exception);
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    _log.i('newPassword: $newPassword');
+    try {
+      final user = await _auth.authStateChanges().first;
+      return user?.updatePassword(newPassword);
+    } on FirebaseAuthException catch (exception) {
+      throw FirebaseAuthFailure.mapFirebaseAuthExceptionToFailure(exception);
+    }
+  }
+
+  Future<void> updateUsername(String username) async {
+    try {
+      final user = await _auth.authStateChanges().first;
+      return user?.updateDisplayName(username);
     } on FirebaseAuthException catch (exception) {
       throw FirebaseAuthFailure.mapFirebaseAuthExceptionToFailure(exception);
     }

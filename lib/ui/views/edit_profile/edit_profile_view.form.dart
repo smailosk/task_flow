@@ -12,7 +12,6 @@ import 'package:stacked/stacked.dart';
 const bool _autoTextFieldValidation = true;
 
 const String UserNameValueKey = 'userName';
-const String FullNameValueKey = 'fullName';
 const String EmailValueKey = 'email';
 const String PasswordValueKey = 'password';
 
@@ -24,7 +23,6 @@ final Map<String, FocusNode> _EditProfileViewFocusNodes = {};
 final Map<String, String? Function(String?)?> _EditProfileViewTextValidations =
     {
   UserNameValueKey: null,
-  FullNameValueKey: null,
   EmailValueKey: null,
   PasswordValueKey: null,
 };
@@ -32,15 +30,12 @@ final Map<String, String? Function(String?)?> _EditProfileViewTextValidations =
 mixin $EditProfileView {
   TextEditingController get userNameController =>
       _getFormTextEditingController(UserNameValueKey);
-  TextEditingController get fullNameController =>
-      _getFormTextEditingController(FullNameValueKey);
   TextEditingController get emailController =>
       _getFormTextEditingController(EmailValueKey);
   TextEditingController get passwordController =>
       _getFormTextEditingController(PasswordValueKey);
 
   FocusNode get userNameFocusNode => _getFormFocusNode(UserNameValueKey);
-  FocusNode get fullNameFocusNode => _getFormFocusNode(FullNameValueKey);
   FocusNode get emailFocusNode => _getFormFocusNode(EmailValueKey);
   FocusNode get passwordFocusNode => _getFormFocusNode(PasswordValueKey);
 
@@ -69,7 +64,6 @@ mixin $EditProfileView {
   /// with the latest textController values
   void syncFormWithViewModel(FormStateHelper model) {
     userNameController.addListener(() => _updateFormData(model));
-    fullNameController.addListener(() => _updateFormData(model));
     emailController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
 
@@ -84,7 +78,6 @@ mixin $EditProfileView {
   )
   void listenToFormUpdated(FormViewModel model) {
     userNameController.addListener(() => _updateFormData(model));
-    fullNameController.addListener(() => _updateFormData(model));
     emailController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
 
@@ -97,7 +90,6 @@ mixin $EditProfileView {
       model.formValueMap
         ..addAll({
           UserNameValueKey: userNameController.text,
-          FullNameValueKey: fullNameController.text,
           EmailValueKey: emailController.text,
           PasswordValueKey: passwordController.text,
         }),
@@ -142,7 +134,6 @@ extension ValueProperties on FormStateHelper {
   }
 
   String? get userNameValue => this.formValueMap[UserNameValueKey] as String?;
-  String? get fullNameValue => this.formValueMap[FullNameValueKey] as String?;
   String? get emailValue => this.formValueMap[EmailValueKey] as String?;
   String? get passwordValue => this.formValueMap[PasswordValueKey] as String?;
 
@@ -153,17 +144,6 @@ extension ValueProperties on FormStateHelper {
 
     if (_EditProfileViewTextEditingControllers.containsKey(UserNameValueKey)) {
       _EditProfileViewTextEditingControllers[UserNameValueKey]?.text =
-          value ?? '';
-    }
-  }
-
-  set fullNameValue(String? value) {
-    this.setData(
-      this.formValueMap..addAll({FullNameValueKey: value}),
-    );
-
-    if (_EditProfileViewTextEditingControllers.containsKey(FullNameValueKey)) {
-      _EditProfileViewTextEditingControllers[FullNameValueKey]?.text =
           value ?? '';
     }
   }
@@ -192,9 +172,6 @@ extension ValueProperties on FormStateHelper {
   bool get hasUserName =>
       this.formValueMap.containsKey(UserNameValueKey) &&
       (userNameValue?.isNotEmpty ?? false);
-  bool get hasFullName =>
-      this.formValueMap.containsKey(FullNameValueKey) &&
-      (fullNameValue?.isNotEmpty ?? false);
   bool get hasEmail =>
       this.formValueMap.containsKey(EmailValueKey) &&
       (emailValue?.isNotEmpty ?? false);
@@ -204,8 +181,6 @@ extension ValueProperties on FormStateHelper {
 
   bool get hasUserNameValidationMessage =>
       this.fieldsValidationMessages[UserNameValueKey]?.isNotEmpty ?? false;
-  bool get hasFullNameValidationMessage =>
-      this.fieldsValidationMessages[FullNameValueKey]?.isNotEmpty ?? false;
   bool get hasEmailValidationMessage =>
       this.fieldsValidationMessages[EmailValueKey]?.isNotEmpty ?? false;
   bool get hasPasswordValidationMessage =>
@@ -213,8 +188,6 @@ extension ValueProperties on FormStateHelper {
 
   String? get userNameValidationMessage =>
       this.fieldsValidationMessages[UserNameValueKey];
-  String? get fullNameValidationMessage =>
-      this.fieldsValidationMessages[FullNameValueKey];
   String? get emailValidationMessage =>
       this.fieldsValidationMessages[EmailValueKey];
   String? get passwordValidationMessage =>
@@ -224,8 +197,6 @@ extension ValueProperties on FormStateHelper {
 extension Methods on FormStateHelper {
   setUserNameValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[UserNameValueKey] = validationMessage;
-  setFullNameValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[FullNameValueKey] = validationMessage;
   setEmailValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[EmailValueKey] = validationMessage;
   setPasswordValidationMessage(String? validationMessage) =>
@@ -234,7 +205,6 @@ extension Methods on FormStateHelper {
   /// Clears text input fields on the Form
   void clearForm() {
     userNameValue = '';
-    fullNameValue = '';
     emailValue = '';
     passwordValue = '';
   }
@@ -243,7 +213,6 @@ extension Methods on FormStateHelper {
   void validateForm() {
     this.setValidationMessages({
       UserNameValueKey: getValidationMessage(UserNameValueKey),
-      FullNameValueKey: getValidationMessage(FullNameValueKey),
       EmailValueKey: getValidationMessage(EmailValueKey),
       PasswordValueKey: getValidationMessage(PasswordValueKey),
     });
@@ -266,7 +235,6 @@ String? getValidationMessage(String key) {
 void updateValidationData(FormStateHelper model) =>
     model.setValidationMessages({
       UserNameValueKey: getValidationMessage(UserNameValueKey),
-      FullNameValueKey: getValidationMessage(FullNameValueKey),
       EmailValueKey: getValidationMessage(EmailValueKey),
       PasswordValueKey: getValidationMessage(PasswordValueKey),
     });

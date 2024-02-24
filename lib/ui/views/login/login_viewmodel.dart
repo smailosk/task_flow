@@ -12,22 +12,22 @@ class LoginViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   final _log = getLogger('LoginViewModel');
 
-  createAccount() {
-    if (emailValue == null || passwordValue == null) return;
+  // createAccount() {
+  //   if (emailValue == null || passwordValue == null) return;
 
-    validateForm();
-    if (hasAnyValidationMessage) return;
+  //   validateForm();
+  //   if (hasAnyValidationMessage) return;
 
-    setBusy(true);
+  //   setBusy(true);
 
-    Executor.run(
-            _authService.createAccountWithEmail(emailValue!, passwordValue!))
-        .then((value) => value.fold((l) {
-              setBusy(false);
-            }, (r) {
-              _navigationService.clearStackAndShow(Routes.homeView);
-            }));
-  }
+  //   Executor.run(
+  //           _authService.createAccountWithEmail(emailValue!, passwordValue!,us))
+  //       .then((value) => value.fold((l) {
+  //             setBusy(false);
+  //           }, (r) {
+  //             _navigationService.clearStackAndShow(Routes.homeView);
+  //           }));
+  // }
 
   signIn() {
     validateForm();
@@ -47,5 +47,9 @@ class LoginViewModel extends FormViewModel {
             }, (r) {
               _navigationService.clearStackAndShow(Routes.homeView);
             }));
+  }
+
+  void navigateToSignUp() {
+    _navigationService.navigateTo(Routes.signUpView);
   }
 }

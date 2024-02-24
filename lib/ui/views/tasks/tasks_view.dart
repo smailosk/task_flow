@@ -103,6 +103,10 @@ class TaskCard extends StatelessWidget {
                   ),
                 ),
                 PopupMenuButton(
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.black,
+                  ),
                   itemBuilder: (context) => [
                     const PopupMenuItem(value: 'edit', child: Text('Edit')),
                     const PopupMenuItem(value: 'delete', child: Text('Delete')),
