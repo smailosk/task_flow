@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/error_handling/failures/functions_failures.dart';
 import 'package:task_flow/core/error_handling/failures/general_failure.dart';
@@ -10,7 +11,9 @@ class FunctionsService {
   final _functions = FirebaseFunctions.instance;
   final _log = getLogger('FunctionsService');
   FunctionsService() {
-    _functions.useFunctionsEmulator('localhost', 5001);
+    if (kDebugMode) {
+      _functions.useFunctionsEmulator('localhost', 5001);
+    }
   }
 
   Future<Map<String, dynamic>> _callCloudFunction(String functionName,

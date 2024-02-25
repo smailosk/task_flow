@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/error_handling/failures/general_failure.dart';
@@ -13,7 +14,9 @@ class FirestoreService {
   final _auth = locator<AuthService>();
 
   FirestoreService() {
-    _firestore.useFirestoreEmulator('127.0.0.1', 8080);
+    if (kDebugMode) {
+      _firestore.useFirestoreEmulator('127.0.0.1', 8080);
+    }
   }
   final _log = getLogger('FirestoreService');
 

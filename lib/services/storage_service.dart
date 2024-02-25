@@ -1,13 +1,13 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:task_flow/core/error_handling/failures/general_failure.dart';
 
 class StorageService {
   final _storage = FirebaseStorage.instance;
   StorageService() {
-    _storage.useStorageEmulator('127.0.0.1', 9199);
+    if (kDebugMode) {
+      _storage.useStorageEmulator('127.0.0.1', 9199);
+    }
   }
 
   Future<String> uploadProfilePicture(Uint8List data, String userId) async {

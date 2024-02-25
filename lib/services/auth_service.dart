@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:task_flow/app/app.logger.dart';
 import 'package:task_flow/core/error_handling/failures/auth_failures.dart';
 
@@ -8,7 +9,9 @@ class AuthService {
   final _auth = FirebaseAuth.instance;
   final _log = getLogger('AuthService');
   AuthService() {
-    _auth.useAuthEmulator('127.0.0.1', 9099);
+    if (kDebugMode) {
+      _auth.useAuthEmulator('127.0.0.1', 9099);
+    }
   }
 
   String? get uid => _auth.currentUser?.uid;
