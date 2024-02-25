@@ -34,11 +34,10 @@ class SettingsView extends StatelessWidget {
               SizedBox(
                 height: 100,
                 width: 100,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: ProfilePicture(
-                      userId: viewModel.uid,
-                    )),
+                child: ProfilePicture(
+                  size: 100,
+                  userId: viewModel.uid,
+                ),
               ),
               const SizedBox(height: 8),
               Center(

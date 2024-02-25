@@ -154,4 +154,33 @@ class FunctionsService {
           stackTrace: stackTrace);
     }
   }
+
+  Future editEnvironment(EnvironmentModel environmentModel) async {
+    try {
+      return _callCloudFunction('editEnvironment',
+          data: environmentModel.toJson());
+    } on FunctionsFailure {
+      rethrow;
+    } catch (exception, stackTrace) {
+      throw GeneralFailure(
+          type: GeneralFailureType.unexpectedError,
+          description:
+              'FunctionsService - editEnvironment ${exception.toString()}',
+          stackTrace: stackTrace);
+    }
+  }
+
+  Future deleteEnvironment(String id) async {
+    try {
+      return _callCloudFunction('deleteEnvironment', data: {'id': id});
+    } on FunctionsFailure {
+      rethrow;
+    } catch (exception, stackTrace) {
+      throw GeneralFailure(
+          type: GeneralFailureType.unexpectedError,
+          description:
+              'FunctionsService - deleteEnvironment ${exception.toString()}',
+          stackTrace: stackTrace);
+    }
+  }
 }

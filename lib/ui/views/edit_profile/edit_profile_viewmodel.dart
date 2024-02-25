@@ -17,6 +17,8 @@ class EditProfileViewModel extends FormViewModel {
   final _log = getLogger('EditProfileViewModel');
   final _picker = locator<ImagePickerService>();
   final _storage = locator<StorageService>();
+
+  String get uid => _authService.uid!;
   init() async {
     setBusy(true);
     final user = await _authService.currentUser;

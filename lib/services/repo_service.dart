@@ -302,4 +302,38 @@ class RepoService with ListenableServiceMixin {
       );
     }
   }
+
+  Future deleteEnvironment(String id) async {
+    try {
+      await _functions.deleteEnvironment(id);
+      _environments.remove(id);
+      notifyListeners();
+    } on Failure catch (e) {
+      _log.e('RepoService - deleteEnvironment', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - deleteEnvironment ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future editEnvironment(EnvironmentModel environmentModel) async {
+    try {
+      await _functions.editEnvironment(environmentModel);
+      _environments[environmentModel.id] = environmentModel;
+      notifyListeners();
+    } on Failure catch (e) {
+      _log.e('RepoService - editEnvironment', e);
+      rethrow;
+    } catch (e, s) {
+      throw GeneralFailure(
+        type: GeneralFailureType.unexpectedError,
+        description: 'RepoService - editEnvironment ${e.toString()}',
+        stackTrace: s,
+      );
+    }
+  }
 }

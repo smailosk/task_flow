@@ -159,42 +159,7 @@ export const createEnvironment = onCall(async (request) => {
     }
 });
 
-export const deleteEnvironment = onCall(async (request) => {
-    if (!request.auth) {
-        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
-    }
 
-    // Validate incoming data
-    if (typeof request.data.environmentId !== 'string') {
-        throw new HttpsError('invalid-argument', 'Invalid data format');
-    }
-
-    const environmentId = request.data.environmentId;
-    const userId = request.auth.uid;
-
-    try {
-        // Retrieve the environment to check if the user is an admin
-        const environmentRef = firestoreDb.collection('Environments').doc(environmentId);
-        const environmentDoc = await environmentRef.get();
-
-        if (!environmentDoc.exists) {
-            throw new HttpsError('not-found', 'Environment not found');
-        }
-
-        const environmentData = environmentDoc.data() as Environment; // Type assertion
-        if (!environmentData.admins.includes(userId)) {
-            throw new HttpsError('permission-denied', 'User is not an admin of this environment');
-        }
-
-        // User is an admin, proceed with deletion
-        await environmentRef.delete();
-
-        return { message: 'Environment deleted successfully' };
-    } catch (error) {
-        console.error('Error deleting environment:', error);
-        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
-    }
-});
 
 
 export const createProject = onCall(async (request) => {
@@ -629,26 +594,27 @@ export const assignTask = onCall(async (request) => {
 });
 
 
-export const modifyEnvironment = onCall(async (request) => {
+export const editEnvironment = onCall(async (request) => {
     if (!request.auth) {
         throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
     }
 
     // Validate incoming data
-    if (typeof request.data.environmentId !== 'string' ||
-        typeof request.data.newTitle !== 'string' ||
-        typeof request.data.newColor !== 'string' ||
-        !Array.isArray(request.data.admins) ||
-        request.data.admins.some((adminId: any) => typeof adminId !== 'string')) {
+    if (typeof request.data.id !== 'string' ||
+        typeof request.data.name !== 'string' ||
+        typeof request.data.color !== 'string' ||
+        typeof request.data.icon !== 'number'
+
+    ) {
         throw new HttpsError('invalid-argument', 'Invalid data format');
     }
 
-    const { environmentId, newTitle, newColor, admins } = request.data;
+    const { id, name, color, icon } = request.data;
     const userId = request.auth.uid;
 
     try {
         // Retrieve the environment to check if the user is an admin
-        const environmentRef = firestoreDb.collection('Environments').doc(environmentId);
+        const environmentRef = firestoreDb.collection('Environments').doc(id);
         const environmentDoc = await environmentRef.get();
 
         if (!environmentDoc.exists) {
@@ -662,16 +628,65 @@ export const modifyEnvironment = onCall(async (request) => {
 
         // Update the environment with new details
         await environmentRef.update({
-            name: newTitle,
-            color: newColor,
-            admins: admins
+            name: name,
+            color: color,
+            icon: icon
         });
 
-        return { message: 'Environment updated successfully' };
+        return {};
     } catch (error) {
         console.error('Error modifying environment:', error);
         throw new HttpsError(FunctionsErrorCodes.INTERNAL, 'Unable to modify environment.');
 
 
+    }
+});
+
+
+export const deleteEnvironment = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    // Validate incoming data
+    if (typeof request.data.id !== 'string') {
+        throw new HttpsError('invalid-argument', 'Invalid data format');
+    }
+
+    const environmentId = request.data.id;
+    const userId = request.auth.uid;
+
+    try {
+        // Retrieve the environment to check if the user is an admin
+        const environmentRef = firestoreDb.collection('Environments').doc(environmentId);
+        const environmentDoc = await environmentRef.get();
+
+        if (!environmentDoc.exists) {
+            throw new HttpsError('not-found', 'Environment not found');
+        }
+
+        const environmentData = environmentDoc.data() as Environment; // Type assertion
+        if (!environmentData.admins.includes(userId)) {
+            throw new HttpsError('permission-denied', 'User is not an admin of this environment');
+        }
+
+        // Delete the environment and all its projects and tasks
+        await firestoreDb.collection('Projects').where('parentEnvironmentId', '==', environmentId).get().then(async (querySnapshot) => {
+            querySnapshot.forEach(async (doc) => {
+                await firestoreDb.collection('Tasks').where('parentProjectId', '==', doc.id).get().then((tasksQuerySnapshot) => {
+                    tasksQuerySnapshot.forEach(async (taskDoc) => {
+                        await taskDoc.ref.delete();
+                    });
+                });
+
+                doc.ref.delete();
+
+            });
+            await environmentRef.delete();
+        });
+        return {};
+    } catch (error) {
+        console.error('Error deleting environment:', error);
+        throw new HttpsError(FunctionsErrorCodes.INTERNAL, error as string);
     }
 });

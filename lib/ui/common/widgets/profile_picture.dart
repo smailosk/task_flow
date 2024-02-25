@@ -4,8 +4,8 @@ import 'package:task_flow/services/storage_service.dart';
 
 class ProfilePicture extends StatefulWidget {
   final String userId;
-
-  const ProfilePicture({super.key, required this.userId});
+  final double size;
+  const ProfilePicture({super.key, required this.userId, this.size = 50});
 
   @override
   _ProfilePictureState createState() => _ProfilePictureState();
@@ -32,9 +32,21 @@ class _ProfilePictureState extends State<ProfilePicture> {
           return Text('Error: ${snapshot.error}'); // Show error state
         } else if (snapshot.hasData) {
           final imageUrl = snapshot.data!;
-          return Image.network(imageUrl);
+          return CircleAvatar(
+              child: SizedBox(
+                  width: widget.size,
+                  height: widget.size,
+                  child: ClipOval(
+                      child: Image.network(imageUrl, fit: BoxFit.fill))));
         } else {
-          return const Text('No image available'); // Show default state
+          return CircleAvatar(
+              child: SizedBox(
+                  width: widget.size,
+                  height: widget.size,
+                  child: ClipOval(
+                      child: Image.network(
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4moKlTUfDqvfHcx32l_RfRL779U0dakfE-Cys3Qudw&s',
+                          fit: BoxFit.fill)))); // Show default state
         }
       },
     );

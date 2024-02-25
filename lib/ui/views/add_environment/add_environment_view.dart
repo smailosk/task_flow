@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/core/models/environment/environment.dart';
@@ -17,10 +18,13 @@ import 'add_environment_viewmodel.dart';
   FormTextField(name: 'environmentIcon'),
 ])
 class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
-  const AddEnvironmentView({super.key, this.environmentModel});
+  AddEnvironmentView({super.key, this.environmentModel});
 
   final EnvironmentModel? environmentModel;
-
+  final iconsController =
+      AutoScrollController(axis: Axis.horizontal, suggestedRowHeight: 50);
+  final colorsController =
+      AutoScrollController(axis: Axis.horizontal, suggestedRowHeight: 50);
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddEnvironmentViewModel>.reactive(
@@ -29,7 +33,7 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
       },
       onViewModelReady: (viewModel) {
         syncFormWithViewModel(viewModel);
-        viewModel.init();
+        viewModel.init(iconsController, colorsController);
       },
       viewModelBuilder: () =>
           AddEnvironmentViewModel(environmentModel: environmentModel),
@@ -94,12 +98,18 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: viewModel.icons.length,
+                        controller: iconsController,
                         itemBuilder: (context, index) {
                           final iconData = viewModel.icons[index];
-                          return IconPickerItemWidget(
-                            iconData: Utils.iconDataFromInt(iconData),
-                            isSelected: viewModel.selectedIcon == iconData,
-                            onTap: () => viewModel.setIcon(index),
+                          return AutoScrollTag(
+                            controller: iconsController,
+                            index: index,
+                            key: ValueKey(index),
+                            child: IconPickerItemWidget(
+                              iconData: Utils.iconDataFromInt(iconData),
+                              isSelected: viewModel.selectedIcon == iconData,
+                              onTap: () => viewModel.setIcon(index),
+                            ),
                           );
                         },
                       ),
@@ -122,16 +132,22 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: viewModel.colors.length,
+                          controller: colorsController,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            return ColorPickerItemWidget(
-                                color:
-                                    Utils.hexToColor(viewModel.colors[index]),
-                                isSelected:
-                                    viewModel.selectedColorIndex == index,
-                                onTap: () => viewModel.updateSelectedColor(
-                                      index,
-                                    ));
+                            return AutoScrollTag(
+                              controller: colorsController,
+                              index: index,
+                              key: ValueKey(index),
+                              child: ColorPickerItemWidget(
+                                  color:
+                                      Utils.hexToColor(viewModel.colors[index]),
+                                  isSelected:
+                                      viewModel.selectedColorIndex == index,
+                                  onTap: () => viewModel.updateSelectedColor(
+                                        index,
+                                      )),
+                            );
                           }),
                     ),
                     verticalSpaceLarge,
@@ -145,7 +161,11 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                         ),
                         MainButton(
                           enabled: viewModel.isFormValid,
-                          onPressed: () => viewModel.addEnvironment(),
+                          onPressed: () {
+                            viewModel.environmentModel != null
+                                ? viewModel.editEnvironment()
+                                : viewModel.addEnvironment();
+                          },
                           text: environmentModel != null
                               ? 'Save changes'
                               : 'Create Environment',

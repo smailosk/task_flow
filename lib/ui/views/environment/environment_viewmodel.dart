@@ -40,8 +40,13 @@ class EnvironmentViewModel extends ReactiveViewModel {
   }
 
   void navigateToEditEnvironment(int index) {
-    _log.i('navigateToEditEnvironment');
+    _log.i('navigateToEditEnvironment $index');
     _navigationService.navigateToAddEnvironmentView(
         environmentModel: environments[index]);
+  }
+
+  void deleteEnvironment(int index) {
+    _log.i('deleteEnvironment $index');
+    _repo.deleteEnvironment(environments[index].id);
   }
 }

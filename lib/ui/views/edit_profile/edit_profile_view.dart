@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
+import 'package:task_flow/ui/common/widgets/profile_picture.dart';
 
 import '../../common/ui_helpers.dart';
 import '../../common/widgets/main_button.dart';
@@ -70,16 +71,13 @@ class EditProfileView extends StackedView<EditProfileViewModel>
               width: 100,
               height: 100,
               child: Stack(
-                // clipBehavior: Clip.none,
-                // fit: StackFit.expand,
                 children: [
                   Positioned.fill(
                     child: viewModel.busy('img')
                         ? const CircularProgressIndicator()
-                        : CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(viewModel.imgUrl),
-                            // Replace with your image provider
+                        : ProfilePicture(
+                            userId: viewModel.uid,
+                            size: 95,
                           ),
                   ),
                   Positioned(
@@ -162,7 +160,7 @@ class EditProfileView extends StackedView<EditProfileViewModel>
                 MainButton(
                   enabled: true,
                   onPressed: viewModel.back,
-                  text: 'Cancel',
+                  text: 'Back',
                 ),
                 MainButton(
                   enabled: viewModel.userNameUpdated,

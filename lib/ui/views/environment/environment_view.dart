@@ -140,6 +140,16 @@ class EnvironmentView extends StatelessWidget {
               viewModel.navigateToEditEnvironment(index);
             },
           ),
+          PopupMenuItem(
+            child: const Row(children: [
+              Icon(Icons.delete),
+              SizedBox(width: 16),
+              Text('Delete')
+            ]),
+            onTap: () {
+              viewModel.deleteEnvironment(index);
+            },
+          )
         ],
         position: RelativeRect.fromRect(
             Rect.fromLTWH(offset.dx, offset.dy, 30, 30),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
+import 'package:task_flow/ui/common/widgets/profile_picture.dart';
 
 import '../../../core/utils/utils.dart';
 import '../../common/widgets/reusable_icon_button.dart';
@@ -149,15 +150,10 @@ class TaskCard extends StatelessWidget {
                   ],
                 ),
                 if (task.assignee.isNotEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: CircleAvatar(
-                      radius: 15,
-                      backgroundImage: NetworkImage(
-                        'https://i.pravatar.cc/150',
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ProfilePicture(
+                      userId: task.assignee,
                     ),
                   ),
               ],

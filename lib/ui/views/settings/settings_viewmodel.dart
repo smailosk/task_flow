@@ -16,7 +16,8 @@ class SettingsViewModel extends BaseViewModel {
     _navigation.clearStackAndShow(Routes.startupView);
   }
 
-  navigateToEditProfile() {
-    _navigation.navigateTo(Routes.editProfileView);
+  navigateToEditProfile() async {
+    await _navigation.navigateTo(Routes.editProfileView);
+    notifyListeners();
   }
 }
