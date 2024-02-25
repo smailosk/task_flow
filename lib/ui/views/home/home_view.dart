@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:stacked/stacked.dart';
+import 'package:task_flow/ui/views/calendar/calendar_view.dart';
 import 'package:task_flow/ui/views/environment/environment_view.dart';
 import 'package:task_flow/ui/views/search/search_view.dart';
 import 'package:task_flow/ui/views/settings/settings_view.dart';
@@ -53,7 +54,7 @@ class HomeView extends StackedView<HomeViewModel> {
       case 0:
         widget = const EnvironmentView();
       case 1:
-        widget = const Placeholder();
+        widget = const CalendarView();
       case 2:
         widget = const SearchView();
       case 3:

@@ -32,7 +32,7 @@ class RepoService with ListenableServiceMixin {
     final envToFetch = await _fetchProjects();
     if (envToFetch.isEmpty) return;
     await _fetchEnvironmentByIds(envToFetch);
-
+    _fetchTasks();
     _log.i('RepoService - init - _environments: ${_environments.length}');
     _log.i('RepoService - init - _projects: ${_projects.length}');
     _log.i('RepoService - init - done');
@@ -94,6 +94,22 @@ class RepoService with ListenableServiceMixin {
         stackTrace: s,
       );
     }
+  }
+
+  _fetchTasks() {
+    _tasksByProject.clear();
+    for (var project in _projects.values) {
+      _fetchTasksForProject(project.id);
+    }
+  }
+
+  void _fetchTasksForProject(String id) {
+    _firestore.fetchTasksForProject(id).then((data) {
+      _tasksByProject[id] = {for (var e in data) e.id: e};
+      notifyListeners();
+    }).catchError((e) {
+      _log.e('RepoService - _fetchTasksForProject', e);
+    });
   }
 
   Future<List<TaskModel>> fetchTasksForProject(String projectId) async {
