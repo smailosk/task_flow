@@ -38,7 +38,7 @@ class AddTaskViewModel extends FormViewModel {
   }
 
   createTask() {
-    Executor.run(_repoService.addNewTask(TaskModel(
+    Executor.runFuture(_repoService.addNewTask(TaskModel(
             assignee: '',
             title: taskTitleValue ?? '',
             id: '',
@@ -53,7 +53,7 @@ class AddTaskViewModel extends FormViewModel {
   }
 
   updateTask(TaskModel task) {
-    Executor.run(_repoService.updateTask(task.copyWith(
+    Executor.runFuture(_repoService.updateTask(task.copyWith(
             title: taskTitleValue ?? '',
             details: taskDetailsValue ?? '',
             deadline: _deadline)))

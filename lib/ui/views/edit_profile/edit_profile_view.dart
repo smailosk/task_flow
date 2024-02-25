@@ -1,4 +1,7 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -6,6 +9,8 @@ import '../../common/ui_helpers.dart';
 import '../../common/widgets/main_button.dart';
 import 'edit_profile_view.form.dart';
 import 'edit_profile_viewmodel.dart';
+
+enum ProfilePictureAction { takeAPicture, chooseFromGallery }
 
 @FormView(fields: [
   FormTextField(name: 'userName'),
@@ -59,12 +64,64 @@ class EditProfileView extends StackedView<EditProfileViewModel>
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-              // Replace with your image provider
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: Stack(
+                // clipBehavior: Clip.none,
+                // fit: StackFit.expand,
+                children: [
+                  Positioned.fill(
+                    child: viewModel.busy('img')
+                        ? const CircularProgressIndicator()
+                        : CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(viewModel.imgUrl),
+                            // Replace with your image provider
+                          ),
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: IconButton(
+                          alignment: Alignment.bottomRight,
+                          style: ButtonStyle(
+                            alignment: Alignment.bottomRight,
+                            fixedSize:
+                                MaterialStateProperty.all(const Size(30, 30)),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.grey.shade200),
+                            shape: MaterialStateProperty.all(
+                              const CircleBorder(),
+                            ),
+                          ),
+                          onPressed: () {
+                            showModalActionSheet<ProfilePictureAction>(
+                                    context: context,
+                                    actions: const [
+                                      SheetAction<ProfilePictureAction>(
+                                          key:
+                                              ProfilePictureAction.takeAPicture,
+                                          label: 'Take picture'),
+                                      SheetAction<ProfilePictureAction>(
+                                          key: ProfilePictureAction
+                                              .chooseFromGallery,
+                                          label: 'Choose from gallery'),
+                                    ],
+                                    isDismissible: true,
+                                    style: AdaptiveStyle.adaptive,
+                                    cancelLabel: 'Cancel')
+                                .then((value) {
+                              if (value != null) {
+                                viewModel.changeProfilePicture(value);
+                              }
+                            });
+                          },
+                          icon: const Icon(Icons.edit)))
+                ],
+              ),
             ),
             verticalSpace(30),
             _buildTextField(

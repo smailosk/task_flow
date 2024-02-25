@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
+import 'package:task_flow/ui/common/widgets/profile_picture.dart';
 
 import 'settings_viewmodel.dart';
 
@@ -29,9 +31,14 @@ class SettingsView extends StatelessWidget {
                 ),
               ),
               verticalSpaceMedium,
-              const CircleAvatar(
-                radius: 100,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/1000'),
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: ProfilePicture(
+                      userId: viewModel.uid,
+                    )),
               ),
               const SizedBox(height: 8),
               Center(
@@ -43,7 +50,7 @@ class SettingsView extends StatelessWidget {
                   ),
                 ),
               ),
-              Center(child: Text('@${viewModel.displayUserName}')),
+              Center(child: Text('@${viewModel.displayName}')),
               const SizedBox(height: 20),
               _buildSettingsTile(
                 ListTile(

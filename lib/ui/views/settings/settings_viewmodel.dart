@@ -9,7 +9,7 @@ class SettingsViewModel extends BaseViewModel {
   final _navigation = locator<NavigationService>();
 
   String get displayName => _auth.displayName ?? '';
-  String get displayUserName => _auth.uid ?? '';
+  String get uid => _auth.uid ?? '';
 
   signOut() async {
     await _auth.signOut();

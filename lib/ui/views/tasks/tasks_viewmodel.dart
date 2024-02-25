@@ -32,7 +32,7 @@ class TasksViewModel extends ReactiveViewModel {
   void toggleTaskCompletion(int index, bool doneValue) {
     final task = tasks[index];
 
-    Executor.run(_repoService.setTaskAsDone(task, doneValue))
+    Executor.runFuture(_repoService.setTaskAsDone(task, doneValue))
         .then((value) => value.fold((failure) {}, (r) {
               _log.i('Marked as :${!task.done}');
             }));
@@ -49,7 +49,7 @@ class TasksViewModel extends ReactiveViewModel {
   void deleteTask(int index) {
     _log.i('Deleting task ${tasks[index].title}');
 
-    Executor.run(_repoService.deleteTask(tasks[index]))
+    Executor.runFuture(_repoService.deleteTask(tasks[index]))
         .then((value) => value.fold((l) {}, (r) {
               _log.i('Task deleted');
             }));

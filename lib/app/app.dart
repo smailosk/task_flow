@@ -1,5 +1,7 @@
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:task_flow/services/image_picker_service.dart';
+import 'package:task_flow/services/storage_service.dart';
 import 'package:task_flow/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:task_flow/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:task_flow/ui/views/add_task/add_task_view.dart';
@@ -17,15 +19,8 @@ import 'package:task_flow/ui/views/calendar/calendar_view.dart';
 import 'package:task_flow/ui/views/projects/projects_view.dart';
 import 'package:task_flow/ui/views/add_project/add_project_view.dart';
 import 'package:task_flow/ui/views/tasks/tasks_view.dart';
-import 'package:task_flow/ui/views/add_task/add_task_view.dart';
 import 'package:task_flow/ui/views/edit_profile/edit_profile_view.dart';
 import 'package:task_flow/ui/views/sign_up/sign_up_view.dart';
-import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
-import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
-import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
-import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
-import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
-import 'package:task_flow/ui/bottom_sheets/date_time_picker/date_time_picker_sheet.dart';
 import 'package:task_flow/ui/views/search/search_view.dart';
 // @stacked-import
 
@@ -59,12 +54,13 @@ import 'package:task_flow/ui/views/search/search_view.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
-
+    LazySingleton(classType: ImagePickerService),
     LazySingleton(classType: AuthService),
     // LazySingleton(classType: GoogleAuthService),
     LazySingleton(classType: FunctionsService),
     LazySingleton(classType: RepoService),
     LazySingleton(classType: FirestoreService),
+    LazySingleton(classType: StorageService),
 // @stacked-service
   ],
   bottomsheets: [

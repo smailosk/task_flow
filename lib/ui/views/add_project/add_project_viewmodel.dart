@@ -52,8 +52,10 @@ class AddProjectViewModel extends FormViewModel {
 
   addProject() {
     setBusy(true);
-    Executor.run(_repo.addNewProject(projectNameValue ?? 'No name provided',
-            projectColorValue ?? '#000000', environmentId))
+    Executor.runFuture(_repo.addNewProject(
+            projectNameValue ?? 'No name provided',
+            projectColorValue ?? '#000000',
+            environmentId))
         .then((value) => value.fold((failure) {
               _log.e('Failed to add Project', failure);
               setBusy(false);
@@ -67,7 +69,7 @@ class AddProjectViewModel extends FormViewModel {
 
   updateProject() {
     setBusy(true);
-    Executor.run(_repo.editProject(project!.copyWith(
+    Executor.runFuture(_repo.editProject(project!.copyWith(
       color: projectColorValue!,
       name: projectNameValue!,
     ))).then((value) => value.fold((failure) {

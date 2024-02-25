@@ -55,7 +55,7 @@ class AddEnvironmentViewModel extends FormViewModel {
 
   addEnvironment() {
     setBusy(true);
-    Executor.run(_repo.addNewEnvironment(
+    Executor.runFuture(_repo.addNewEnvironment(
             environmentNameValue ?? 'No name provided',
             environmentColorValue ?? '#000000',
             selectedIcon ?? 0))

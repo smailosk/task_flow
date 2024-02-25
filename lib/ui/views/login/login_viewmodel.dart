@@ -40,7 +40,7 @@ class LoginViewModel extends FormViewModel {
     _log.i(emailValue);
     _log.i(passwordValue);
 
-    Executor.run(_authService.signInWithEmailAndPassowrd(
+    Executor.runFuture(_authService.signInWithEmailAndPassowrd(
             emailValue!, passwordValue!))
         .then((value) => value.fold((l) {
               setBusy(false);
