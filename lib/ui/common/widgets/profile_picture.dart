@@ -5,6 +5,7 @@ import 'package:task_flow/services/storage_service.dart';
 class ProfilePicture extends StatefulWidget {
   final String userId;
   final double size;
+
   const ProfilePicture({super.key, required this.userId, this.size = 50});
 
   @override

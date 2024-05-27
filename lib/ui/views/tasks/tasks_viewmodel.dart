@@ -12,8 +12,8 @@ import '../../../core/models/project/project.dart';
 class TasksViewModel extends ReactiveViewModel {
   @override
   List<ListenableServiceMixin> get listenableServices => [_repoService];
-  final _navigationService = locator<NavigationService>();
   final _repoService = locator<RepoService>();
+  final _navigationService = locator<NavigationService>();
   final _log = getLogger('TasksViewModel');
   final String projectId;
 
@@ -31,15 +31,12 @@ class TasksViewModel extends ReactiveViewModel {
 
   void toggleTaskCompletion(int index, bool doneValue) {
     final task = tasks[index];
-
-    Executor.runFuture(_repoService.setTaskAsDone(task, doneValue))
-        .then((value) => value.fold((failure) {}, (r) {
-              _log.i('Marked as :${!task.done}');
-            }));
-  }
-
-  navigateToAddTask() {
-    _navigationService.navigateToAddTaskView(projectId: projectId);
+    Executor.runFuture(_repoService.setTaskAsDone(
+      task,
+      doneValue,
+    )).then((value) => value.fold((failure) {}, (r) {
+          _log.i('Marked as :${!task.done}');
+        }));
   }
 
   back() {
@@ -55,10 +52,19 @@ class TasksViewModel extends ReactiveViewModel {
             }));
   }
 
+  navigateToAddTask() {
+    _navigationService.navigateToAddTaskView(
+      projectId: projectId,
+    );
+  }
+
   void editTask(int index) {
     _navigationService.navigateTo(
       Routes.addTaskView,
-      arguments: AddTaskViewArguments(projectId: projectId, task: tasks[index]),
+      arguments: AddTaskViewArguments(
+        projectId: projectId,
+        task: tasks[index],
+      ),
     );
   }
 }

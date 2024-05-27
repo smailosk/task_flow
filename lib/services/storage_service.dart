@@ -4,6 +4,7 @@ import 'package:task_flow/core/error_handling/failures/general_failure.dart';
 
 class StorageService {
   final _storage = FirebaseStorage.instance;
+
   StorageService() {
     if (kDebugMode) {
       _storage.useStorageEmulator('127.0.0.1', 9199);
@@ -12,7 +13,7 @@ class StorageService {
 
   Future<String> uploadProfilePicture(Uint8List data, String userId) async {
     try {
-      final fileName = '$userId.jpg'; // Specify the desired file name here
+      final fileName = '$userId.jpg';
 
       final result = await _storage.ref('profile_pictures/$fileName').putData(
             data,

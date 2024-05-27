@@ -33,7 +33,7 @@ dependencies:
   animations:
   google_fonts: ^6.1.0
   adaptive_dialog: ^2.1.0
-  # flutter_signin_button: ^2.0.0
+  sign_in_button: ^3.2.0
   flutter_snake_navigationbar: ^0.6.1
   omni_datetime_picker: ^1.0.9
   scroll_to_index: ^3.0.1

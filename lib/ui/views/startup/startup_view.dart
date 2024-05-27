@@ -20,20 +20,29 @@ class StartupView extends StackedView<StartupViewModel> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'STACKED',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+              'TASK-FLOW',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: Color(0xFF24A19C),
+              ),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Loading ...', style: TextStyle(fontSize: 16)),
+                Text(
+                  'Loading ...',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
                 horizontalSpaceSmall,
                 SizedBox(
                   width: 16,
                   height: 16,
                   child: CircularProgressIndicator(
-                    color: Colors.black,
-                    strokeWidth: 6,
+                    color: Color(0xFF075B58),
+                    strokeWidth: 4,
                   ),
                 )
               ],

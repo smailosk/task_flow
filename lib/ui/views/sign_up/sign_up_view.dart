@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
@@ -112,13 +113,18 @@ class SignUpView extends StatelessWidget with $SignUpView {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Register',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.w700,
-                      )),
+                  child: viewModel.isBusy
+                      ? const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: CircularProgressIndicator(),
+                        )
+                      : const Text('Register',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.w700,
+                          )),
                 ),
                 verticalSpaceMedium,
                 const Row(
@@ -140,28 +146,23 @@ class SignUpView extends StatelessWidget with $SignUpView {
                   ],
                 ),
                 verticalSpaceMedium,
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: [
-                //     SignInButton(
-                //       Buttons.Facebook,
-                //       onPressed: () {},
-                //     ),
-                //     SignInButton(
-                //       Buttons.Google,
-                //       onPressed: () {},
-                //     ),
-                //     SignInButton(
-                //       Buttons.Twitter,
-                //       onPressed: () {},
-                //     ),
-                //   ],
-                // ),
-                // const SizedBox(height: 30),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('Add FB, twitter and Google',
-                      style: TextStyle(color: Colors.blueAccent)),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SignInButton(
+                      Buttons.facebook,
+                      onPressed: () {},
+                    ),
+                    SignInButton(
+                      Buttons.google,
+                      onPressed: () {},
+                    ),
+                    SignInButton(
+                      Buttons.twitter,
+                      onPressed: () {},
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/app/app.logger.dart';
@@ -15,9 +14,10 @@ class FirestoreService {
 
   FirestoreService() {
     if (kDebugMode) {
-      _firestore.useFirestoreEmulator('127.0.0.1', 8080);
+      _firestore.useFirestoreEmulator('127.0.0.1', 8081);
     }
   }
+
   final _log = getLogger('FirestoreService');
 
   Future<List<EnvironmentModel>> fetchEnvironments() async {

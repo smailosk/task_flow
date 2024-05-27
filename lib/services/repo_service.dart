@@ -20,7 +20,9 @@ class RepoService with ListenableServiceMixin {
   final Map<String, Map<String, TaskModel>> _tasksByProject = {};
 
   Map<String, EnvironmentModel> get environments => _environments;
+
   Map<String, ProjectModel> get projects => _projects;
+
   Map<String, Map<String, TaskModel>> get tasksByProject => _tasksByProject;
 
   init() async {
@@ -112,13 +114,21 @@ class RepoService with ListenableServiceMixin {
     });
   }
 
-  Future<List<TaskModel>> fetchTasksForProject(String projectId) async {
+  // Fetches tasks for a given project
+  Future<List<TaskModel>> fetchTasksForProject(
+    String projectId,
+  ) async {
     try {
       final data = await _firestore.fetchTasksForProject(projectId);
-      _tasksByProject[projectId] = {for (var e in data) e.id: e};
+      _tasksByProject[projectId] = {
+        for (var e in data) e.id: e,
+      };
       return data;
     } on Failure catch (e) {
-      _log.e('RepoService - fetchTasksForProject', e);
+      _log.e(
+        'RepoService - fetchTasksForProject',
+        e,
+      );
       rethrow;
     } catch (e, s) {
       throw GeneralFailure(
@@ -129,20 +139,26 @@ class RepoService with ListenableServiceMixin {
     }
   }
 
-  Future<void> setTaskAsDone(TaskModel task, bool doneValue) async {
+  // Marks a task as done or undone based on user interaction
+  Future<void> setTaskAsDone(
+    TaskModel task,
+    bool doneValue,
+  ) async {
     try {
       _tasksByProject[task.parentProjectId]?[task.id] =
           _tasksByProject[task.parentProjectId]![task.id]!
               .copyWith(done: doneValue);
       notifyListeners();
-      await _functions.markTaskDone(TaskModel(
-          title: '',
-          id: task.id,
-          done: doneValue,
-          details: '',
-          parentProjectId: task.parentProjectId,
-          deadline: null,
-          assignee: ''));
+      await _functions.markTaskDone(
+        TaskModel(
+            title: '',
+            id: task.id,
+            done: doneValue,
+            details: '',
+            parentProjectId: task.parentProjectId,
+            deadline: null,
+            assignee: ''),
+      );
     } on Failure catch (e) {
       _log.e('RepoService - setTaskDone', e);
       _tasksByProject[task.parentProjectId]?[task.id] =
@@ -228,6 +244,7 @@ class RepoService with ListenableServiceMixin {
     }
   }
 
+  // Adds a new task to the project
   Future<void> addNewTask(TaskModel task) async {
     try {
       final newTask = await _functions.createTask(task);
@@ -246,12 +263,12 @@ class RepoService with ListenableServiceMixin {
     }
   }
 
+  // Updates an existing task's details
   Future updateTask(TaskModel taskModel) async {
     try {
       await _functions.updateTask(taskModel);
       _tasksByProject[taskModel.parentProjectId]?[taskModel.id] = taskModel;
       notifyListeners();
-      // return _functions.updateTask(taskModel);
     } on Failure catch (e) {
       _log.e('RepoService - updateTask', e);
       rethrow;
@@ -264,6 +281,7 @@ class RepoService with ListenableServiceMixin {
     }
   }
 
+  // Deletes a task from the project
   Future deleteTask(TaskModel task) async {
     try {
       await _functions.deleteTask(task);

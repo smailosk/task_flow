@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/ui/common/app_colors.dart';
@@ -52,6 +53,7 @@ class LoginView extends StatelessWidget with $LoginView {
                   ),
                 ),
                 verticalSpaceMedium,
+                // Email TextField
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
@@ -64,6 +66,7 @@ class LoginView extends StatelessWidget with $LoginView {
                   ),
                 ),
                 const SizedBox(height: 15),
+                // Password TextField
                 TextField(
                   controller: passwordController,
                   decoration: InputDecoration(
@@ -84,27 +87,26 @@ class LoginView extends StatelessWidget with $LoginView {
                         style: TextStyle(color: Colors.blueGrey)),
                   ),
                 ),
-                const SizedBox(height: 10),
+                verticalSpaceMedium,
                 ElevatedButton(
-                  onPressed: viewModel.signIn,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kcPrimaryColor,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                    onPressed: viewModel.signIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kcPrimaryColor,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                  child: viewModel.isBusy
-                      ? const CircularProgressIndicator()
-                      : const Text('Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            letterSpacing: 1,
-                            fontWeight: FontWeight.w700,
-                          )),
-                ),
-                const SizedBox(height: 20),
+                    child: viewModel.isBusy
+                        ? const CircularProgressIndicator()
+                        : const Text('Login',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              letterSpacing: 1,
+                              fontWeight: FontWeight.w700,
+                            ))),
+                verticalSpaceLarge,
                 const Row(
                   children: [
                     Expanded(
@@ -123,25 +125,26 @@ class LoginView extends StatelessWidget with $LoginView {
                     )),
                   ],
                 ),
-                const SizedBox(height: 30),
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: [
-                //     SignInButton(
-                //       Buttons.Facebook,
-                //       onPressed: () {},
-                //     ),
-                //     SignInButton(
-                //       Buttons.Google,
-                //       onPressed: () {},
-                //     ),
-                //     SignInButton(
-                //       Buttons.Twitter,
-                //       onPressed: () {},
-                //     ),
-                //   ],
-                // ),
-                // const SizedBox(height: 30),
+                verticalSpaceLarge,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SignInButton(
+                      Buttons.facebook,
+                      onPressed: () {},
+                    ),
+                    SignInButton(
+                      Buttons.google,
+                      onPressed: () {},
+                    ),
+                    SignInButton(
+                      Buttons.twitter,
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                verticalSpaceLarge,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

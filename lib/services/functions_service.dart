@@ -10,6 +10,7 @@ import 'package:task_flow/core/models/task/task.dart';
 class FunctionsService {
   final _functions = FirebaseFunctions.instance;
   final _log = getLogger('FunctionsService');
+
   FunctionsService() {
     if (kDebugMode) {
       _functions.useFunctionsEmulator('localhost', 5001);
@@ -97,10 +98,11 @@ class FunctionsService {
       rethrow;
     } catch (exception, stackTrace) {
       throw GeneralFailure(
-          type: GeneralFailureType.unexpectedError,
-          description:
-              'FunctionsService - markTaskDone ${exception.toString()}',
-          stackTrace: stackTrace);
+        type: GeneralFailureType.unexpectedError,
+        description: 'FunctionsService - markTaskDone '
+            '${exception.toString()}',
+        stackTrace: stackTrace,
+      );
     }
   }
 

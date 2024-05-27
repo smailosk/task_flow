@@ -13,9 +13,11 @@ class AddTaskViewModel extends FormViewModel {
   final TaskModel? task;
   final _repoService = locator<RepoService>();
   final _navigationService = locator<NavigationService>();
-  final _bottomSheetService = locator<BottomSheetService>();
+
   AddTaskViewModel(this.projectId, this.task);
+
   final _log = getLogger('AddTaskViewModel');
+
   ProjectModel? get project => _repoService.getProjectById(projectId);
 
   void init() {
@@ -28,6 +30,7 @@ class AddTaskViewModel extends FormViewModel {
   }
 
   DateTime _deadline = DateTime.now();
+
   DateTime get deadline => _deadline;
 
   setDateTime(DateTime? dateTime) {

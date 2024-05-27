@@ -5,7 +5,6 @@ import 'package:task_flow/ui/views/calendar/calendar_view.dart';
 import 'package:task_flow/ui/views/environment/environment_view.dart';
 import 'package:task_flow/ui/views/search/search_view.dart';
 import 'package:task_flow/ui/views/settings/settings_view.dart';
-import 'package:task_flow/ui/views/sign_up/sign_up_view.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {

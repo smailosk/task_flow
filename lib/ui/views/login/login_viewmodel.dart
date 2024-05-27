@@ -40,15 +40,21 @@ class LoginViewModel extends FormViewModel {
     _log.i(emailValue);
     _log.i(passwordValue);
 
-    Executor.runFuture(_authService.signInWithEmailAndPassowrd(
-            emailValue!, passwordValue!))
-        .then((value) => value.fold((l) {
-              setBusy(false);
-            }, (r) {
-              _navigationService.clearStackAndShow(Routes.homeView);
-            }));
+    // Executes the sign-in using AuthService
+    Executor.runFuture(
+      _authService.signInWithEmailAndPassword(
+        emailValue!,
+        passwordValue!,
+      ),
+    ).then((value) => value.fold((l) {
+          setBusy(false);
+        }, (r) {
+          // On success, navigate to the home view
+          _navigationService.clearStackAndShow(Routes.homeView);
+        }));
   }
 
+  // Navigates to the sign-up view
   void navigateToSignUp() {
     _navigationService.navigateTo(Routes.signUpView);
   }

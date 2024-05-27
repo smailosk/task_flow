@@ -89,8 +89,10 @@ class TaskCard extends StatelessWidget {
               children: [
                 Checkbox(
                   value: task.done,
-                  onChanged: (value) =>
-                      viewModel.toggleTaskCompletion(taskIndex, value ?? false),
+                  onChanged: (value) => viewModel.toggleTaskCompletion(
+                    taskIndex,
+                    value ?? false,
+                  ),
                 ),
                 Expanded(
                   child: Text(
@@ -152,9 +154,7 @@ class TaskCard extends StatelessWidget {
                 if (task.assignee.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: ProfilePicture(
-                      userId: task.assignee,
-                    ),
+                    child: ProfilePicture(userId: task.assignee),
                   ),
               ],
             ),

@@ -63,7 +63,7 @@ export const PrintBody = onRequest(async (request, response) => {
     }
 });
 
-
+// 4.4.1	Firebase Auth
 exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
     try {
 
@@ -71,7 +71,8 @@ exports.OnUserCreated = functions.auth.user().onCreate(async (user) => {
         const environmentData: Environment = {
             id: firestoreDb.collection('Environments').doc().id,
             name: 'Default Environment',
-            icon: icons[Math.floor(Math.random() * icons.length)],
+            icon: icons[0],
+//          icon: icons[Math.floor(Math.random() * icons.length)],
             color: kEnvironmentColors[Math.floor(Math.random() * kEnvironmentColors.length)],
             admins: [user.uid]
         };

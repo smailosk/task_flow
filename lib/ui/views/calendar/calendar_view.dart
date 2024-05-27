@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
 import 'package:task_flow/ui/common/widgets/profile_picture.dart';
-import 'package:task_flow/ui/views/tasks/tasks_view.dart';
 
+import '../../common/app_colors.dart';
 import 'calendar_viewmodel.dart';
 
 class CalendarView extends StatelessWidget {
@@ -18,85 +17,95 @@ class CalendarView extends StatelessWidget {
     return ViewModelBuilder<CalendarViewModel>.reactive(
       viewModelBuilder: () => CalendarViewModel(),
       onViewModelReady: (viewModel) => viewModel.init(),
-      disposeViewModel: true,
-      createNewViewModelOnInsert: true,
-      fireOnViewModelReadyOnce: true,
-      initialiseSpecialViewModelsOnce: true,
       builder: (context, viewModel, child) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Container(
-          padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
             child: viewModel.isBusy
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ListView.separated(
-                    itemCount:
-                        (viewModel.events[viewModel.selectedDate]?.length ??
-                                0) +
-                            1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return TableCalendar(
-                          firstDay: DateTime.utc(2010, 10, 16),
-                          lastDay: DateTime.utc(2030, 3, 14),
-                          focusedDay: viewModel.selectedDate,
-                          calendarFormat: viewModel.calendarFormat,
-                          headerVisible: true,
-                          startingDayOfWeek: StartingDayOfWeek.monday,
-                          weekNumbersVisible: false,
-                          selectedDayPredicate: (day) {
-                            return isSameDay(viewModel.selectedDate, day);
-                          },
-                          eventLoader: (day) {
-                            return viewModel.events[day] ?? [];
-                          },
-                          calendarBuilders: CalendarBuilders(
-                            selectedBuilder: (context, date, focusedDay) {
-                              return Container(
-                                margin: const EdgeInsets.all(4.0),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Text(
-                                  date.day.toString(),
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
-                                ),
-                              );
-                            },
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      // Customize the appearance of TableCalendar here
+                      TableCalendar(
+                        firstDay: DateTime.utc(2010, 10, 16),
+                        lastDay: DateTime.utc(2030, 3, 14),
+                        focusedDay: viewModel.selectedDate,
+                        calendarFormat: viewModel.calendarFormat,
+                        headerStyle: HeaderStyle(
+                          titleTextStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onBackground,
                           ),
-                          onFormatChanged: viewModel.onFormatChanged,
-                          onDaySelected: (selectedDay, focusedDay) =>
-                              viewModel.onDaySelected(selectedDay),
-                        );
-                      }
-                      final task =
-                          viewModel.events[viewModel.selectedDate]![index - 1];
-                      return CalendarTaskCard(
-                        task: task,
-                        viewModel: viewModel,
-                        taskIndex: index - 1,
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      if (index == 0) {
-                        return const SizedBox(
-                          height: 20,
-                        );
-                      } else {
-                        return const SizedBox(
-                          height: 10,
-                        );
-                      }
-                    },
+                          formatButtonVisible: false,
+                          leftChevronIcon: Icon(
+                            Icons.arrow_back_ios,
+                            size: 15,
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
+                          rightChevronIcon: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 15,
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        daysOfWeekStyle: DaysOfWeekStyle(
+                          weekdayStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface),
+                          weekendStyle: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.6)),
+                        ),
+                        calendarStyle: CalendarStyle(
+                          outsideDaysVisible: false,
+                          weekendTextStyle: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.6)),
+                          selectedDecoration: BoxDecoration(
+                            color: kcPrimaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          todayDecoration: BoxDecoration(
+                            border:
+                                Border.all(color: kcPrimaryColor, width: 0.8),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        selectedDayPredicate: (day) =>
+                            isSameDay(viewModel.selectedDate, day),
+                        onDaySelected: (selectedDay, focusedDay) =>
+                            viewModel.onDaySelected(selectedDay),
+                        eventLoader: (day) => viewModel.events[day] ?? [],
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: (viewModel
+                                  .events[viewModel.selectedDate]?.length ??
+                              0),
+                          itemBuilder: (context, index) {
+                            final task = viewModel
+                                .events[viewModel.selectedDate]![index];
+                            return CalendarTaskCard(
+                                task: task,
+                                viewModel: viewModel,
+                                taskIndex: index);
+                          },
+                          separatorBuilder: (context, index) => const Divider(),
+                        ),
+                      ),
+                    ],
                   ),
           ),
         ),
