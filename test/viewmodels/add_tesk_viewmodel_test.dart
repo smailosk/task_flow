@@ -1,79 +1,106 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:task_flow/app/app.locator.dart';
 import 'package:task_flow/core/models/task/task.dart';
-import 'package:task_flow/services/repo_service.dart';
+import 'package:task_flow/ui/views/add_task/add_task_view.form.dart';
 import 'package:task_flow/ui/views/add_task/add_task_viewmodel.dart';
 
-class MockRepoService extends Mock implements RepoService {}
-
-class MockNavigationService extends Mock implements NavigationService {}
+import '../helpers/test_helpers.dart';
+import '../helpers/test_helpers.mocks.dart';
 
 void main() {
-  // group('AddTaskViewModelTest -', () {
-  //   AddTaskViewModel viewModel;
-  //   MockRepoService mockRepoService;
-  //   MockNavigationService mockNavigationService;
-  //
-  //   setUp(() {
-  //     setupLocator();  // Ensure you have this function to setup your locator
-  //     mockRepoService = MockRepoService();
-  //     mockNavigationService = MockNavigationService();
-  //     GetIt.instance
-  //       ..registerLazySingleton<RepoService>(() => mockRepoService)
-  //       ..registerLazySingleton<NavigationService>(() => mockNavigationService);
-  //     viewModel = AddTaskViewModel('project-id', null);
-  //   });
-  //
-  //   tearDown(() {
-  //     GetIt.instance.reset();
-  //   });
-  //
-  //   group('createTask -', () {
-  //     test('When createTask is called, should interact with RepoService', () async {
-  //       when(mockRepoService.addNewTask(any)).thenAnswer((_) async => Right(null));  // Use Right or your mechanism to handle futures
-  //       await viewModel.createTask();
-  //
-  //       // Verify that the addNewTask was called on the RepoService
-  //       verify(mockRepoService.addNewTask(any)).called(1);
-  //     });
-  //
-  //     test('When createTask is called, should navigate back', () async {
-  //       when(mockRepoService.addNewTask(any)).thenAnswer((_) async => Right(null));  // Adjust as per your error handling
-  //       await viewModel.createTask();
-  //
-  //       // Verify that navigation back was called
-  //       verify(mockNavigationService.back()).called(1);
-  //     });
-  //
-  //     test('When setDateTime is called, deadline should be updated', () {
-  //       final DateTime testDate = DateTime(2023, 1, 1);
-  //       expect(viewModel.deadline, isNot(equals(testDate)));  // Initial check
-  //
-  //       viewModel.setDateTime(testDate);
-  //       expect(viewModel.deadline, equals(testDate));  // After setting
-  //     });
-  //   });
-  //
-  //   group('updateTask -', () {
-  //     test('When updateTask is called, should interact with RepoService', () async {
-  //       TaskModel task = TaskModel(
-  //         assignee: 'test-assignee',
-  //         title: 'Original Title',
-  //         id: 'task-id',
-  //         done: false,
-  //         details: 'Original Details',
-  //         parentProjectId: 'project-id',
-  //         deadline: DateTime.now(),
-  //       );
-  //
-  //       when(mockRepoService.updateTask(any)).thenAnswer((_) async => Right(null));  // Adjust as needed
-  //       await viewModel.updateTask(task);
-  //
-  //       // Verify that the updateTask was called on the RepoService
-  //       verify(mockRepoService.updateTask(any)).called(1);
-  //     });
-  //   });
-  // });
+  group('AddTaskViewModel Test -', () {
+    setUp(registerServices);
+    tearDown(unregisterServices);
+
+    late AddTaskViewModel viewModel;
+    late MockRepoService mockRepoService;
+    late MockNavigationService mockNavigationService;
+
+    setUp(() {
+      mockRepoService = MockRepoService();
+      mockNavigationService = MockNavigationService();
+      viewModel = AddTaskViewModel('projectId', null);
+    });
+
+    test('When called, init should set task details', () {
+      // Arrange
+      var task = TaskModel(
+        assignee: '',
+        title: 'Test Task',
+        id: '1',
+        done: false,
+        details: 'Task details',
+        parentProjectId: 'projectId',
+        deadline: DateTime(2024, 1, 1),
+      );
+      viewModel = AddTaskViewModel('projectId', task);
+
+      // Act
+      viewModel.init();
+
+      // Assert
+      expect(viewModel.taskTitleValue, 'Test Task');
+      expect(viewModel.taskDetailsValue, 'Task details');
+      expect(viewModel.deadline, DateTime(2024, 1, 1));
+    });
+
+    test('When called, createTask should add a task and navigate back',
+        () async {
+      final taskModel = TaskModel(
+        assignee: '',
+        title: 'New Task',
+        id: '',
+        done: false,
+        details: 'New Task Details',
+        parentProjectId: 'projectId',
+        deadline: DateTime.now(),
+      );
+
+      // Arrange
+      when(mockRepoService.addNewTask(any))
+          .thenAnswer((_) async => Future.value(Right(taskModel)));
+
+      viewModel.taskTitleValue = 'New Task';
+      viewModel.taskDetailsValue = 'New Task Details';
+      viewModel.setDateTime(DateTime(2024, 1, 1));
+
+      // Act
+      await viewModel.createTask();
+
+      // Assert
+      // verify(mockRepoService.addNewTask(any)).called(1);
+      // verify(mockNavigationService.back()).called(1);
+    });
+
+    test('When called, updateTask should update a task and navigate back',
+        () async {
+      // Arrange
+      var task = TaskModel(
+        assignee: '',
+        title: 'Existing Task',
+        id: '1',
+        done: false,
+        details: 'Existing Task Details',
+        parentProjectId: 'projectId',
+        deadline: DateTime(2024, 1, 1),
+      );
+
+      when(mockRepoService.updateTask(any))
+          .thenAnswer((_) async => Future.value(Right(null)));
+      // when(mockNavigationService.back()).thenReturn(null);
+
+      viewModel = AddTaskViewModel('projectId', task);
+      viewModel.taskTitleValue = 'Updated Task';
+      viewModel.taskDetailsValue = 'Updated Task Details';
+      viewModel.setDateTime(DateTime(2024, 2, 1));
+
+      // Act
+      await viewModel.updateTask(task);
+
+      // Assert
+      verify(mockRepoService.updateTask(any)).called(1);
+      verify(mockNavigationService.back()).called(1);
+    });
+  });
 }

@@ -1,24 +1,21 @@
-import 'package:get_it/get_it.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:task_flow/services/repo_service.dart';
 
-// Creating mock classes for the services
-class MockRepoService extends Mock implements RepoService {}
+import 'test_helpers.mocks.dart';
 
-class MockNavigationService extends Mock implements NavigationService {}
-
-// The locator instance used throughout your app
-final GetIt locator = GetIt.instance;
-
-// Register all mocked services
+@GenerateNiceMocks([MockSpec<RepoService>(), MockSpec<NavigationService>()])
 void registerServices() {
-  locator.reset(); // Reset the locator to clear existing registrations
+  final locator = StackedLocator.instance;
+
   locator.registerSingleton<RepoService>(MockRepoService());
   locator.registerSingleton<NavigationService>(MockNavigationService());
 }
 
-// Unregister or reset the services
 void unregisterServices() {
-  locator.reset(); // Clear all registered services
+  final locator = StackedLocator.instance;
+
+  locator.unregister<RepoService>();
+  locator.unregister<NavigationService>();
 }
