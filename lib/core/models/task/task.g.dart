@@ -13,7 +13,7 @@ _$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
       done: json['done'] as bool,
       details: json['details'] as String,
       parentProjectId: json['parentProjectId'] as String,
-      deadline: Converters.intToDateTime(json['deadline'] as int?),
+      deadline: Converters.intToDateTime((json['deadline'] as num?)?.toInt()),
       assignee: json['assignee'] as String,
     );
 

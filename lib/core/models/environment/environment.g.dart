@@ -11,7 +11,7 @@ _$EnvironmentModelImpl _$$EnvironmentModelImplFromJson(
     _$EnvironmentModelImpl(
       id: json['id'] as String,
       name: json['name'] as String,
-      icon: json['icon'] as int,
+      icon: (json['icon'] as num).toInt(),
       color: json['color'] as String,
       admins:
           (json['admins'] as List<dynamic>).map((e) => e as String).toList(),

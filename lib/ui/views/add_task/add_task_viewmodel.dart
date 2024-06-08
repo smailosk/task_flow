@@ -40,19 +40,30 @@ class AddTaskViewModel extends FormViewModel {
     }
   }
 
-  createTask() {
-    Executor.runFuture(_repoService.addNewTask(TaskModel(
-            assignee: '',
-            title: taskTitleValue ?? '',
-            id: '',
-            done: false,
-            details: taskDetailsValue ?? '',
-            parentProjectId: projectId,
-            deadline: _deadline)))
-        .then((value) => value.fold((l) {}, (r) {
-              _log.i('Task created');
-              _navigationService.back();
-            }));
+  createTask() async {
+    // Executor.runFuture(_repoService.addNewTask(TaskModel(
+    //         assignee: '',
+    //         title: taskTitleValue ?? '',
+    //         id: '',
+    //         done: false,
+    //         details: taskDetailsValue ?? '',
+    //         parentProjectId: projectId,
+    //         deadline: _deadline)))
+    //     .then((value) => value.fold((l) {}, (r) {
+    //           _log.i('Task created');
+    //           _navigationService.back();
+    //         }));
+
+    await _repoService.addNewTask(TaskModel(
+        assignee: '',
+        title: taskTitleValue ?? '',
+        id: '',
+        done: false,
+        details: taskDetailsValue ?? '',
+        parentProjectId: projectId,
+        deadline: _deadline));
+
+    _navigationService.back();
   }
 
   updateTask(TaskModel task) {

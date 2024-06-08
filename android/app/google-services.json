@@ -29,6 +29,13 @@
             {
               "client_id": "114092212102-lqj4rm4pc84u52e2d8pjkruspqa7spta.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "114092212102-ivcc6k3o28vm77j9cf2rkt24af64jc11.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ismail.taskFlow"
+              }
             }
           ]
         }
