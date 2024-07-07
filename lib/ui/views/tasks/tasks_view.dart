@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/core/models/task/task.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
+import 'package:task_flow/ui/common/widgets/busy_widget.dart';
 import 'package:task_flow/ui/common/widgets/profile_picture.dart';
 
 import '../../../core/utils/utils.dart';
@@ -17,6 +18,7 @@ class TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<TasksViewModel>.reactive(
       viewModelBuilder: () => TasksViewModel(projectId),
+      onViewModelReady: (viewModel) => viewModel.init(),
       builder: (context, viewModel, child) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
@@ -43,18 +45,21 @@ class TasksView extends StatelessWidget {
             ),
           ],
         ),
-        body: Container(
-          padding: const EdgeInsets.all(25),
-          child: ListView.builder(
-            itemCount: viewModel.tasks.length,
-            itemBuilder: (context, index) {
-              final task = viewModel.tasks[index];
-              return TaskCard(
-                task: task,
-                viewModel: viewModel,
-                taskIndex: index,
-              );
-            },
+        body: BusyWidget(
+          isBusy: viewModel.isBusy,
+          child: Container(
+            padding: const EdgeInsets.all(25),
+            child: ListView.builder(
+              itemCount: viewModel.tasks.length,
+              itemBuilder: (context, index) {
+                final task = viewModel.tasks[index];
+                return TaskCard(
+                  task: task,
+                  viewModel: viewModel,
+                  taskIndex: index,
+                );
+              },
+            ),
           ),
         ),
       ),

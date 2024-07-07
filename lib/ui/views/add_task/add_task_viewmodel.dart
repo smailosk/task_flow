@@ -53,7 +53,8 @@ class AddTaskViewModel extends FormViewModel {
     //           _log.i('Task created');
     //           _navigationService.back();
     //         }));
-
+    if (isBusy) return;
+    setBusy(true);
     await _repoService.addNewTask(TaskModel(
         assignee: '',
         title: taskTitleValue ?? '',
@@ -62,16 +63,22 @@ class AddTaskViewModel extends FormViewModel {
         details: taskDetailsValue ?? '',
         parentProjectId: projectId,
         deadline: _deadline));
-
+    setBusy(false);
     _navigationService.back();
   }
 
   updateTask(TaskModel task) {
+    if (isBusy) return;
+    setBusy(true);
     Executor.runFuture(_repoService.updateTask(task.copyWith(
             title: taskTitleValue ?? '',
             details: taskDetailsValue ?? '',
             deadline: _deadline)))
-        .then((value) => value.fold((l) {}, (r) {
+        .then((value) => value.fold((l) {
+              setBusy(false);
+            }, (r) {
+              setBusy(false);
+
               _navigationService.back();
             }));
   }

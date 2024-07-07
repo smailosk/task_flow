@@ -7,6 +7,20 @@ class BusyWidget extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        if (isBusy)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: kcPrimaryColor,
+              ),
+            ),
+          ),
+      ],
+    );
     return isBusy
         ? const Center(
             child: CircularProgressIndicator(

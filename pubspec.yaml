@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   #Architecture & State Management
-  stacked: ^3.4.2
+  stacked: ^3.4.3
   stacked_hooks: ^0.2.4
   stacked_services: ^1.5.0
   logger: ^1.4.0
@@ -29,13 +29,13 @@ dependencies:
 
   #UI
   flutter_screenutil: ^5.9.3
-  table_calendar: ^3.1.1
+  table_calendar: ^3.1.2
   animations: ^2.0.11
   google_fonts: ^6.2.1
   adaptive_dialog: ^2.1.0
   sign_in_button: ^3.2.0
   flutter_snake_navigationbar: ^0.6.1
-  omni_datetime_picker: ^1.1.0
+  omni_datetime_picker: ^2.0.3
   scroll_to_index: ^3.0.1
   # board_datetime_picker:
   #   git:
@@ -43,11 +43,11 @@ dependencies:
   #     ref: main
 
   #Firebase
-  firebase_core: ^3.0.0
-  firebase_auth: ^5.0.0
-  cloud_firestore: ^5.0.0
-  cloud_functions: ^5.0.0
-  firebase_storage: ^12.0.0
+  firebase_core: ^3.1.1
+  firebase_auth: ^5.1.1
+  cloud_firestore: ^5.0.2
+  cloud_functions: ^5.0.2
+  firebase_storage: ^12.1.0
 
 # dependency_overrides:
 #   http: ^1.1.0
@@ -56,7 +56,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.4.10
+  build_runner: ^2.4.11
   mockito: ^5.4.4
   stacked_generator: ^1.6.0
   freezed: ^2.5.2

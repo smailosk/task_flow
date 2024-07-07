@@ -32,7 +32,7 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
         disposeForm();
       },
       builder: (context, viewModel, child) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: SingleChildScrollView(
           child: Container(
               padding: const EdgeInsets.all(15),
@@ -193,11 +193,13 @@ class AddTaskView extends StatelessWidget with $AddTaskView {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         MainButton(
+                          // isBusy: viewModel.isBusy,
                           enabled: true,
                           onPressed: viewModel.back,
                           text: 'Cancel',
                         ),
                         MainButton(
+                            isBusy: viewModel.isBusy,
                             enabled: true,
                             text: task != null ? 'Save changes' : 'Create Task',
                             color: const Color(0xFF24A19C),

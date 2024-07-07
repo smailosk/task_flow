@@ -12,11 +12,11 @@ class FirestoreService {
   final _firestore = FirebaseFirestore.instance;
   final _auth = locator<AuthService>();
 
-  FirestoreService() {
-    if (kDebugMode) {
-      _firestore.useFirestoreEmulator('127.0.0.1', 8081);
-    }
-  }
+  // FirestoreService() {
+  //   if (kDebugMode) {
+  //     _firestore.useFirestoreEmulator('127.0.0.1', 8081);
+  //   }
+  // }
 
   final _log = getLogger('FirestoreService');
 

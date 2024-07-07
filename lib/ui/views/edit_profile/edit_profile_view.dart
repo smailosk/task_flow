@@ -1,11 +1,8 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:task_flow/ui/common/widgets/profile_picture.dart';
-
 import '../../common/ui_helpers.dart';
 import '../../common/widgets/main_button.dart';
 import 'edit_profile_view.form.dart';
@@ -88,10 +85,10 @@ class EditProfileView extends StackedView<EditProfileViewModel>
                           style: ButtonStyle(
                             alignment: Alignment.bottomRight,
                             fixedSize:
-                                MaterialStateProperty.all(const Size(30, 30)),
+                                WidgetStateProperty.all(const Size(30, 30)),
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.grey.shade200),
-                            shape: MaterialStateProperty.all(
+                                WidgetStateProperty.all(Colors.grey.shade200),
+                            shape: WidgetStateProperty.all(
                               const CircleBorder(),
                             ),
                           ),

@@ -53,10 +53,14 @@ class ProjectsViewModel extends ReactiveViewModel {
     );
   }
 
-  deleteProject(int index) {
-    _repoService
-        .deleteProject(projects[index])
-        .executeFuture((error) {}, (success) {});
+  deleteProject(int index) async {
+    if (isBusy) return;
+    setBusy(true);
+    _repoService.deleteProject(projects[index]).executeFuture((error) {
+      setBusy(false);
+    }, (success) {
+      setBusy(false);
+    });
   }
 
   back() {

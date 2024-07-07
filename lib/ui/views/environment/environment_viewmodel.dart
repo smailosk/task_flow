@@ -45,8 +45,11 @@ class EnvironmentViewModel extends ReactiveViewModel {
         environmentModel: environments[index]);
   }
 
-  void deleteEnvironment(int index) {
+  void deleteEnvironment(int index) async {
+    if (isBusy) return;
+    setBusy(true);
     _log.i('deleteEnvironment $index');
-    _repo.deleteEnvironment(environments[index].id);
+    await _repo.deleteEnvironment(environments[index].id);
+    setBusy(false);
   }
 }

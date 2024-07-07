@@ -39,7 +39,7 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
           AddEnvironmentViewModel(environmentModel: environmentModel),
       builder: (context, viewModel, child) {
         return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: Container(
               padding: const EdgeInsets.only(
                   top: 15, left: 15, right: 15, bottom: 0),
@@ -160,6 +160,7 @@ class AddEnvironmentView extends StatelessWidget with $AddEnvironmentView {
                           text: 'Cancel',
                         ),
                         MainButton(
+                          isBusy: viewModel.isBusy,
                           enabled: viewModel.isFormValid,
                           onPressed: () {
                             viewModel.environmentModel != null

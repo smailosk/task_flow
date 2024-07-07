@@ -34,7 +34,7 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
         disposeForm();
       },
       builder: (context, viewModel, child) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Container(
             padding: const EdgeInsets.only(
               top: 15,
@@ -165,6 +165,7 @@ class AddProjectView extends StatelessWidget with $AddProjectView {
                       ),
                       MainButton(
                         enabled: viewModel.isFormValid && !viewModel.isBusy,
+                        isBusy: viewModel.isBusy,
                         text: project != null ? 'Save' : 'Create Project',
                         color: const Color(0xFF24A19C),
                         onPressed: project != null

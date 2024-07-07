@@ -5,11 +5,11 @@ import 'package:task_flow/core/error_handling/failures/general_failure.dart';
 class StorageService {
   final _storage = FirebaseStorage.instance;
 
-  StorageService() {
-    if (kDebugMode) {
-      _storage.useStorageEmulator('127.0.0.1', 9199);
-    }
-  }
+  // StorageService() {
+  //   if (kDebugMode) {
+  //     _storage.useStorageEmulator('127.0.0.1', 9199);
+  //   }
+  // }
 
   Future<String> uploadProfilePicture(Uint8List data, String userId) async {
     try {

@@ -63,11 +63,12 @@ class AddEnvironmentViewModel extends FormViewModel {
   }
 
   addEnvironment() {
+    if (isBusy) return;
     setBusy(true);
     Executor.runFuture(_repo.addNewEnvironment(
             environmentNameValue ?? 'No name provided',
             environmentColorValue ?? '#000000',
-            selectedIcon ?? 0))
+            selectedIcon))
         .then((value) => value.fold((failure) {
               _log.e('Failed to add environment', failure);
               setBusy(false);

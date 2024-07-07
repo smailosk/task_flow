@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/ui/common/ui_helpers.dart';
 import 'package:task_flow/ui/common/widgets/profile_picture.dart';

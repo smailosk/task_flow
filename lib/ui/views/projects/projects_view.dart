@@ -1,12 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:task_flow/core/models/project/project.dart';
 import 'package:task_flow/core/utils/utils.dart';
 import 'package:task_flow/ui/common/widgets/busy_widget.dart';
-
 import '../../common/widgets/reusable_icon_button.dart';
 import 'projects_viewmodel.dart';
 
@@ -21,7 +18,7 @@ class ProjectsView extends StatelessWidget {
       viewModelBuilder: () => ProjectsViewModel(environmentId),
       onViewModelReady: (viewmodel) => viewmodel.init(),
       builder: (context, viewmodel, child) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

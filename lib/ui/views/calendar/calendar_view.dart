@@ -18,7 +18,7 @@ class CalendarView extends StatelessWidget {
       viewModelBuilder: () => CalendarViewModel(),
       onViewModelReady: (viewModel) => viewModel.init(),
       builder: (context, viewModel, child) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: SizedBox(
@@ -38,18 +38,18 @@ class CalendarView extends StatelessWidget {
                           titleTextStyle: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           formatButtonVisible: false,
                           leftChevronIcon: Icon(
                             Icons.arrow_back_ios,
                             size: 15,
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           rightChevronIcon: Icon(
                             Icons.arrow_forward_ios,
                             size: 15,
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.surface,
@@ -72,7 +72,7 @@ class CalendarView extends StatelessWidget {
                                   .colorScheme
                                   .onSurface
                                   .withOpacity(0.6)),
-                          selectedDecoration: BoxDecoration(
+                          selectedDecoration: const BoxDecoration(
                             color: kcPrimaryColor,
                             shape: BoxShape.circle,
                           ),

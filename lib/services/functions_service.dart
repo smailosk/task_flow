@@ -11,11 +11,11 @@ class FunctionsService {
   final _functions = FirebaseFunctions.instance;
   final _log = getLogger('FunctionsService');
 
-  FunctionsService() {
-    if (kDebugMode) {
-      _functions.useFunctionsEmulator('localhost', 5001);
-    }
-  }
+  // FunctionsService() {
+  //   if (kDebugMode) {
+  //     _functions.useFunctionsEmulator('localhost', 5001);
+  //   }
+  // }
 
   Future<Map<String, dynamic>> _callCloudFunction(String functionName,
       {Map<String, dynamic>? data}) async {

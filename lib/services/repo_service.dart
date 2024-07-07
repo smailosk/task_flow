@@ -231,6 +231,7 @@ class RepoService with ListenableServiceMixin {
         members: [],
       ));
       _projects[project.id] = project;
+      _tasksByProject[project.id] = {};
       notifyListeners();
     } on FunctionsFailure catch (e) {
       _log.e('RepoService - addNewProject', e);
@@ -249,7 +250,10 @@ class RepoService with ListenableServiceMixin {
     try {
       final newTask = await _functions.createTask(task);
 
-      _tasksByProject[task.parentProjectId]![newTask.id] = newTask;
+      _tasksByProject[task.parentProjectId]![newTask.id] =
+          task.copyWith(id: newTask.id);
+
+      _log.i(task.parentProjectId);
       notifyListeners();
     } on Failure catch (e) {
       _log.e('RepoService - addNewTask', e);

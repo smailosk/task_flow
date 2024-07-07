@@ -45,17 +45,22 @@ class TasksViewModel extends ReactiveViewModel {
 
   void deleteTask(int index) {
     _log.i('Deleting task ${tasks[index].title}');
-
+    if (isBusy) return;
+    setBusy(true);
     Executor.runFuture(_repoService.deleteTask(tasks[index]))
-        .then((value) => value.fold((l) {}, (r) {
+        .then((value) => value.fold((l) {
+              setBusy(false);
+            }, (r) {
               _log.i('Task deleted');
+              setBusy(false);
             }));
   }
 
-  navigateToAddTask() {
-    _navigationService.navigateToAddTaskView(
+  navigateToAddTask() async {
+    await _navigationService.navigateToAddTaskView(
       projectId: projectId,
     );
+    notifyListeners();
   }
 
   void editTask(int index) {
